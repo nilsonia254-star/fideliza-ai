@@ -12,14 +12,15 @@
         .balance-card { font-size: 18px; }
         .balance-card span { font-weight: bold; color: #d81b60; }
         .admin-panel { background: #fce4ec; border: 1px solid #f8bbd0; }
-        .admin-panel input, .admin-panel select { padding: 8px; width: 80%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .admin-panel select { padding: 8px; width: 80%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
         .admin-panel button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 82%; margin-top: 5px; }
         .admin-panel button:hover { background-color: #ad1457; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .card h3 { margin-top: 0; color: #880e4f; font-size: 17px; }
-        .points { color: #e91e63; font-weight: bold; font-size: 16px; margin: 15px 0; }
-        .card button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; width: 100%; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 950px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 210px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .card h3 { margin-top: 0; color: #880e4f; font-size: 15px; }
+        .card p { font-size: 13px; color: #555; }
+        .points { color: #e91e63; font-weight: bold; font-size: 15px; margin: 10px 0; }
+        .card button { background-color: #d81b60; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; transition: background 0.3s; width: 100%; }
         .card button:hover { background-color: #ad1457; }
         .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; font-size: 16px; }
         .rules-info { font-size: 12px; color: #666; margin-top: 10px; }
@@ -29,73 +30,81 @@
 
     <header>
         <h1>Designer Estilo Mary</h1>
-        <p>Manicure, Design e Micropigmentação</p>
+        <p>Manicure, Design, Cílios e Micropigmentação</p>
     </header>
 
     <div class="panel">
         <label for="cliente-select"><b>Selecionar Cliente:</b></label><br><br>
         <select id="cliente-select" onchange="mudarCliente()" style="padding: 8px; width: 80%; border-radius: 4px; border: 1px solid #ccc;">
-            <!-- Opções geradas via JavaScript -->
+            <!-- Gerado via JS -->
         </select>
     </div>
 
     <div class="panel balance-card">
         Cliente Ativa: <span id="nome-cliente-ativo">Mariana</span><br>
-        Saldo Atual: <span id="user-points">150</span> pontos<br>
-        <div class="rules-info">⚠️ Validade dos pontos: 60 dias | Teto máximo: 500 pontos</div>
+        Saldo Atual: <span id="user-points">25</span> / 50 pontos<br>
+        <div class="rules-info">⚠️ +5 pts por atendimento/indicação | Validade: 60 dias | Máximo: 50 pts</div>
     </div>
 
     <div class="panel admin-panel">
         <h3>Área da Mary (Gerenciamento)</h3>
-        <input type="number" id="valor-compra" placeholder="Valor do serviço (R$)"><br>
-        <button type="button" onclick="adicionarPontos()">Adicionar Pontos por Compra</button><br>
-        <button type="button" onclick="registrarIndicacao()" style="background-color: #880e4f;">Indicação (Ambos ganham 20 pts)</button>
+        <button type="button" onclick="adicionarPontosAtendimento()">Registrar Atendimento (+5 pts)</button><br>
+        <button type="button" onclick="registrarIndicacao()" style="background-color: #880e4f;">Indicação (Ambos ganham +5 pts)</button>
     </div>
 
     <div class="container">
         <div class="card">
             <div>
-                <h3>Manicure / Cuidados com Unhas</h3>
-                <p>Manutenção e esmaltação impecável para suas mãos.</p>
-                <div class="points">50 pontos</div>
+                <h3>Manicure</h3>
+                <p>Cuidados e esmaltação para mãos.</p>
+                <div class="points">10 pontos</div>
             </div>
-            <button onclick="resgatar(50, 'Sessão de Manicure')">Resgatar</button>
+            <button onclick="resgatar(10, 'Sessão de Manicure')">Resgatar</button>
         </div>
 
         <div class="card">
             <div>
                 <h3>Design de Sobrancelhas</h3>
-                <p>Alinhamento e valorização do seu olhar com técnica exclusiva.</p>
-                <div class="points">100 pontos</div>
+                <p>Alinhamento e valorização do olhar.</p>
+                <div class="points">20 pontos</div>
             </div>
-            <button onclick="resgatar(100, 'Design de Sobrancelhas')">Resgatar</button>
+            <button onclick="resgatar(20, 'Design de Sobrancelhas')">Resgatar</button>
         </div>
 
         <div class="card">
             <div>
-                <h3>Micropigmentação de Sobrancelha</h3>
-                <p>Procedimento de destaque e definição duradoura.</p>
-                <div class="points">300 pontos</div>
+                <h3>Extensão de Cílios</h3>
+                <p>Volume e destaque natural aos cílios.</p>
+                <div class="points">35 pontos</div>
             </div>
-            <button onclick="resgatar(300, 'Micropigmentação de Sobrancelha')">Resgatar</button>
+            <button onclick="resgatar(35, 'Extensão de Cílios')">Resgatar</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <h3>Micropigmentação</h3>
+                <p>Definição duradoura para sobrancelhas.</p>
+                <div class="points">50 pontos</div>
+            </div>
+            <button onclick="resgatar(50, 'Micropigmentação')">Resgatar</button>
         </div>
     </div>
 
     <div class="message" id="msg"></div>
 
     <script>
-        // Lista com os clientes e controle de data de última movimentação (para simular os 60 dias)
         let clientes = [
-            { nome: "Mariana", pontos: 150, ultimaAtualizacao: new Date() },
-            { nome: "Juliana Silva", pontos: 80, ultimaAtualizacao: new Date() },
-            { nome: "Camila Souza", pontos: 200, ultimaAtualizacao: new Date() },
-            { nome: "Fernanda Lima", pontos: 30, ultimaAtualizacao: new Date() },
-            { nome: "Bruna Costa", pontos: 120, ultimaAtualizacao: new Date() }
+            { nome: "Mariana", pontos: 25, ultimaAtualizacao: new Date() },
+            { nome: "Juliana Silva", pontos: 15, ultimaAtualizacao: new Date() },
+            { nome: "Camila Souza", pontos: 40, ultimaAtualizacao: new Date() },
+            { nome: "Fernanda Lima", pontos: 5, ultimaAtualizacao: new Date() },
+            { nome: "Bruna Costa", pontos: 30, ultimaAtualizacao: new Date() }
         ];
 
         let clienteAtualIndex = 0;
-        const LIMITE_MAXIMO_PONTOS = 500; // Teto para evitar abuso
-        const DIAS_EXPIRACAO = 60; // Validade dos pontos
+        const LIMITE_MAXIMO_PONTOS = 50; // Teto de 50 pontos (10 atendimentos)
+        const PONTOS_POR_ACAO = 5;       // 5 pontos por atendimento ou indicação
+        const DIAS_EXPIRACAO = 60;       // Validade de 60 dias
 
         function atualizarSelect() {
             const select = document.getElementById("cliente-select");
@@ -123,9 +132,9 @@
             let diferencaDias = diferencaTempo / (1000 * 3600 * 24);
 
             if (diferencaDias > DIAS_EXPIRACAO && cli.pontos > 0) {
-                cli.pontos = 0; // Expirou os pontos por inatividade
+                cli.pontos = 0;
                 document.getElementById("msg").style.color = "#c0392b";
-                document.getElementById("msg").innerText = `Atenção: Os pontos de ${cli.nome} expiram após ${DIAS_EXPIRACAO} dias inativos.`;
+                document.getElementById("msg").innerText = `Atenção: Os pontos de ${cli.nome} expiraram após ${DIAS_EXPIRACAO} dias inativos.`;
             }
         }
 
@@ -151,34 +160,22 @@
             }
         }
 
-        function adicionarPontos() {
-            const valorInput = document.getElementById("valor-compra");
+        function adicionarPontosAtendimento() {
             const msgEl = document.getElementById("msg");
             let cli = clientes[clienteAtualIndex];
             
-            let valor = parseFloat(valorInput.value);
-            if (isNaN(valor) || valor <= 0) {
+            if (cli.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = "Digite um valor de serviço válido!";
+                msgEl.innerText = `Erro: O saldo máximo permitido é de ${LIMITE_MAXIMO_PONTOS} pontos!`;
                 return;
             }
 
-            let pontosGanhos = Math.floor(valor);
-
-            // Valida o teto máximo de pontos para evitar abuso
-            if (cli.pontos + pontosGanhos > LIMITE_MAXIMO_PONTOS) {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Erro: Ultrapassaria o limite de ${LIMITE_MAXIMO_PONTOS} pontos permitidos!`;
-                return;
-            }
-
-            cli.pontos += pontosGanhos;
+            cli.pontos += PONTOS_POR_ACAO;
             cli.ultimaAtualizacao = new Date();
             atualizarTela();
             
             msgEl.style.color = "#d81b60";
-            msgEl.innerText = `Sucesso! +${pontosGanhos} pontos para ${cli.nome}!`;
-            valorInput.value = "";
+            msgEl.innerText = `Sucesso! +${PONTOS_POR_ACAO} pontos de atendimento para ${cli.nome}!`;
         }
 
         function registrarIndicacao() {
@@ -188,32 +185,30 @@
             const msgEl = document.getElementById("msg");
             let cliIndicou = clientes[clienteAtualIndex];
 
-            // 1. Quem indicou ganha 20 pts (respeitando o teto)
-            if (cliIndicou.pontos + 20 > LIMITE_MAXIMO_PONTOS) {
+            // 1. Quem indicou ganha 5 pts (respeitando o teto de 50)
+            if (cliIndicou.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = "A cliente que indicou atingiu o limite máximo de pontos!";
+                msgEl.innerText = "A cliente que indicou atingiu o limite máximo de 50 pontos!";
                 return;
             }
-            cliIndicou.pontos += 20;
+            cliIndicou.pontos += PONTOS_POR_ACAO;
             cliIndicou.ultimaAtualizacao = new Date();
 
-            // 2. A nova indicada entra na lista já ganhando 20 pts de boas-vindas
+            // 2. A nova indicada entra na lista já ganhando 5 pts
             let novaCliente = {
                 nome: nomeIndicada.trim(),
-                pontos: 20,
+                pontos: PONTOS_POR_ACAO,
                 ultimaAtualizacao: new Date()
             };
             clientes.push(novaCliente);
 
-            // Seleciona automaticamente a nova cliente cadastrada
             clienteAtualIndex = clientes.length - 1;
             atualizarTela();
 
             msgEl.style.color = "#d81b60";
-            msgEl.innerText = `Indicação sucesso! ${cliIndicou.nome} e a nova cliente ${nomeIndicada} ganharam 20 pts!`;
+            msgEl.innerText = `Indicação confirmada! ${cliIndicou.nome} e a nova cliente ${nomeIndicada} ganharam +5 pts!`;
         }
 
-        // Inicializa a tela ao carregar
         atualizarTela();
     </script>
 
