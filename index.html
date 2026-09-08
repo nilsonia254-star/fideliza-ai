@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Designer Estilo Mary - Programa de Fidelidade</title>
+    <title>Designer Estilo Mary - Meus Pontos</title>
     <style>
         :root {
             --primary: #c2185b;
             --primary-dark: #880e4f;
             --primary-light: #fce4ec;
-            --accent: #f8bbd0;
             --bg-color: #fcf6f7;
             --text-main: #2d2d2d;
             --text-muted: #666;
@@ -21,42 +20,41 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 30px 15px;
+            padding: 20px 15px;
         }
 
         .wrapper {
-            max-width: 850px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         h1 {
             color: var(--primary-dark);
             margin: 0 0 5px 0;
-            font-size: 28px;
-            letter-spacing: 0.5px;
+            font-size: 24px;
         }
 
         header p {
             color: var(--text-muted);
             margin: 0;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .card-box {
             background: var(--white);
-            padding: 20px 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(194, 24, 91, 0.06);
             margin-bottom: 20px;
             border: 1px solid rgba(248, 187, 208, 0.4);
         }
 
-        .client-select-box label {
+        .search-box label {
             font-weight: 600;
             color: var(--primary-dark);
             font-size: 14px;
@@ -64,147 +62,96 @@
             margin-bottom: 8px;
         }
 
-        select {
+        input {
             width: 100%;
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #d1d5db;
-            background-color: var(--white);
             font-size: 15px;
-            color: var(--text-main);
+            box-sizing: border-box;
             outline: none;
             transition: border-color 0.2s;
         }
 
-        select:focus {
+        input:focus {
             border-color: var(--primary);
-        }
-
-        .balance-card {
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
-        }
-
-        .balance-title {
-            font-size: 14px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .client-active-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-        }
-
-        .client-contact-info {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .points-display {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .rules-info {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.7);
-            padding: 6px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        .admin-panel {
-            background-color: #fff0f3;
-            border: 1px dashed var(--primary);
-            text-align: center;
-        }
-
-        .admin-panel h3 {
-            margin-top: 0;
-            color: var(--primary-dark);
-            font-size: 16px;
-            margin-bottom: 15px;
         }
 
         .btn {
             background-color: var(--primary);
             color: var(--white);
             border: none;
-            padding: 12px 20px;
+            padding: 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             width: 100%;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 2px 6px rgba(194, 24, 91, 0.2);
-            margin-bottom: 10px;
+            margin-top: 10px;
+            transition: background 0.2s;
         }
 
         .btn:hover {
             background-color: var(--primary-dark);
         }
 
-        .btn:active {
-            transform: scale(0.98);
+        .balance-card {
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
+            display: none; /* Só aparece após buscar o cliente */
         }
 
-        .btn-secondary {
-            background-color: var(--primary-dark);
+        .client-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
         }
 
-        .btn-success {
-            background-color: #27ae60;
+        .points-display {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
         }
 
-        .btn-success:hover {
-            background-color: #219653;
+        .rules-info {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
         }
 
         .rewards-title {
             text-align: center;
             color: var(--primary-dark);
-            font-size: 18px;
+            font-size: 16px;
             margin: 25px 0 15px 0;
             font-weight: 600;
         }
 
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
         .card {
             background: var(--white);
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
             padding: 15px;
-            text-align: center;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
             border: 1px solid #eee;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(194, 24, 91, 0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .card h3 {
-            margin: 0 0 8px 0;
+            margin: 0 0 3px 0;
             color: var(--primary-dark);
             font-size: 15px;
         }
@@ -212,44 +159,25 @@
         .card p {
             font-size: 12px;
             color: var(--text-muted);
-            margin: 0 0 12px 0;
-            line-height: 1.4;
+            margin: 0;
         }
 
-        .points-tag {
+        .badge-pts {
+            background: var(--primary-light);
             color: var(--primary);
             font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 12px;
-            background: var(--primary-light);
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
-        }
-
-        .card button {
-            background-color: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
             font-size: 13px;
-            font-weight: 600;
-            width: 100%;
-            transition: background 0.2s;
+            padding: 6px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
         }
 
-        .card button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .message {
+        .msg-erro {
+            color: #c0392b;
+            font-size: 14px;
             text-align: center;
-            margin-top: 25px;
+            margin-top: 10px;
             font-weight: 600;
-            font-size: 15px;
-            min-height: 24px;
         }
     </style>
 </head>
@@ -258,233 +186,110 @@
     <div class="wrapper">
         <header>
             <h1>Designer Estilo Mary</h1>
-            <p>Manicure, Design, Cílios e Micropigmentação</p>
+            <p>Consulte seus pontos e benefícios</p>
         </header>
 
-        <div class="card-box client-select-box">
-            <label for="cliente-select">Selecionar Cliente:</label>
-            <select id="cliente-select" onchange="mudarCliente()">
-                <!-- Gerado via JS -->
-            </select>
+        <!-- Campo de Consulta por Telefone -->
+        <div class="card-box search-box" id="box-busca">
+            <label for="telefone-busca">Digite seu WhatsApp ou Telefone:</label>
+            <input type="text" id="telefone-busca" placeholder="(11) 99999-9999">
+            <button class="btn" onclick="consultarPontos()">Consultar Meus Pontos</button>
+            <div class="msg-erro" id="msg-erro"></div>
         </div>
 
-        <div class="card-box balance-card">
-            <div class="balance-title">Cliente Ativa</div>
-            <div class="client-active-name" id="nome-cliente-ativo">Mariana</div>
-            <div class="client-contact-info" id="info-contato-ativo">Tel: (11) 90000-0000 | Telegram: Não informado</div>
-            <div class="points-display"><span id="user-points">0</span> <span style="font-size: 18px; font-weight: 400;">/ 50 pts</span></div>
-            <div class="rules-info">✨ +5 pts por atendimento ou indicação | ⏳ Validade: 60 dias</div>
+        <!-- Painel de Exibição do Cliente (Oculto até buscar) -->
+        <div class="card-box balance-card" id="box-resultado">
+            <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Saldo da Cliente</div>
+            <div class="client-name" id="res-nome">Nome da Cliente</div>
+            <div style="font-size: 13px; color: var(--text-muted);" id="res-tel">(11) 00000-0000</div>
+            
+            <div class="points-display"><span id="res-pontos">0</span> <span style="font-size: 18px; font-weight: 400;">/ 50 pts</span></div>
+            
+            <div class="rules-info" id="res-validade">⏳ Validade dos pontos: Ativos</div>
+            <br>
+            <button class="btn" style="background-color: #666; font-size: 13px; padding: 8px; margin-top: 15px;" onclick="voltarBusca()">Consultar outro número</button>
         </div>
 
-        <div class="card-box admin-panel">
-            <h3>Área da Mary (Gerenciamento)</h3>
-            <button class="btn btn-success" type="button" onclick="cadastrarNovaCliente()">+ Cadastrar Nova Cliente</button>
-            <button class="btn" type="button" onclick="adicionarPontosAtendimento()">Registrar Atendimento (+5 pts)</button>
-            <button class="btn btn-secondary" type="button" onclick="registrarIndicacao()">Indicação Premiada (Ambos +5 pts)</button>
-        </div>
-
-        <div class="rewards-title">Resgate de Benefícios (Cada resgate custa 5 pontos)</div>
+        <div class="rewards-title">Benefícios Disponíveis para Resgate (5 pts cada)</div>
 
         <div class="container">
             <div class="card">
                 <div>
                     <h3>Manicure</h3>
                     <p>Cuidados e esmaltação impecável.</p>
-                    <div class="points-tag">5 pontos</div>
                 </div>
-                <button onclick="resgatar(5, 'Sessão de Manicure')">Resgatar</button>
+                <div class="badge-pts">5 pontos</div>
             </div>
 
             <div class="card">
                 <div>
                     <h3>Design de Sobrancelhas</h3>
                     <p>Alinhamento e valorização do olhar.</p>
-                    <div class="points-tag">5 pontos</div>
                 </div>
-                <button onclick="resgatar(5, 'Design de Sobrancelhas')">Resgatar</button>
+                <div class="badge-pts">5 pontos</div>
             </div>
 
             <div class="card">
                 <div>
                     <h3>Extensão de Cílios</h3>
                     <p>Volume e destaque natural aos cílios.</p>
-                    <div class="points-tag">5 pontos</div>
                 </div>
-                <button onclick="resgatar(5, 'Extensão de Cílios')">Resgatar</button>
+                <div class="badge-pts">5 pontos</div>
             </div>
 
             <div class="card">
                 <div>
                     <h3>Micropigmentação</h3>
                     <p>Definição duradoura para sobrancelhas.</p>
-                    <div class="points-tag">5 pontos</div>
                 </div>
-                <button onclick="resgatar(5, 'Micropigmentação')">Resgatar</button>
+                <div class="badge-pts">5 pontos</div>
             </div>
         </div>
-
-        <div class="message" id="msg"></div>
     </div>
 
     <script>
-        // Clientes de teste com saldos zerados (0 pontos)
-        let clientes = [
-            { nome: "Mariana", telefone: "(11) 98888-1111", telegram: "@mariana_oficial", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Juliana Silva", telefone: "(11) 97777-2222", telegram: "", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Camila Souza", telefone: "(11) 96666-3333", telegram: "@camis_souza", pontos: 0, ultimaAtualizacao: new Date() }
+        // Banco simulado (Depois será integrado ao Google Sheets via n8n)
+        let baseClientes = [
+            { nome: "Mariana", telefone: "11988881111", telFormatado: "(11) 98888-1111", pontos: 15, ultimaAtualizacao: new Date() },
+            { nome: "Juliana Silva", telefone: "11977772222", telFormatado: "(11) 97777-2222", pontos: 10, ultimaAtualizacao: new Date() },
+            { nome: "Camila Souza", telefone: "11966663333", telFormatado: "(11) 96666-3333", pontos: 25, ultimaAtualizacao: new Date() }
         ];
 
-        let clienteAtualIndex = 0;
-        const LIMITE_MAXIMO_PONTOS = 50; 
-        const PONTOS_POR_ACAO = 5;       
-
-        function atualizarSelect() {
-            const select = document.getElementById("cliente-select");
-            select.innerHTML = "";
-            clientes.forEach((cli, index) => {
-                let opt = document.createElement("option");
-                opt.value = index;
-                opt.innerText = `${cli.nome} - ${cli.telefone} (${cli.pontos} pts)`;
-                if (index === clienteAtualIndex) opt.selected = true;
-                select.appendChild(opt);
-            });
+        function limparNumero(tel) {
+            return tel.replace(/\D/g, ''); // Remove símbolos e deixa só os números
         }
 
-        function mudarCliente() {
-            const select = document.getElementById("cliente-select");
-            clienteAtualIndex = parseInt(select.value);
-            verificarRegrasExpiracao(clientes[clienteAtualIndex]);
-            atualizarTela();
-        }
+        function consultarPontos() {
+            let inputVal = document.getElementById("telefone-busca").value;
+            let numeroLimpo = limparNumero(inputVal);
+            const msgErro = document.getElementById("msg-erro");
 
-        function verificarRegrasExpiracao(cli) {
-            let agora = new Date();
-            let diferencaTempo = agora - new Date(cli.ultimaAtualizacao);
-            let diasInativo = Math.floor(diferencaTempo / (1000 * 3600 * 24));
-            const msgEl = document.getElementById("msg");
-
-            if (diasInativo >= 60 && cli.pontos > 0) {
-                cli.pontos = 0; 
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `⚠️ Os pontos de ${cli.nome} expiraram após 60 dias sem movimentação e foram zerados.`;
-            } else if (diasInativo >= 50 && diasInativo < 60 && cli.pontos > 0) {
-                let diasRestantes = 60 - diasInativo;
-                msgEl.style.color = "#d35400";
-                msgEl.innerText = `⚠️ ATENÇÃO: Faltam apenas ${diasRestantes} dias para os pontos de ${cli.nome} expirar!`;
-            } else if (diasInativo >= 30 && diasInativo < 50 && cli.pontos > 0) {
-                msgEl.style.color = "#e67e22";
-                msgEl.innerText = `ℹ️ Aviso: Pontos com 30 dias desde a última atividade.`;
-            } else {
-                msgEl.innerText = "";
-            }
-        }
-
-        function atualizarTela() {
-            atualizarSelect();
-            let cli = clientes[clienteAtualIndex];
-            document.getElementById("nome-cliente-ativo").innerText = cli.nome;
-            
-            let telegramTexto = cli.telegram && cli.telegram.trim() !== "" ? cli.telegram : "Não informado";
-            document.getElementById("info-contato-ativo").innerText = `Tel: ${cli.telefone} | Telegram: ${telegramTexto}`;
-            document.getElementById("user-points").innerText = cli.pontos;
-        }
-
-        // Nova função dedicada para cadastrar clientes facilmente via botão
-        function cadastrarNovaCliente() {
-            let nome = prompt("Digite o Nome da nova cliente:");
-            if (!nome || nome.trim() === "") return;
-
-            let telefone = prompt("Digite o WhatsApp / Telefone da cliente:") || "(11) 90000-0000";
-            let telegram = prompt("Digite o usuário do Telegram (opcional, ex: @usuario):") || "";
-
-            let novaCliente = {
-                nome: nome.trim(),
-                telefone: telefone.trim(),
-                telegram: telegram.trim(),
-                pontos: 0,
-                ultimaAtualizacao: new Date()
-            };
-
-            clientes.push(novaCliente);
-            clienteAtualIndex = clientes.length - 1; // Seleciona automaticamente a nova cliente cadastrada
-            atualizarTela();
-
-            const msgEl = document.getElementById("msg");
-            msgEl.style.color = "#27ae60";
-            msgEl.innerText = `✅ Cliente ${novaCliente.nome} cadastrada com sucesso com 0 pontos!`;
-        }
-
-        function resgatar(custo, premio) {
-            const msgEl = document.getElementById("msg");
-            let cli = clientes[clienteAtualIndex];
-
-            if (cli.pontos >= custo) {
-                cli.pontos -= custo;
-                cli.ultimaAtualizacao = new Date(); 
-                atualizarTela();
-                msgEl.style.color = "#c2185b";
-                msgEl.innerText = `✨ Parabéns ${cli.nome}! Resgatou: ${premio} (-${custo} pts)! Validade renovada.`;
-            } else {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `❌ Pontos insuficientes para ${cli.nome}. Saldo atual: ${cli.pontos} pts.`;
-            }
-        }
-
-        function adicionarPontosAtendimento() {
-            const msgEl = document.getElementById("msg");
-            let cli = clientes[clienteAtualIndex];
-            
-            if (cli.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `❌ Atingiria o limite máximo de ${LIMITE_MAXIMO_PONTOS} pontos!`;
+            if (!numeroLimpo) {
+                msgErro.innerText = "Por favor, digite o número de telefone.";
                 return;
             }
 
-            cli.pontos += PONTOS_POR_ACAO;
-            cli.ultimaAtualizacao = new Date(); 
-            atualizarTela();
-            
-            msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pts para ${cli.nome}! Validade renovada por 60 dias.`;
-        }
+            let clienteEncontrada = baseClientes.find(c => c.telefone === numeroLimpo);
 
-        function registrarIndicacao() {
-            let nomeIndicada = prompt("Digite o nome da nova cliente indicada por " + clientes[clienteAtualIndex].nome + ":");
-            if (!nomeIndicada || nomeIndicada.trim() === "") return;
+            if (clienteEncontrada) {
+                msgErro.innerText = "";
+                document.getElementById("box-busca").style.display = "none";
+                document.getElementById("box-resultado").style.display = "block";
 
-            let telIndicada = prompt("Digite o WhatsApp/Telefone da nova indicada:") || "(11) 90000-0000";
-            let telegramIndicada = prompt("Digite o usuário do Telegram da nova indicada (opcional):") || "";
-
-            const msgEl = document.getElementById("msg");
-            let cliIndicou = clientes[clienteAtualIndex];
-
-            if (cliIndicou.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = "❌ A cliente que indicou já atingiu o limite máximo de 50 pontos!";
-                return;
+                document.getElementById("res-nome").innerText = clienteEncontrada.nome;
+                document.getElementById("res-tel").innerText = clienteEncontrada.telFormatado;
+                document.getElementById("res-pontos").innerText = clienteEncontrada.pontos;
+            } else {
+                msgErro.innerText = "Número não encontrado. Verifique com a Mary se seu cadastro foi realizado.";
             }
-            cliIndicou.pontos += PONTOS_POR_ACAO;
-            cliIndicou.ultimaAtualizacao = new Date();
-
-            let novaCliente = {
-                nome: nomeIndicada.trim(),
-                telefone: telIndicada.trim(),
-                telegram: telegramIndicada.trim(),
-                pontos: PONTOS_POR_ACAO, // Indicada ganha 5 pontos de boas-vindas
-                ultimaAtualizacao: new Date()
-            };
-            clientes.push(novaCliente);
-
-            clienteAtualIndex = clientes.length - 1;
-            atualizarTela();
-
-            msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} ganhou +5 pts e ${nomeIndicada} foi cadastrada com +5 pts!`;
         }
 
-        // Executa ao carregar a página
-        verificarRegrasExpiracao(clientes[clienteAtualIndex]);
-        atualizarTela();
+        function voltarBusca() {
+            document.getElementById("box-resultado").style.display = "none";
+            document.getElementById("box-busca").style.display = "block";
+            document.getElementById("telefone-busca").value = "";
+            document.getElementById("msg-erro").innerText = "";
+        }
     </script>
 
 </body>
