@@ -3,31 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fideliza AI - Vitrine de Recompensas</title>
+    <title>Fideliza AI - Painel e Vitrine</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { color: #2c3e50; }
-        .balance-card { background: #fff; padding: 15px; border-radius: 8px; max-width: 400px; margin: 0 auto 30px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-size: 18px; }
+        header { text-align: center; margin-bottom: 25px; }
+        h1 { color: #2c3e50; margin-bottom: 5px; }
+        .balance-card { background: #fff; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 20px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-size: 18px; }
         .balance-card span { font-weight: bold; color: #27ae60; }
+        .admin-panel { background: #e8f4fd; border: 1px solid #bbe1fa; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 30px auto; text-align: center; }
+        .admin-panel input { padding: 8px; width: 60%; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        .admin-panel button { background-color: #27ae60; }
+        .admin-panel button:hover { background-color: #219653; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
         .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
         .card h3 { margin-top: 0; color: #34495e; }
         .points { color: #e67e22; font-weight: bold; font-size: 16px; margin: 15px 0; }
         button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
         button:hover { background-color: #2980b9; }
-        .message { text-align: center; margin-top: 20px; font-weight: bold; color: #27ae60; height: 24px; }
+        .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Fideliza AI</h1>
-        <p>Sua vitrine exclusiva de prêmios e vantagens</p>
+        <p>Sistema inteligente de recompensas</p>
     </header>
 
     <div class="balance-card">
-        Seu Saldo Atual: <span id="user-points">150</span> pontos
+        Saldo do Cliente: <span id="user-points">150</span> pontos
+    </div>
+
+    <div class="admin-panel">
+        <h3>Área do Lojista (Adicionar Pontos)</h3>
+        <input type="number" id="valor-compra" placeholder="Valor da compra (R$)">
+        <button onclick="adicionarPontos()">Adicionar</button>
     </div>
 
     <div class="container">
@@ -76,9 +86,3 @@
             } else {
                 msgEl.style.color = "#c0392b";
                 msgEl.innerText = `Pontos insuficientes para resgatar: ${premio}.`;
-            }
-        }
-    </script>
-
-</body>
-</html>
