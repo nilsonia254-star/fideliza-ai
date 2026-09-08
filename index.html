@@ -161,7 +161,14 @@
 
         .btn-secondary {
             background-color: var(--primary-dark);
-            margin-bottom: 0;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
         }
 
         .rewards-title {
@@ -271,6 +278,7 @@
 
         <div class="card-box admin-panel">
             <h3>Área da Mary (Gerenciamento)</h3>
+            <button class="btn btn-success" type="button" onclick="cadastrarNovaCliente()">+ Cadastrar Nova Cliente</button>
             <button class="btn" type="button" onclick="adicionarPontosAtendimento()">Registrar Atendimento (+5 pts)</button>
             <button class="btn btn-secondary" type="button" onclick="registrarIndicacao()">Indicação Premiada (Ambos +5 pts)</button>
         </div>
@@ -319,11 +327,11 @@
     </div>
 
     <script>
-        // Simulando clientes com datas de atualização customizáveis para teste
+        // Clientes de teste com saldos zerados (0 pontos)
         let clientes = [
-            { nome: "Mariana", telefone: "(11) 98888-1111", telegram: "@mariana_oficial", pontos: 15, ultimaAtualizacao: new Date() },
-            { nome: "Juliana Silva", telefone: "(11) 97777-2222", telegram: "", pontos: 10, ultimaAtualizacao: new Date() },
-            { nome: "Camila Souza", telefone: "(11) 96666-3333", telegram: "@camis_souza", pontos: 20, ultimaAtualizacao: new Date() }
+            { nome: "Mariana", telefone: "(11) 98888-1111", telegram: "@mariana_oficial", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Juliana Silva", telefone: "(11) 97777-2222", telegram: "", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Camila Souza", telefone: "(11) 96666-3333", telegram: "@camis_souza", pontos: 0, ultimaAtualizacao: new Date() }
         ];
 
         let clienteAtualIndex = 0;
@@ -349,7 +357,6 @@
             atualizarTela();
         }
 
-        // Lógica de verificação dos 30, 50 e 60 dias
         function verificarRegrasExpiracao(cli) {
             let agora = new Date();
             let diferencaTempo = agora - new Date(cli.ultimaAtualizacao);
@@ -357,7 +364,7 @@
             const msgEl = document.getElementById("msg");
 
             if (diasInativo >= 60 && cli.pontos > 0) {
-                cli.pontos = 0; // Zera automaticamente
+                cli.pontos = 0; 
                 msgEl.style.color = "#c0392b";
                 msgEl.innerText = `⚠️ Os pontos de ${cli.nome} expiraram após 60 dias sem movimentação e foram zerados.`;
             } else if (diasInativo >= 50 && diasInativo < 60 && cli.pontos > 0) {
@@ -366,7 +373,7 @@
                 msgEl.innerText = `⚠️ ATENÇÃO: Faltam apenas ${diasRestantes} dias para os pontos de ${cli.nome} expirar!`;
             } else if (diasInativo >= 30 && diasInativo < 50 && cli.pontos > 0) {
                 msgEl.style.color = "#e67e22";
-                msgEl.innerText = `ℹ️ Aviso: Seus pontos completaram 30 dias desde a última atividade. Lembre-se de usá-los!`;
+                msgEl.innerText = `ℹ️ Aviso: Pontos com 30 dias desde a última atividade.`;
             } else {
                 msgEl.innerText = "";
             }
@@ -382,13 +389,38 @@
             document.getElementById("user-points").innerText = cli.pontos;
         }
 
+        // Nova função dedicada para cadastrar clientes facilmente via botão
+        function cadastrarNovaCliente() {
+            let nome = prompt("Digite o Nome da nova cliente:");
+            if (!nome || nome.trim() === "") return;
+
+            let telefone = prompt("Digite o WhatsApp / Telefone da cliente:") || "(11) 90000-0000";
+            let telegram = prompt("Digite o usuário do Telegram (opcional, ex: @usuario):") || "";
+
+            let novaCliente = {
+                nome: nome.trim(),
+                telefone: telefone.trim(),
+                telegram: telegram.trim(),
+                pontos: 0,
+                ultimaAtualizacao: new Date()
+            };
+
+            clientes.push(novaCliente);
+            clienteAtualIndex = clientes.length - 1; // Seleciona automaticamente a nova cliente cadastrada
+            atualizarTela();
+
+            const msgEl = document.getElementById("msg");
+            msgEl.style.color = "#27ae60";
+            msgEl.innerText = `✅ Cliente ${novaCliente.nome} cadastrada com sucesso com 0 pontos!`;
+        }
+
         function resgatar(custo, premio) {
             const msgEl = document.getElementById("msg");
             let cli = clientes[clienteAtualIndex];
 
             if (cli.pontos >= custo) {
                 cli.pontos -= custo;
-                cli.ultimaAtualizacao = new Date(); // Reseta o cronômetro ao pontuar/resgatar
+                cli.ultimaAtualizacao = new Date(); 
                 atualizarTela();
                 msgEl.style.color = "#c2185b";
                 msgEl.innerText = `✨ Parabéns ${cli.nome}! Resgatou: ${premio} (-${custo} pts)! Validade renovada.`;
@@ -409,11 +441,11 @@
             }
 
             cli.pontos += PONTOS_POR_ACAO;
-            cli.ultimaAtualizacao = new Date(); // Reseta o cronômetro para mais 60 dias
+            cli.ultimaAtualizacao = new Date(); 
             atualizarTela();
             
             msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pts para ${cli.nome}! Validade renovada por mais 60 dias.`;
+            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pts para ${cli.nome}! Validade renovada por 60 dias.`;
         }
 
         function registrarIndicacao() {
@@ -438,7 +470,7 @@
                 nome: nomeIndicada.trim(),
                 telefone: telIndicada.trim(),
                 telegram: telegramIndicada.trim(),
-                pontos: PONTOS_POR_ACAO,
+                pontos: PONTOS_POR_ACAO, // Indicada ganha 5 pontos de boas-vindas
                 ultimaAtualizacao: new Date()
             };
             clientes.push(novaCliente);
@@ -447,7 +479,7 @@
             atualizarTela();
 
             msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} ganhou +5 pts e ${nomeIndicada} foi cadastrada!`;
+            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} ganhou +5 pts e ${nomeIndicada} foi cadastrada com +5 pts!`;
         }
 
         // Executa ao carregar a página
