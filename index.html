@@ -12,7 +12,7 @@
         .balance-card span { font-weight: bold; color: #27ae60; }
         .admin-panel { background: #e8f4fd; border: 1px solid #bbe1fa; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 30px auto; text-align: center; }
         .admin-panel input { padding: 8px; width: 60%; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .admin-panel button { background-color: #27ae60; }
+        .admin-panel button { background-color: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
         .admin-panel button:hover { background-color: #219653; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
         .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -20,7 +20,7 @@
         .points { color: #e67e22; font-weight: bold; font-size: 16px; margin: 15px 0; }
         button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
         button:hover { background-color: #2980b9; }
-        .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; }
+        .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -37,7 +37,7 @@
     <div class="admin-panel">
         <h3>Área do Lojista (Adicionar Pontos)</h3>
         <input type="number" id="valor-compra" placeholder="Valor da compra (R$)">
-        <button onclick="adicionarPontos()">Adicionar</button>
+        <button type="button" onclick="adicionarPontos()">Adicionar</button>
     </div>
 
     <div class="container">
@@ -84,5 +84,4 @@
                 msgEl.style.color = "#27ae60";
                 msgEl.innerText = `Parabéns! Você resgatou: ${premio}!`;
             } else {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Pontos insuficientes para resgatar: ${premio}.`;
+                msgEl.styl
