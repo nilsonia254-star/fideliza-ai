@@ -3,69 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fideliza AI - Painel e Vitrine</title>
+    <title>Estilo Mari - Programa de Fidelidade</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        body { font-family: Arial, sans-serif; background-color: #fdf2f4; color: #333; margin: 0; padding: 20px; }
         header { text-align: center; margin-bottom: 25px; }
-        h1 { color: #2c3e50; margin-bottom: 5px; }
+        h1 { color: #d81b60; margin-bottom: 5px; }
         .balance-card { background: #fff; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 20px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-size: 18px; }
-        .balance-card span { font-weight: bold; color: #27ae60; }
-        .admin-panel { background: #e8f4fd; border: 1px solid #bbe1fa; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 30px auto; text-align: center; }
+        .balance-card span { font-weight: bold; color: #d81b60; }
+        .admin-panel { background: #fce4ec; border: 1px solid #f8bbd0; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 30px auto; text-align: center; }
         .admin-panel input { padding: 8px; width: 60%; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .admin-panel button { background-color: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
-        .admin-panel button:hover { background-color: #219653; }
+        .admin-panel button { background-color: #d81b60; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .admin-panel button:hover { background-color: #ad1457; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
         .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .card h3 { margin-top: 0; color: #34495e; }
-        .points { color: #e67e22; font-weight: bold; font-size: 16px; margin: 15px 0; }
-        button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
-        button:hover { background-color: #2980b9; }
+        .card h3 { margin-top: 0; color: #880e4f; font-size: 17px; }
+        .points { color: #e91e63; font-weight: bold; font-size: 16px; margin: 15px 0; }
+        button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
+        button:hover { background-color: #ad1457; }
         .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; font-size: 16px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Fideliza AI</h1>
-        <p>Sistema inteligente de recompensas</p>
+        <h1>Estilo Mari</h1>
+        <p>Manicure, Design e Micropigmentação</p>
     </header>
 
     <div class="balance-card">
-        Saldo do Cliente: <span id="user-points">150</span> pontos
+        Saldo da Cliente: <span id="user-points">150</span> pontos
     </div>
 
     <div class="admin-panel">
-        <h3>Área do Lojista (Adicionar Pontos)</h3>
-        <input type="number" id="valor-compra" placeholder="Valor da compra (R$)">
+        <h3>Área da Mari (Adicionar Pontos)</h3>
+        <input type="number" id="valor-compra" placeholder="Valor do serviço (R$)">
         <button type="button" onclick="adicionarPontos()">Adicionar</button>
     </div>
 
     <div class="container">
         <div class="card">
             <div>
-                <h3>Café Grátis</h3>
-                <p>Um café expresso fresquinho para acompanhar seu dia.</p>
+                <h3>Manicure / Cuidados com Unhas</h3>
+                <p>Manutenção e esmaltação impecável para suas mãos.</p>
                 <div class="points">50 pontos</div>
             </div>
-            <button onclick="resgatar(50, 'Café Grátis')">Resgatar</button>
+            <button onclick="resgatar(50, 'Sessão de Manicure')">Resgatar</button>
         </div>
 
         <div class="card">
             <div>
-                <h3>Desconto de 10%</h3>
-                <p>Válido para qualquer compra na próxima visita.</p>
+                <h3>Design de Sobrancelhas</h3>
+                <p>Alinhamento e valorização do seu olhar com técnica exclusiva.</p>
                 <div class="points">100 pontos</div>
             </div>
-            <button onclick="resgatar(100, 'Desconto de 10%')">Resgatar</button>
+            <button onclick="resgatar(100, 'Design de Sobrancelhas')">Resgatar</button>
         </div>
 
         <div class="card">
             <div>
-                <h3>Camiseta Exclusiva</h3>
-                <p>Camiseta oficial estilizada da nossa marca.</p>
+                <h3>Micropigmentação de Sobrancelha</h3>
+                <p>Procedimento de destaque e definição duradoura.</p>
                 <div class="points">300 pontos</div>
             </div>
-            <button onclick="resgatar(300, 'Camiseta Exclusiva')">Resgatar</button>
+            <button onclick="resgatar(300, 'Micropigmentação de Sobrancelha')">Resgatar</button>
         </div>
     </div>
 
@@ -81,35 +81,4 @@
             if (pontosAtuais >= custo) {
                 pontosAtuais -= custo;
                 pointsEl.innerText = pontosAtuais;
-                msgEl.style.color = "#27ae60";
-                msgEl.innerText = `Parabéns! Você resgatou: ${premio}!`;
-            } else {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Pontos insuficientes para resgatar: ${premio}.`;
-            }
-        }
-
-        function adicionarPontos() {
-            const valorInput = document.getElementById("valor-compra");
-            const msgEl = document.getElementById("msg");
-            const pointsEl = document.getElementById("user-points");
-            
-            let valor = parseFloat(valorInput.value);
-            if (isNaN(valor) || valor <= 0) {
-                msgEl.style.color = "#c0392b";
-                msgEl.innerText = "Digite um valor de compra válido!";
-                return;
-            }
-
-            let pontosGanhos = Math.floor(valor);
-            pontosAtuais += pontosGanhos;
-            pointsEl.innerText = pontosAtuais;
-            
-            msgEl.style.color = "#27ae60";
-            msgEl.innerText = `Sucesso! +${pontosGanhos} pontos adicionados ao cliente!`;
-            valorInput.value = "";
-        }
-    </script>
-
-</body>
-</html>
+                msgEl.style.color = "#d81b60";
