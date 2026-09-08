@@ -137,18 +137,39 @@
     </div>
 
     <script>
-        // Lista compartilhada simulada
-        let listaAdmin = [
-            { nome: "Mariana", telefone: "(11) 98888-1111", pontos: 15 },
-            { nome: "Juliana Silva", telefone: "(11) 97777-2222", pontos: 10 },
-            { nome: "Camila Souza", telefone: "(11) 96666-3333", pontos: 25 }
-        ];
+        // Carrega a base salva ou cria uma inicial se estiver vazia
+        function obterClientes() {
+            let dados = localStorage.getItem('baseClientesMary');
+            if (dados) {
+                return JSON.parse(dados);
+            } else {
+                let inicial = [
+                    { nome: "Mariana", telefone: "11988881111", pontos: 15 },
+                    { nome: "Juliana Silva", telefone: "11977772222", pontos: 10 },
+                    { nome: "Camila Souza", telefone: "11966663333", pontos: 25 }
+                ];
+                localStorage.setItem('baseClientesMary', JSON.stringify(inicial));
+                return inicial;
+            }
+        }
 
+        function salvarClientes(lista) {
+            localStorage.setItem('baseClientesMary', JSON.stringify(lista));
+        }
+
+        let listaAdmin = obterClientes();
         let indexAdmin = 0;
 
         function carregarSelectAdmin() {
+            listaAdmin = obterClientes();
             const select = document.getElementById("cliente-select");
             select.innerHTML = "";
+            
+            if (listaAdmin.length === 0) {
+                select.innerHTML = "<option>Nenhuma cliente cadastrada</option>";
+                return;
+            }
+
             listaAdmin.forEach((cli, i) => {
                 let opt = document.createElement("option");
                 opt.value = i;
@@ -165,6 +186,7 @@
         }
 
         function atualizarPainelAdmin() {
+            if (listaAdmin.length === 0) return;
             let cli = listaAdmin[indexAdmin];
             document.getElementById("adm-nome").innerText = cli.nome;
             document.getElementById("adm-tel").innerText = cli.telefone;
@@ -174,9 +196,13 @@
         function cadastrarClienteAdmin() {
             let nome = prompt("Nome da nova cliente:");
             if (!nome || nome.trim() === "") return;
-            let tel = prompt("Telefone / WhatsApp:") || "(11) 00000-0000";
+            let tel = prompt("Telefone / WhatsApp (somente números ou com DDD):") || "11000000000";
+            
+            // Limpa o telefone para salvar apenas números
+            let telLimpo = tel.replace(/\D/g, '');
 
-            listaAdmin.push({ nome: nome.trim(), telefone: tel.trim(), pontos: 0 });
+            listaAdmin.push({ nome: nome.trim(), telefone: telLimpo, pontos: 0 });
+            salvarClientes(listaAdmin);
             indexAdmin = listaAdmin.length - 1;
             carregarSelectAdmin();
 
@@ -185,6 +211,7 @@
         }
 
         function adicionarPontosAdmin() {
+            if (listaAdmin.length === 0) return;
             let cli = listaAdmin[indexAdmin];
             if (cli.pontos + 5 > 50) {
                 document.getElementById("adm-msg").style.color = "#c0392b";
@@ -192,6 +219,7 @@
                 return;
             }
             cli.pontos += 5;
+            salvarClientes(listaAdmin);
             atualizarPainelAdmin();
             carregarSelectAdmin();
             document.getElementById("adm-msg").style.color = "#c2185b";
@@ -199,9 +227,11 @@
         }
 
         function registrarIndicacaoAdmin() {
+            if (listaAdmin.length === 0) return;
             let nomeInd = prompt("Nome da pessoa indicada:");
             if (!nomeInd || nomeInd.trim() === "") return;
-            let telInd = prompt("Telefone da indicada:") || "(11) 00000-0000";
+            let telInd = prompt("Telefone da indicada (somente números):") || "11000000000";
+            let telIndLimpo = telInd.replace(/\D/g, '');
 
             let cli = listaAdmin[indexAdmin];
             if (cli.pontos + 5 > 50) {
@@ -210,9 +240,10 @@
                 return;
             }
 
-            cli.pontos += 5; // Quem indicou ganha
-            listaAdmin.push({ nome: nomeInd.trim(), telefone: telInd.trim(), pontos: 5 }); // Indicada ganha boas-vindas
+            cli.pontos += 5; 
+            listaAdmin.push({ nome: nomeInd.trim(), telefone: telIndLimpo, pontos: 5 }); 
 
+            salvarClientes(listaAdmin);
             indexAdmin = listaAdmin.length - 1;
             carregarSelectAdmin();
 
