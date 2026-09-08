@@ -5,104 +5,323 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer Estilo Mary - Programa de Fidelidade</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #fdf2f4; color: #333; margin: 0; padding: 20px; }
-        header { text-align: center; margin-bottom: 25px; }
-        h1 { color: #d81b60; margin-bottom: 5px; }
-        .panel { background: #fff; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 15px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .balance-card { font-size: 18px; }
-        .balance-card span { font-weight: bold; color: #d81b60; }
-        .admin-panel { background: #fce4ec; border: 1px solid #f8bbd0; }
-        .admin-panel select { padding: 8px; width: 80%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        .admin-panel button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 82%; margin-top: 5px; }
-        .admin-panel button:hover { background-color: #ad1457; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 950px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 210px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .card h3 { margin-top: 0; color: #880e4f; font-size: 15px; }
-        .card p { font-size: 13px; color: #555; }
-        .points { color: #e91e63; font-weight: bold; font-size: 15px; margin: 10px 0; }
-        .card button { background-color: #d81b60; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; transition: background 0.3s; width: 100%; }
-        .card button:hover { background-color: #ad1457; }
-        .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; font-size: 16px; }
-        .rules-info { font-size: 12px; color: #666; margin-top: 10px; }
+        :root {
+            --primary: #c2185b;
+            --primary-dark: #880e4f;
+            --primary-light: #fce4ec;
+            --accent: #f8bbd0;
+            --bg-color: #fcf6f7;
+            --text-main: #2d2d2d;
+            --text-muted: #666;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .wrapper {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .card-box {
+            background: var(--white);
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.06);
+            margin-bottom: 20px;
+            border: 1px solid rgba(248, 187, 208, 0.4);
+        }
+
+        .client-select-box label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background-color: var(--white);
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .balance-card {
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
+        }
+
+        .balance-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .client-active-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .points-display {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .rules-info {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .admin-panel {
+            background-color: #fff0f3;
+            border: 1px dashed var(--primary);
+            text-align: center;
+        }
+
+        .admin-panel h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 2px 6px rgba(194, 24, 91, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-dark);
+            margin-top: 10px;
+        }
+
+        .rewards-title {
+            text-align: center;
+            color: var(--primary-dark);
+            font-size: 18px;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(194, 24, 91, 0.1);
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+            font-size: 15px;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0 0 12px 0;
+            line-height: 1.4;
+        }
+
+        .points-tag {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+            background: var(--primary-light);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .card button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .card button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 25px;
+            font-weight: 600;
+            font-size: 15px;
+            min-height: 24px;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Designer Estilo Mary</h1>
-        <p>Manicure, Design, Cílios e Micropigmentação</p>
-    </header>
+    <div class="wrapper">
+        <header>
+            <h1>Designer Estilo Mary</h1>
+            <p>Manicure, Design, Cílios e Micropigmentação</p>
+        </header>
 
-    <div class="panel">
-        <label for="cliente-select"><b>Selecionar Cliente:</b></label><br><br>
-        <select id="cliente-select" onchange="mudarCliente()" style="padding: 8px; width: 80%; border-radius: 4px; border: 1px solid #ccc;">
-            <!-- Gerado via JS -->
-        </select>
-    </div>
-
-    <div class="panel balance-card">
-        Cliente Ativa: <span id="nome-cliente-ativo">Mariana</span><br>
-        Saldo Atual: <span id="user-points">25</span> / 50 pontos<br>
-        <div class="rules-info">⚠️ +5 pts por atendimento/indicação | Validade: 60 dias | Máximo: 50 pts</div>
-    </div>
-
-    <div class="panel admin-panel">
-        <h3>Área da Mary (Gerenciamento)</h3>
-        <button type="button" onclick="adicionarPontosAtendimento()">Registrar Atendimento (+5 pts)</button><br>
-        <button type="button" onclick="registrarIndicacao()" style="background-color: #880e4f;">Indicação (Ambos ganham +5 pts)</button>
-    </div>
-
-    <div class="container">
-        <div class="card">
-            <div>
-                <h3>Manicure</h3>
-                <p>Cuidados e esmaltação para mãos.</p>
-                <div class="points">10 pontos</div>
-            </div>
-            <button onclick="resgatar(10, 'Sessão de Manicure')">Resgatar</button>
+        <div class="card-box client-select-box">
+            <label for="cliente-select">Selecionar Cliente:</label>
+            <select id="cliente-select" onchange="mudarCliente()">
+                <!-- Gerado via JS -->
+            </select>
         </div>
 
-        <div class="card">
-            <div>
-                <h3>Design de Sobrancelhas</h3>
-                <p>Alinhamento e valorização do olhar.</p>
-                <div class="points">20 pontos</div>
-            </div>
-            <button onclick="resgatar(20, 'Design de Sobrancelhas')">Resgatar</button>
+        <div class="card-box balance-card">
+            <div class="balance-title">Cliente Ativa</div>
+            <div class="client-active-name" id="nome-cliente-ativo">Mariana</div>
+            <div class="points-display"><span id="user-points">0</span> <span style="font-size: 18px; font-weight: 400;">/ 50 pts</span></div>
+            <div class="rules-info">✨ +5 pts por atendimento ou indicação | ⏳ Validade: 60 dias</div>
         </div>
 
-        <div class="card">
-            <div>
-                <h3>Extensão de Cílios</h3>
-                <p>Volume e destaque natural aos cílios.</p>
-                <div class="points">35 pontos</div>
-            </div>
-            <button onclick="resgatar(35, 'Extensão de Cílios')">Resgatar</button>
+        <div class="card-box admin-panel">
+            <h3>Área da Mary (Gerenciamento)</h3>
+            <button class="btn" type="button" onclick="adicionarPontosAtendimento()">Registrar Atendimento (+5 pts)</button>
+            <button class="btn btn-secondary" type="button" onclick="registrarIndicacao()">Indicação Premiada (Ambos +5 pts)</button>
         </div>
 
-        <div class="card">
-            <div>
-                <h3>Micropigmentação</h3>
-                <p>Definição duradoura para sobrancelhas.</p>
-                <div class="points">50 pontos</div>
+        <div class="rewards-title">Resgate de Benefícios (Cada resgate custa 5 pontos)</div>
+
+        <div class="container">
+            <div class="card">
+                <div>
+                    <h3>Manicure</h3>
+                    <p>Cuidados e esmaltação impecável.</p>
+                    <div class="points-tag">5 pontos</div>
+                </div>
+                <button onclick="resgatar(5, 'Sessão de Manicure')">Resgatar</button>
             </div>
-            <button onclick="resgatar(50, 'Micropigmentação')">Resgatar</button>
+
+            <div class="card">
+                <div>
+                    <h3>Design de Sobrancelhas</h3>
+                    <p>Alinhamento e valorização do olhar.</p>
+                    <div class="points-tag">5 pontos</div>
+                </div>
+                <button onclick="resgatar(5, 'Design de Sobrancelhas')">Resgatar</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <h3>Extensão de Cílios</h3>
+                    <p>Volume e destaque natural aos cílios.</p>
+                    <div class="points-tag">5 pontos</div>
+                </div>
+                <button onclick="resgatar(5, 'Extensão de Cílios')">Resgatar</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <h3>Micropigmentação</h3>
+                    <p>Definição duradoura para sobrancelhas.</p>
+                    <div class="points-tag">5 pontos</div>
+                </div>
+                <button onclick="resgatar(5, 'Micropigmentação')">Resgatar</button>
+            </div>
         </div>
+
+        <div class="message" id="msg"></div>
     </div>
-
-    <div class="message" id="msg"></div>
 
     <script>
+        // Clientes de teste iniciam com 0 pontos (zerados)
         let clientes = [
-            { nome: "Mariana", pontos: 25, ultimaAtualizacao: new Date() },
-            { nome: "Juliana Silva", pontos: 15, ultimaAtualizacao: new Date() },
-            { nome: "Camila Souza", pontos: 40, ultimaAtualizacao: new Date() },
-            { nome: "Fernanda Lima", pontos: 5, ultimaAtualizacao: new Date() },
-            { nome: "Bruna Costa", pontos: 30, ultimaAtualizacao: new Date() }
+            { nome: "Mariana", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Juliana Silva", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Camila Souza", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Fernanda Lima", pontos: 0, ultimaAtualizacao: new Date() },
+            { nome: "Bruna Costa", pontos: 0, ultimaAtualizacao: new Date() }
         ];
 
         let clienteAtualIndex = 0;
-        const LIMITE_MAXIMO_PONTOS = 50; // Teto de 50 pontos (10 atendimentos)
+        const LIMITE_MAXIMO_PONTOS = 50; // Teto de 50 pontos
         const PONTOS_POR_ACAO = 5;       // 5 pontos por atendimento ou indicação
         const DIAS_EXPIRACAO = 60;       // Validade de 60 dias
 
@@ -112,7 +331,7 @@
             clientes.forEach((cli, index) => {
                 let opt = document.createElement("option");
                 opt.value = index;
-                opt.innerText = `${cli.nome} - ${cli.pontos} pts`;
+                opt.innerText = `${cli.nome} (${cli.pontos} pts)`;
                 if (index === clienteAtualIndex) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -152,11 +371,11 @@
                 cli.pontos -= custo;
                 cli.ultimaAtualizacao = new Date();
                 atualizarTela();
-                msgEl.style.color = "#d81b60";
-                msgEl.innerText = `Parabéns ${cli.nome}! Resgatou: ${premio}!`;
+                msgEl.style.color = "#c2185b";
+                msgEl.innerText = `✨ Parabéns ${cli.nome}! Resgatou: ${premio} (-${custo} pts)!`;
             } else {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Pontos insuficientes para ${cli.nome}.`;
+                msgEl.innerText = `❌ Pontos insuficientes para ${cli.nome}. Saldo atual: ${cli.pontos} pts.`;
             }
         }
 
@@ -166,7 +385,7 @@
             
             if (cli.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Erro: O saldo máximo permitido é de ${LIMITE_MAXIMO_PONTOS} pontos!`;
+                msgEl.innerText = `❌ Atingiria o limite máximo de ${LIMITE_MAXIMO_PONTOS} pontos!`;
                 return;
             }
 
@@ -174,8 +393,8 @@
             cli.ultimaAtualizacao = new Date();
             atualizarTela();
             
-            msgEl.style.color = "#d81b60";
-            msgEl.innerText = `Sucesso! +${PONTOS_POR_ACAO} pontos de atendimento para ${cli.nome}!`;
+            msgEl.style.color = "#c2185b";
+            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pontos de atendimento para ${cli.nome}!`;
         }
 
         function registrarIndicacao() {
@@ -188,7 +407,7 @@
             // 1. Quem indicou ganha 5 pts (respeitando o teto de 50)
             if (cliIndicou.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = "A cliente que indicou atingiu o limite máximo de 50 pontos!";
+                msgEl.innerText = "❌ A cliente que indicou já atingiu o limite máximo de 50 pontos!";
                 return;
             }
             cliIndicou.pontos += PONTOS_POR_ACAO;
@@ -205,8 +424,8 @@
             clienteAtualIndex = clientes.length - 1;
             atualizarTela();
 
-            msgEl.style.color = "#d81b60";
-            msgEl.innerText = `Indicação confirmada! ${cliIndicou.nome} e a nova cliente ${nomeIndicada} ganharam +5 pts!`;
+            msgEl.style.color = "#c2185b";
+            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} e ${nomeIndicada} ganharam +5 pts!`;
         }
 
         atualizarTela();
