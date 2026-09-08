@@ -8,18 +8,19 @@
         body { font-family: Arial, sans-serif; background-color: #fdf2f4; color: #333; margin: 0; padding: 20px; }
         header { text-align: center; margin-bottom: 25px; }
         h1 { color: #d81b60; margin-bottom: 5px; }
-        .balance-card { background: #fff; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 20px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-size: 18px; }
+        .panel { background: #fff; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 15px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .balance-card { font-size: 18px; }
         .balance-card span { font-weight: bold; color: #d81b60; }
-        .admin-panel { background: #fce4ec; border: 1px solid #f8bbd0; padding: 15px; border-radius: 8px; max-width: 450px; margin: 0 auto 30px auto; text-align: center; }
-        .admin-panel input { padding: 8px; width: 60%; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .admin-panel button { background-color: #d81b60; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .admin-panel { background: #fce4ec; border: 1px solid #f8bbd0; }
+        .admin-panel input, .admin-panel select { padding: 8px; width: 80%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .admin-panel button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 82%; }
         .admin-panel button:hover { background-color: #ad1457; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
         .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
         .card h3 { margin-top: 0; color: #880e4f; font-size: 17px; }
         .points { color: #e91e63; font-weight: bold; font-size: 16px; margin: 15px 0; }
-        button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
-        button:hover { background-color: #ad1457; }
+        .card button { background-color: #d81b60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; width: 100%; }
+        .card button:hover { background-color: #ad1457; }
         .message { text-align: center; margin-top: 20px; font-weight: bold; height: 24px; font-size: 16px; }
     </style>
 </head>
@@ -30,14 +31,27 @@
         <p>Manicure, Design e Micropigmentação</p>
     </header>
 
-    <div class="balance-card">
-        Saldo da Cliente: <span id="user-points">150</span> pontos
+    <div class="panel">
+        <label for="cliente-select"><b>Selecionar Cliente:</b></label><br><br>
+        <select id="cliente-select" onchange="mudarCliente()" style="padding: 8px; width: 80%; border-radius: 4px; border: 1px solid #ccc;">
+            <option value="0">Mariana (Exemplo 1) - 150 pts</option>
+            <option value="1">Juliana Silva (Exemplo 2) - 80 pts</option>
+            <option value="2">Camila Souza (Exemplo 3) - 200 pts</option>
+            <option value="3">Fernanda Lima (Exemplo 4) - 30 pts</option>
+            <option value="4">Bruna Costa (Exemplo 5) - 120 pts</option>
+        </select>
     </div>
 
-    <div class="admin-panel">
-        <h3>Área da Mary (Adicionar Pontos)</h3>
-        <input type="number" id="valor-compra" placeholder="Valor do serviço (R$)">
-        <button type="button" onclick="adicionarPontos()">Adicionar</button>
+    <div class="panel balance-card">
+        Cliente Ativa: <span id="nome-cliente-ativo">Mariana</span><br>
+        Saldo Atual: <span id="user-points">150</span> pontos
+    </div>
+
+    <div class="panel admin-panel">
+        <h3>Área da Mary (Gerenciar Pontos & Indicação)</h3>
+        <input type="number" id="valor-compra" placeholder="Valor do serviço (R$)"><br>
+        <button type="button" onclick="adicionarPontos()">Adicionar Pontos por Compra</button><br><br>
+        <button type="button" onclick="registrarIndicacao()" style="background-color: #880e4f;">Indicação Premiada (+20 pts p/ ambos)</button>
     </div>
 
     <div class="container">
@@ -72,27 +86,46 @@
     <div class="message" id="msg"></div>
 
     <script>
-        let pontosAtuais = 150;
+        // Lista com os 5 clientes de teste e seus saldos iniciais
+        let clientes = [
+            { nome: "Mariana", pontos: 150 },
+            { nome: "Juliana Silva", pontos: 80 },
+            { nome: "Camila Souza", pontos: 200 },
+            { nome: "Fernanda Lima", pontos: 30 },
+            { nome: "Bruna Costa", pontos: 120 }
+        ];
+
+        let clienteAtualIndex = 0;
+
+        function mudarCliente() {
+            const select = document.getElementById("cliente-select");
+            clienteAtualIndex = parseInt(select.value);
+            atualizarTela();
+            document.getElementById("msg").innerText = "";
+        }
+
+        function atualizarTela() {
+            document.getElementById("nome-cliente-ativo").innerText = clientes[clienteAtualIndex].nome;
+            document.getElementById("user-points").innerText = clientes[clienteAtualIndex].pontos;
+        }
 
         function resgatar(custo, premio) {
             const msgEl = document.getElementById("msg");
-            const pointsEl = document.getElementById("user-points");
 
-            if (pontosAtuais >= custo) {
-                pontosAtuais -= custo;
-                pointsEl.innerText = pontosAtuais;
+            if (clientes[clienteAtualIndex].pontos >= custo) {
+                clientes[clienteAtualIndex].pontos -= custo;
+                atualizarTela();
                 msgEl.style.color = "#d81b60";
-                msgEl.innerText = `Parabéns! Você resgatou: ${premio}!`;
+                msgEl.innerText = `Parabéns ${clientes[clienteAtualIndex].nome}! Resgatou: ${premio}!`;
             } else {
                 msgEl.style.color = "#c0392b";
-                msgEl.innerText = `Pontos insuficientes para resgatar: ${premio}.`;
+                msgEl.innerText = `Pontos insuficientes para ${clientes[clienteAtualIndex].nome}.`;
             }
         }
 
         function adicionarPontos() {
             const valorInput = document.getElementById("valor-compra");
             const msgEl = document.getElementById("msg");
-            const pointsEl = document.getElementById("user-points");
             
             let valor = parseFloat(valorInput.value);
             if (isNaN(valor) || valor <= 0) {
@@ -102,12 +135,22 @@
             }
 
             let pontosGanhos = Math.floor(valor);
-            pontosAtuais += pontosGanhos;
-            pointsEl.innerText = pontosAtuais;
+            clientes[clienteAtualIndex].pontos += pontosGanhos;
+            atualizarTela();
             
             msgEl.style.color = "#d81b60";
-            msgEl.innerText = `Sucesso! +${pontosGanhos} pontos adicionados à cliente!`;
+            msgEl.innerText = `Sucesso! +${pontosGanhos} pontos para ${clientes[clienteAtualIndex].nome}!`;
             valorInput.value = "";
+        }
+
+        function registrarIndicacao() {
+            const msgEl = document.getElementById("msg");
+            // Adiciona 20 pontos bônus para a cliente ativa por ter indicado alguém
+            clientes[clienteAtualIndex].pontos += 20;
+            atualizarTela();
+            
+            msgEl.style.color = "#d81b60";
+            msgEl.innerText = `Indicação confirmada! +20 pontos bônus para ${clientes[clienteAtualIndex].nome}!`;
         }
     </script>
 
