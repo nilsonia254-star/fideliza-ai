@@ -97,6 +97,12 @@
             font-size: 20px;
             font-weight: 700;
             color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .client-contact-info {
+            font-size: 13px;
+            color: var(--text-muted);
             margin-bottom: 10px;
         }
 
@@ -142,6 +148,7 @@
             width: 100%;
             transition: background 0.2s, transform 0.1s;
             box-shadow: 0 2px 6px rgba(194, 24, 91, 0.2);
+            margin-bottom: 10px;
         }
 
         .btn:hover {
@@ -154,7 +161,7 @@
 
         .btn-secondary {
             background-color: var(--primary-dark);
-            margin-top: 10px;
+            margin-bottom: 0;
         }
 
         .rewards-title {
@@ -257,6 +264,7 @@
         <div class="card-box balance-card">
             <div class="balance-title">Cliente Ativa</div>
             <div class="client-active-name" id="nome-cliente-ativo">Mariana</div>
+            <div class="client-contact-info" id="info-contato-ativo">Tel: (11) 90000-0000 | Telegram: Não informado</div>
             <div class="points-display"><span id="user-points">0</span> <span style="font-size: 18px; font-weight: 400;">/ 50 pts</span></div>
             <div class="rules-info">✨ +5 pts por atendimento ou indicação | ⏳ Validade: 60 dias</div>
         </div>
@@ -311,19 +319,16 @@
     </div>
 
     <script>
-        // Clientes de teste iniciam com 0 pontos (zerados)
+        // Simulando clientes com datas de atualização customizáveis para teste
         let clientes = [
-            { nome: "Mariana", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Juliana Silva", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Camila Souza", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Fernanda Lima", pontos: 0, ultimaAtualizacao: new Date() },
-            { nome: "Bruna Costa", pontos: 0, ultimaAtualizacao: new Date() }
+            { nome: "Mariana", telefone: "(11) 98888-1111", telegram: "@mariana_oficial", pontos: 15, ultimaAtualizacao: new Date() },
+            { nome: "Juliana Silva", telefone: "(11) 97777-2222", telegram: "", pontos: 10, ultimaAtualizacao: new Date() },
+            { nome: "Camila Souza", telefone: "(11) 96666-3333", telegram: "@camis_souza", pontos: 20, ultimaAtualizacao: new Date() }
         ];
 
         let clienteAtualIndex = 0;
-        const LIMITE_MAXIMO_PONTOS = 50; // Teto de 50 pontos
-        const PONTOS_POR_ACAO = 5;       // 5 pontos por atendimento ou indicação
-        const DIAS_EXPIRACAO = 60;       // Validade de 60 dias
+        const LIMITE_MAXIMO_PONTOS = 50; 
+        const PONTOS_POR_ACAO = 5;       
 
         function atualizarSelect() {
             const select = document.getElementById("cliente-select");
@@ -331,7 +336,7 @@
             clientes.forEach((cli, index) => {
                 let opt = document.createElement("option");
                 opt.value = index;
-                opt.innerText = `${cli.nome} (${cli.pontos} pts)`;
+                opt.innerText = `${cli.nome} - ${cli.telefone} (${cli.pontos} pts)`;
                 if (index === clienteAtualIndex) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -340,27 +345,41 @@
         function mudarCliente() {
             const select = document.getElementById("cliente-select");
             clienteAtualIndex = parseInt(select.value);
-            verificarExpiracao(clientes[clienteAtualIndex]);
+            verificarRegrasExpiracao(clientes[clienteAtualIndex]);
             atualizarTela();
-            document.getElementById("msg").innerText = "";
         }
 
-        function verificarExpiracao(cli) {
+        // Lógica de verificação dos 30, 50 e 60 dias
+        function verificarRegrasExpiracao(cli) {
             let agora = new Date();
             let diferencaTempo = agora - new Date(cli.ultimaAtualizacao);
-            let diferencaDias = diferencaTempo / (1000 * 3600 * 24);
+            let diasInativo = Math.floor(diferencaTempo / (1000 * 3600 * 24));
+            const msgEl = document.getElementById("msg");
 
-            if (diferencaDias > DIAS_EXPIRACAO && cli.pontos > 0) {
-                cli.pontos = 0;
-                document.getElementById("msg").style.color = "#c0392b";
-                document.getElementById("msg").innerText = `Atenção: Os pontos de ${cli.nome} expiraram após ${DIAS_EXPIRACAO} dias inativos.`;
+            if (diasInativo >= 60 && cli.pontos > 0) {
+                cli.pontos = 0; // Zera automaticamente
+                msgEl.style.color = "#c0392b";
+                msgEl.innerText = `⚠️ Os pontos de ${cli.nome} expiraram após 60 dias sem movimentação e foram zerados.`;
+            } else if (diasInativo >= 50 && diasInativo < 60 && cli.pontos > 0) {
+                let diasRestantes = 60 - diasInativo;
+                msgEl.style.color = "#d35400";
+                msgEl.innerText = `⚠️ ATENÇÃO: Faltam apenas ${diasRestantes} dias para os pontos de ${cli.nome} expirar!`;
+            } else if (diasInativo >= 30 && diasInativo < 50 && cli.pontos > 0) {
+                msgEl.style.color = "#e67e22";
+                msgEl.innerText = `ℹ️ Aviso: Seus pontos completaram 30 dias desde a última atividade. Lembre-se de usá-los!`;
+            } else {
+                msgEl.innerText = "";
             }
         }
 
         function atualizarTela() {
             atualizarSelect();
-            document.getElementById("nome-cliente-ativo").innerText = clientes[clienteAtualIndex].nome;
-            document.getElementById("user-points").innerText = clientes[clienteAtualIndex].pontos;
+            let cli = clientes[clienteAtualIndex];
+            document.getElementById("nome-cliente-ativo").innerText = cli.nome;
+            
+            let telegramTexto = cli.telegram && cli.telegram.trim() !== "" ? cli.telegram : "Não informado";
+            document.getElementById("info-contato-ativo").innerText = `Tel: ${cli.telefone} | Telegram: ${telegramTexto}`;
+            document.getElementById("user-points").innerText = cli.pontos;
         }
 
         function resgatar(custo, premio) {
@@ -369,10 +388,10 @@
 
             if (cli.pontos >= custo) {
                 cli.pontos -= custo;
-                cli.ultimaAtualizacao = new Date();
+                cli.ultimaAtualizacao = new Date(); // Reseta o cronômetro ao pontuar/resgatar
                 atualizarTela();
                 msgEl.style.color = "#c2185b";
-                msgEl.innerText = `✨ Parabéns ${cli.nome}! Resgatou: ${premio} (-${custo} pts)!`;
+                msgEl.innerText = `✨ Parabéns ${cli.nome}! Resgatou: ${premio} (-${custo} pts)! Validade renovada.`;
             } else {
                 msgEl.style.color = "#c0392b";
                 msgEl.innerText = `❌ Pontos insuficientes para ${cli.nome}. Saldo atual: ${cli.pontos} pts.`;
@@ -390,21 +409,23 @@
             }
 
             cli.pontos += PONTOS_POR_ACAO;
-            cli.ultimaAtualizacao = new Date();
+            cli.ultimaAtualizacao = new Date(); // Reseta o cronômetro para mais 60 dias
             atualizarTela();
             
             msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pontos de atendimento para ${cli.nome}!`;
+            msgEl.innerText = `🎉 Sucesso! +${PONTOS_POR_ACAO} pts para ${cli.nome}! Validade renovada por mais 60 dias.`;
         }
 
         function registrarIndicacao() {
             let nomeIndicada = prompt("Digite o nome da nova cliente indicada por " + clientes[clienteAtualIndex].nome + ":");
             if (!nomeIndicada || nomeIndicada.trim() === "") return;
 
+            let telIndicada = prompt("Digite o WhatsApp/Telefone da nova indicada:") || "(11) 90000-0000";
+            let telegramIndicada = prompt("Digite o usuário do Telegram da nova indicada (opcional):") || "";
+
             const msgEl = document.getElementById("msg");
             let cliIndicou = clientes[clienteAtualIndex];
 
-            // 1. Quem indicou ganha 5 pts (respeitando o teto de 50)
             if (cliIndicou.pontos + PONTOS_POR_ACAO > LIMITE_MAXIMO_PONTOS) {
                 msgEl.style.color = "#c0392b";
                 msgEl.innerText = "❌ A cliente que indicou já atingiu o limite máximo de 50 pontos!";
@@ -413,9 +434,10 @@
             cliIndicou.pontos += PONTOS_POR_ACAO;
             cliIndicou.ultimaAtualizacao = new Date();
 
-            // 2. A nova indicada entra na lista já ganhando 5 pts
             let novaCliente = {
                 nome: nomeIndicada.trim(),
+                telefone: telIndicada.trim(),
+                telegram: telegramIndicada.trim(),
                 pontos: PONTOS_POR_ACAO,
                 ultimaAtualizacao: new Date()
             };
@@ -425,9 +447,11 @@
             atualizarTela();
 
             msgEl.style.color = "#c2185b";
-            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} e ${nomeIndicada} ganharam +5 pts!`;
+            msgEl.innerText = `🤝 Indicação confirmada! ${cliIndicou.nome} ganhou +5 pts e ${nomeIndicada} foi cadastrada!`;
         }
 
+        // Executa ao carregar a página
+        verificarRegrasExpiracao(clientes[clienteAtualIndex]);
         atualizarTela();
     </script>
 
