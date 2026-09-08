@@ -1,18 +1,84 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fideliza AI</title>
+    <title>Fideliza AI - Vitrine de Recompensas</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f9; color: #333; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 30px; }
         h1 { color: #2c3e50; }
-        p { font-size: 18px; }
+        .balance-card { background: #fff; padding: 15px; border-radius: 8px; max-width: 400px; margin: 0 auto 30px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; font-size: 18px; }
+        .balance-card span { font-weight: bold; color: #27ae60; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 260px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .card h3 { margin-top: 0; color: #34495e; }
+        .points { color: #e67e22; font-weight: bold; font-size: 16px; margin: 15px 0; }
+        button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s; }
+        button:hover { background-color: #2980b9; }
+        .message { text-align: center; margin-top: 20px; font-weight: bold; color: #27ae60; height: 24px; }
     </style>
 </head>
 <body>
-    <h1>Fideliza AI no Ar!</h1>
-    <p>Sistema de fidelização de clientes com pontos, recompensas e indicações.</p>
+
+    <header>
+        <h1>Fideliza AI</h1>
+        <p>Sua vitrine exclusiva de prêmios e vantagens</p>
+    </header>
+
+    <div class="balance-card">
+        Seu Saldo Atual: <span id="user-points">150</span> pontos
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div>
+                <h3>Café Grátis</h3>
+                <p>Um café expresso fresquinho para acompanhar seu dia.</p>
+                <div class="points">50 pontos</div>
+            </div>
+            <button onclick="resgatar(50, 'Café Grátis')">Resgatar</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <h3>Desconto de 10%</h3>
+                <p>Válido para qualquer compra na próxima visita.</p>
+                <div class="points">100 pontos</div>
+            </div>
+            <button onclick="resgatar(100, 'Desconto de 10%')">Resgatar</button>
+        </div>
+
+        <div class="card">
+            <div>
+                <h3>Camiseta Exclusiva</h3>
+                <p>Camiseta oficial estilizada da nossa marca.</p>
+                <div class="points">300 pontos</div>
+            </div>
+            <button onclick="resgatar(300, 'Camiseta Exclusiva')">Resgatar</button>
+        </div>
+    </div>
+
+    <div class="message" id="msg"></div>
+
+    <script>
+        let pontosAtuais = 150;
+
+        function resgatar(custo, premio) {
+            const msgEl = document.getElementById("msg");
+            const pointsEl = document.getElementById("user-points");
+
+            if (pontosAtuais >= custo) {
+                pontosAtuais -= custo;
+                pointsEl.innerText = pontosAtuais;
+                msgEl.style.color = "#27ae60";
+                msgEl.innerText = `Parabéns! Você resgatou: ${premio}!`;
+            } else {
+                msgEl.style.color = "#c0392b";
+                msgEl.innerText = `Pontos insuficientes para resgatar: ${premio}.`;
+            }
+        }
+    </script>
+
 </body>
 </html>
