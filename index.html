@@ -1,254 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Designer Estilo Mary - Meus Pontos</title>
-    <style>
-        :root {
-            --primary: #c2185b;
-            --primary-dark: #880e4f;
-            --primary-light: #fce4ec;
-            --bg-color: #fcf6f7;
-            --text-main: #2d2d2d;
-            --text-muted: #666;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px 15px;
-        }
-
-        .wrapper {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            color: var(--primary-dark);
-            margin: 0 0 5px 0;
-            font-size: 24px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .card-box {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.06);
-            margin-bottom: 20px;
-            border: 1px solid rgba(248, 187, 208, 0.4);
-        }
-
-        .search-box label {
-            font-weight: 600;
-            color: var(--primary-dark);
-            font-size: 14px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-size: 15px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .balance-card {
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
-            display: none; /* Só aparece após buscar o cliente */
-        }
-
-        .client-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-        }
-
-        .points-display {
-            font-size: 38px;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 10px 0;
-        }
-
-        .rules-info {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        .rewards-title {
-            text-align: center;
-            color: var(--primary-dark);
-            font-size: 16px;
-            margin: 25px 0 15px 0;
-            font-weight: 600;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #eee;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .card h3 {
-            margin: 0 0 3px 0;
-            color: var(--primary-dark);
-            font-size: 15px;
-        }
-
-        .card p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .badge-pts {
-            background: var(--primary-light);
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 13px;
-            padding: 6px 10px;
-            border-radius: 6px;
-            white-space: nowrap;
-        }
-
-        .msg-erro {
-            color: #c0392b;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="wrapper">
-        <header>
-            <h1>Designer Estilo Mary</h1>
-            <p>Consulte seus pontos e benefícios</p>
-        </header>
-
-        <!-- Campo de Consulta por Telefone -->
-        <div class="card-box search-box" id="box-busca">
-            <label for="telefone-busca">Digite seu WhatsApp ou Telefone:</label>
-            <input type="text" id="telefone-busca" placeholder="(11) 99999-9999">
-            <button class="btn" onclick="consultarPontos()">Consultar Meus Pontos</button>
-            <div class="msg-erro" id="msg-erro"></div>
-        </div>
-
-        <!-- Painel de Exibição do Cliente (Oculto até buscar) -->
-        <div class="card-box balance-card" id="box-resultado">
-            <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase;">Saldo da Cliente</div>
-            <div class="client-name" id="res-nome">Nome da Cliente</div>
-            <div style="font-size: 13px; color: var(--text-muted);" id="res-tel">(11) 00000-0000</div>
-            
-            <div class="points-display"><span id="res-pontos">0</span> <span style="font-size: 18px; font-weight: 400;">/ 50 pts</span></div>
-            
-            <div class="rules-info" id="res-validade">⏳ Validade dos pontos: Ativos</div>
-            <br>
-            <button class="btn" style="background-color: #666; font-size: 13px; padding: 8px; margin-top: 15px;" onclick="voltarBusca()">Consultar outro número</button>
-        </div>
-
-        <div class="rewards-title">Benefícios Disponíveis para Resgate (5 pts cada)</div>
-
-        <div class="container">
-            <div class="card">
-                <div>
-                    <h3>Manicure</h3>
-                    <p>Cuidados e esmaltação impecável.</p>
-                </div>
-                <div class="badge-pts">5 pontos</div>
-            </div>
-
-            <div class="card">
-                <div>
-                    <h3>Design de Sobrancelhas</h3>
-                    <p>Alinhamento e valorização do olhar.</p>
-                </div>
-                <div class="badge-pts">5 pontos</div>
-            </div>
-
-            <div class="card">
-                <div>
-                    <h3>Extensão de Cílios</h3>
-                    <p>Volume e destaque natural aos cílios.</p>
-                </div>
-                <div class="badge-pts">5 pontos</div>
-            </div>
-
-            <div class="card">
-                <div>
-                    <h3>Micropigmentação</h3>
-                    <p>Definição duradoura para sobrancelhas.</p>
-                </div>
-                <div class="badge-pts">5 pontos</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Banco simulado (Depois será integrado ao Google Sheets via n8n)
+  <script>
+        // Banco simulado para testes (Depois será integrado ao Google Sheets via n8n)
         let baseClientes = [
             { nome: "Mariana", telefone: "11988881111", telFormatado: "(11) 98888-1111", pontos: 15, ultimaAtualizacao: new Date() },
             { nome: "Juliana Silva", telefone: "11977772222", telFormatado: "(11) 97777-2222", pontos: 10, ultimaAtualizacao: new Date() },
@@ -256,20 +7,22 @@
         ];
 
         function limparNumero(tel) {
-            return tel.replace(/\D/g, ''); // Remove símbolos e deixa só os números
+            if (!tel) return '';
+            return tel.toString().replace(/\D/g, ''); // Remove tudo que não for número
         }
 
         function consultarPontos() {
             let inputVal = document.getElementById("telefone-busca").value;
-            let numeroLimpo = limparNumero(inputVal);
+            let numeroBuscado = limparNumero(inputVal);
             const msgErro = document.getElementById("msg-erro");
 
-            if (!numeroLimpo) {
+            if (!numeroBuscado) {
                 msgErro.innerText = "Por favor, digite o número de telefone.";
                 return;
             }
 
-            let clienteEncontrada = baseClientes.find(c => c.telefone === numeroLimpo);
+            // Procura o cliente limpando os números de ambas as pontas
+            let clienteEncontrada = baseClientes.find(c => limparNumero(c.telefone) === numeroBuscado);
 
             if (clienteEncontrada) {
                 msgErro.innerText = "";
@@ -277,10 +30,10 @@
                 document.getElementById("box-resultado").style.display = "block";
 
                 document.getElementById("res-nome").innerText = clienteEncontrada.nome;
-                document.getElementById("res-tel").innerText = clienteEncontrada.telFormatado;
+                document.getElementById("res-tel").innerText = clienteEncontrada.telFormatado || clienteEncontrada.telefone;
                 document.getElementById("res-pontos").innerText = clienteEncontrada.pontos;
             } else {
-                msgErro.innerText = "Número não encontrado. Verifique com a Mary se seu cadastro foi realizado.";
+                msgErro.innerText = "Número não encontrado. Verifique se digitou corretamente ou consulte a Mary.";
             }
         }
 
@@ -291,6 +44,3 @@
             document.getElementById("msg-erro").innerText = "";
         }
     </script>
-
-</body>
-</html>
