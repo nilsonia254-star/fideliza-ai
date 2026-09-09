@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Designer Estilo Mary - Meus Pontos</title>
+    <title>Designer Estilo Mary - Fidelidade</title>
     <style>
         :root {
             --primary: #c2185b;
@@ -14,7 +14,6 @@
             --text-muted: #666;
             --white: #ffffff;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -22,140 +21,66 @@
             margin: 0;
             padding: 20px 15px;
         }
-
-        .wrapper {
-            max-width: 500px;
+        .container {
+            max-width: 480px;
             margin: 0 auto;
         }
-
         header {
             text-align: center;
             margin-bottom: 25px;
         }
-
         h1 {
             color: var(--primary-dark);
-            margin: 0 0 5px 0;
+            margin-bottom: 5px;
             font-size: 24px;
         }
-
-        header p {
+        p {
             color: var(--text-muted);
+            font-size: 14px;
             margin: 0;
-            font-size: 14px;
         }
-
-        .card-box {
+        .card {
             background: var(--white);
-            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.06);
-            margin-bottom: 20px;
-            border: 1px solid rgba(248, 187, 208, 0.4);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #f0e6e8;
         }
-
-        .search-box label {
-            font-weight: 600;
-            color: var(--primary-dark);
-            font-size: 14px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-size: 15px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus { border-color: var(--primary); }
-
         .btn {
             background-color: var(--primary);
             color: var(--white);
             border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
             width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
             margin-top: 10px;
             transition: background 0.2s;
         }
-
-        .btn:hover { background-color: var(--primary-dark); }
-
-        .balance-card {
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
-            display: none; 
+        .btn:hover {
+            background-color: var(--primary-dark);
         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Designer Estilo Mary ✨</h1>
+            <p>Seu Cartão Fidelidade Digital</p>
+        </header>
 
-        .client-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-        }
+        <div class="card">
+            <h3>Consultar Meus Pontos</h3>
+            <p>Digite seu telefone para ver seu saldo atual.</p>
+            <!-- Lógica de consulta virá aqui -->
+        </div>
+    </div>
 
-        .points-display {
-            font-size: 38px;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 10px 0;
-        }
-
-        .rules-info {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        .rewards-title {
-            text-align: center;
-            color: var(--primary-dark);
-            font-size: 16px;
-            margin: 25px 0 15px 0;
-            font-weight: 600;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #eee;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .card h3 {
-            margin: 0 0 3px 0;
-            color: var(--primary-dark);
-            font-size: 15px;
-        }
-
-        .card p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .badge-pts {
+    <script>
+        // Scripts do painel do cliente
+    </script>
+</body>
+</html>
