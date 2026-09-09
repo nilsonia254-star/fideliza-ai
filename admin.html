@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - Mary (Nuvem)</title>
+    <title>Painel de Controle - Mary (Nuvens)</title>
     <style>
         :root {
             --primary: #c2185b;
@@ -14,7 +14,6 @@
             --text-muted: #666;
             --white: #ffffff;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -22,109 +21,47 @@
             margin: 0;
             padding: 20px 15px;
         }
-
-        .wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            color: var(--primary-dark);
-            margin: 0 0 5px 0;
-            font-size: 24px;
-        }
-
-        .card-box {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.06);
-            margin-bottom: 20px;
-            border: 1px solid rgba(248, 187, 208, 0.4);
-        }
-
-        label {
-            font-weight: 600;
-            color: var(--primary-dark);
-            font-size: 14px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            background-color: var(--white);
-            font-size: 15px;
-            margin-bottom: 15px;
-            outline: none;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            width: 100%;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(194, 24, 91, 0.2);
-            transition: background 0.2s;
-        }
-
-        .btn:hover { background-color: var(--primary-dark); }
-        .btn-success { background-color: #27ae60; }
-        .btn-success:hover { background-color: #219653; }
-        .btn-secondary { background-color: #880e4f; }
-
-        .client-info-box {
-            background: var(--primary-light);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .message {
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            margin-top: 15px;
-            min-height: 20px;
-        }
     </style>
 </head>
 <body>
-
     <div class="wrapper">
         <header>
             <h1>Painel da Mary 🔒</h1>
             <p>Gerenciamento Nuvem (n8n)</p>
         </header>
 
-        <div class="card-box">
-            <label for="cliente-select">Selecione a Cliente:</label>
-            <select id="cliente-select" onchange="mudarClienteAdmin()">
+        <div class="card">
+            <label for="cliente-selecao">Selecione uma Cliente:</label>
+            <select id="cliente-selecao" onchange="mudarClienteAdmin()">
                 <option value="">Carregando da nuvem...</option>
             </select>
+        </div>
 
-            <div class="client-info-box">
-                <div style="font-size: 14px; color: var(--text-muted);">Cliente Ativa:</div>
-                <div id="adm-nome" style="font-size: 18px; font-weight: 700; color: var(--primary-dark)">-</div>
-                <div id="adm-tel" style="font-size: 13px; color: var(--text-muted)">-</div>
-                <div style="font-size: 26px; font-weight: 800; color: var(--primary); margin-top: 5px;"><span id="adm-pontos">0</span> / 50 pts</div>
-            </div>
+        <div class="card">
+            <div style="font-size: 14px; color: var(--text-muted);">Cliente Ativa:</div>
+            <div id="nome-adm" style="font-size: 18px; font-weight: 700; color: var(--primary-dark);">-</div>
+            <div id="tel-adm" style="font-size: 13px; color: var(--text-muted)">-</div>
+            <div style="font-size: 26px; font-weight: 800; color: var(--primary); margin-top: 5px;">0 / 50 pts</div>
+        </div>
 
-            <button class="btn btn-success" onclick="cadastrarClienteAdmin()">+ Cadastrar Nova Cliente</button>
-            <button class="btn" onclick="adicionarPontosAdmin()">Registrar Atendimento (+5 pts)</button>
-            <button class="btn btn-secondary" onclick="registrarIndicacaoAdmin()">Indicação Premiada (+5 pts)</butt
+        <button class="btn btn-success" onclick="cadastrarClienteAdmin()">+ Cadastrar Nova Cliente</button>
+        <button class="btn" onclick="adicionarPontosAdmin()">Registrar Atendimento (+5 pts)</button>
+        <button class="btn btn-secondary" onclick="registrarIndicacaoAdmin()">Indicação Premiada (+5 pts)</button>
+    </div>
+
+    <script>
+        function mudarClienteAdmin() {
+            // Lógica de seleção
+        }
+        function cadastrarClienteAdmin() {
+            // Lógica de cadastro
+        }
+        function adicionarPontosAdmin() {
+            // Lógica de pontos
+        }
+        function registrarIndicacaoAdmin() {
+            // Lógica de indicação
+        }
+    </script>
+</body>
+</html>
