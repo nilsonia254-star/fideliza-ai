@@ -13,6 +13,7 @@
             --text-main: #2d2d2d;
             --text-muted: #666;
             --white: #ffffff;
+            --success: #2e7d32;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,6 +21,76 @@
             color: var(--text-main);
             margin: 0;
             padding: 20px 15px;
+        }
+        .wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h1 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #f0e6e8;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            background-color: var(--white);
+            outline: none;
+        }
+        .btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        .btn-success {
+            background-color: var(--success);
+        }
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        .btn-secondary {
+            background-color: #5c6bc0;
+        }
+        .btn-secondary:hover {
+            background-color: #3f51b5;
         }
     </style>
 </head>
@@ -41,7 +112,7 @@
             <div style="font-size: 14px; color: var(--text-muted);">Cliente Ativa:</div>
             <div id="nome-adm" style="font-size: 18px; font-weight: 700; color: var(--primary-dark);">-</div>
             <div id="tel-adm" style="font-size: 13px; color: var(--text-muted)">-</div>
-            <div style="font-size: 26px; font-weight: 800; color: var(--primary); margin-top: 5px;">0 / 50 pts</div>
+            <div id="pontos-adm" style="font-size: 26px; font-weight: 800; color: var(--primary); margin-top: 5px;">0 / 50 pts</div>
         </div>
 
         <button class="btn btn-success" onclick="cadastrarClienteAdmin()">+ Cadastrar Nova Cliente</button>
@@ -54,7 +125,7 @@
             // Lógica de seleção
         }
         function cadastrarClienteAdmin() {
-            // Lógica de cadastro
+            alert("Função de cadastro conectando com o n8n...");
         }
         function adicionarPontosAdmin() {
             // Lógica de pontos
