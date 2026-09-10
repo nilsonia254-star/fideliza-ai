@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - Designer Estilo Mary</title>
     <style>
-        :root { --primary: #c2185b; --primary-dark: #880e4f; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; --warning: #f57c00; }
+        :root { --primary: #c2185b; --primary-dark: #880e4f; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; --warning: #f57c00; --danger: #c62828; }
         body { font-family: sans-serif; background: var(--bg-color); margin: 0; padding: 20px 15px; }
         .wrapper { max-width: 480px; margin: 0 auto; }
         .card { background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
@@ -14,6 +14,7 @@
         .btn-success { background: var(--success); }
         .btn-secondary { background: #5c6bc0; }
         .btn-warning { background: var(--warning); }
+        .btn-danger { background: var(--danger); }
         .alerta-indicacao { background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 10px; display: none; text-align: center; font-weight: bold; }
     </style>
 </head>
@@ -38,14 +39,14 @@
         <button class="btn btn-success" onclick="abrirCadastro()">+ Cadastrar Cliente</button>
         <button class="btn" onclick="registrarAtendimento()">Registrar Atendimento (+5 pts)</button>
         <button class="btn btn-secondary" onclick="registrarIndicacaoManual()">Indicação Manual (+5 pts)</button>
-        <button class="btn btn-warning" onclick="resgatarPontos()">🎁 Resgatar Pontos</button>
-        <button class="btn" style="background: #00897b;" onclick="enviarWhatsApp()">📲 Enviar Link</button>
+        <button class="btn btn-warning" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
+        <button class="btn btn-danger" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
+        <button class="btn" style="background: #00897b; margin-top: 15px;" onclick="enviarWhatsApp()">📲 Enviar Link</button>
     </div>
 
     <script>
         let clientes = JSON.parse(localStorage.getItem('mary_clientes_v2')) || [];
 
-        // Verifica se abriu o painel a partir de um link de indicação de cliente
         const urlParams = new URLSearchParams(window.location.search);
         const indicadoPor = urlParams.get('indicadoPor');
 
@@ -98,20 +99,19 @@
             let novaCliente = {
                 nome: nome.trim(),
                 telefone: telefone.trim(),
-                historico: [{ pontos: 5, data: Date.now() }] // Já ganha os 5 pts do primeiro atendimento
+                historico: [{ pontos: 5, data: Date.now() }]
             };
 
             clientes.push(novaCliente);
             let novoIndex = clientes.length - 1;
 
-            // Se veio através de indicação via link, bonifica automaticamente quem indicou!
             if (indicadoPor) {
                 let quemIndicouObj = clientes.find(c => c.nome.toLowerCase() === decodeURIComponent(indicadoPor).toLowerCase());
                 if (quemIndicouObj) {
                     quemIndicouObj.historico.push({ pontos: 5, data: Date.now() });
                     alert(`Sucesso! Nova cliente cadastrada com +5 pts.\nE ${quemIndicouObj.nome} ganhou +5 pts pela indicação!`);
                 } else {
-                    alert("Cliente cadastrada com sucesso! (Atenção: A pessoa que indicou não foi encontrada exatamente pelo nome no cadastro, verifique se o nome está idêntico).");
+                    alert("Cliente cadastrada com sucesso!");
                 }
             } else {
                 alert("Cliente cadastrada com sucesso!");
@@ -119,8 +119,6 @@
 
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
-            
-            // Seleciona automaticamente a nova cliente cadastrada
             document.getElementById('cliente-selecao').value = novoIndex;
             mudarClienteAdmin();
         }
@@ -158,7 +156,7 @@
             atualizarSelect();
             mudarClienteAdmin();
 
-            alert(`Sucesso! \n- ${clienteIndicouObj.nome} ganhou +5 pts pela indicação.\n- ${nomeNovo} foi cadastrada com +5 pts.`);
+            alert(`Sucesso!\n- ${clienteIndicouObj.nome} ganhou +5 pts pela indicação.\n- ${nomeNovo} foi cadastrada com +5 pts.`);
         }
 
         function resgatarPontos() {
@@ -172,14 +170,29 @@
 
             if (!confirm(`${c.nome} possui ${ptsAtuais} pontos. Deseja realizar o resgate e zerar o ciclo?`)) return;
 
-            clientes[index].historico.path({ pontos: -ptsAtuais, data: Date.now() });
-            // Correção de segurança para o método de push do histórico de resgate:
+            // Insere um registro com o valor negativo exato para zerar o saldo atual de forma limpa
             clientes[index].historico.push({ pontos: -ptsAtuais, data: Date.now() });
 
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
             mudarClienteAdmin();
-            alert(`Resgate realizado com sucesso para ${c.nome}!`);
+            alert(`Resgate realizado com sucesso para ${c.nome}! Os pontos foram zerados.`);
+        }
+
+        function excluirCliente() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index === "") return alert("Selecione uma cliente para excluir!");
+
+            let c = clientes[index];
+            if (!confirm(`Tem certeza que deseja APAGAR COMPLETAMENTE o cadastro de ${c.nome}?`)) return;
+
+            // Remove a cliente da lista
+            clientes.splice(index, 1);
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+
+            atualizarSelect();
+            mudarClienteAdmin();
+            alert("Cadastro excluído com sucesso!");
         }
 
         function enviarWhatsApp() {
