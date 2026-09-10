@@ -41,7 +41,7 @@
         let clientes = JSON.parse(localStorage.getItem('mary_clientes_v2')) || [];
 
         function calcularPontosValidos(historico) {
-            let limite60Dias = Date.now() - (60 * 24 * 60 * 60 * 1000); // 60 dias em milissegundos
+            let limite60Dias = Date.now() - (60 * 24 * 60 * 60 * 1000);
             return historico.filter(r => r.data >= limite60Dias).reduce((acc, r) => acc + r.pontos, 0);
         }
 
@@ -75,7 +75,7 @@
             if(!nome) return;
             let telefone = prompt("Telefone/WhatsApp:");
             if(!telefone) return;
-            clientes.push({ nome: nome, telefone: telefone, historico: [] });
+            clientes.push({ nome: nome, telefone: telefone.trim(), historico: [] });
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
         }
@@ -95,9 +95,13 @@
             let index = document.getElementById('cliente-selecao').value;
             if (index === "") return alert("Selecione uma cliente!");
             let c = clientes[index];
-            let url = window.location.href.replace('admin.html', 'index.html');
-            let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${url}`;
-            window.open(`https://api.whatsapp.com/send?phone=55${c.telefone.replace(/\D/g, '')}&text=${encodeURIComponent(msg)}`);
+            
+            let baseUrl = window.location.href.replace('admin.html', 'index.html');
+            let telLimpo = c.telefone.replace(/\D/g, '');
+            let linkCliente = `${baseUrl}?tel=${telLimpo}`;
+
+            let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${linkCliente}`;
+            window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
         }
 
         atualizarSelect();
