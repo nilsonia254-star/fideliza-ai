@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - Designer Estilo Mary</title>
     <style>
-        :root { --primary: #c2185b; --primary-dark: #880e4f; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; }
+        :root { --primary: #c2185b; --primary-dark: #880e4f; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; --warning: #f57c00; }
         body { font-family: sans-serif; background: var(--bg-color); margin: 0; padding: 20px 15px; }
         .wrapper { max-width: 480px; margin: 0 auto; }
         .card { background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
@@ -13,6 +13,7 @@
         .btn { background: var(--primary); color: var(--white); border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .btn-success { background: var(--success); }
         .btn-secondary { background: #5c6bc0; }
+        .btn-warning { background: var(--warning); }
     </style>
 </head>
 <body>
@@ -33,7 +34,8 @@
 
         <button class="btn btn-success" onclick="abrirCadastro()">+ Cadastrar Cliente</button>
         <button class="btn" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
-        <button class="btn btn-secondary" onclick="adicionarPontos(5)">Indicação Premiada (+5 pts)</button>
+        <button class="btn btn-secondary" onclick="registrarIndicacao()">Indicação Premiada (+5 pts)</button>
+        <button class="btn btn-warning" onclick="resgatarPontos()">🎁 Resgatar Pontos</button>
         <button class="btn" style="background: #00897b;" onclick="enviarWhatsApp()">📲 Enviar Link</button>
     </div>
 
@@ -67,17 +69,22 @@
                 document.getElementById('nome-adm').textContent = c.nome;
                 document.getElementById('tel-adm').textContent = c.telefone;
                 document.getElementById('pontos-adm').textContent = `${Math.min(pts, 50)} / 50 pts`;
+            } else {
+                document.getElementById('nome-adm').textContent = "-";
+                document.getElementById('tel-adm').textContent = "-";
+                document.getElementById('pontos-adm').textContent = "0 / 50 pts";
             }
         }
 
         function abrirCadastro() {
-            let nome = prompt("Nome:");
+            let nome = prompt("Nome da nova cliente:");
             if(!nome) return;
-            let telefone = prompt("Telefone/WhatsApp:");
+            let telefone = prompt("Telefone/WhatsApp da nova cliente:");
             if(!telefone) return;
             clientes.push({ nome: nome, telefone: telefone.trim(), historico: [] });
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
+            alert("Cliente cadastrada com sucesso!");
         }
 
         function adicionarPontos(qtd) {
@@ -88,7 +95,65 @@
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
             mudarClienteAdmin();
-            alert(`+${qtd} pontos adicionados!`);
+            alert(`+${qtd} pontos adicionados por atendimento!`);
+        }
+
+        function registrarIndicacao() {
+            let indexIndicou = document.getElementById('cliente-selecao').value;
+            if (indexIndicou === "") {
+                alert("Selecione primeiro a cliente que FEZ a indicação!");
+                return;
+            }
+
+            let clienteIndicouObj = clientes[indexIndicou];
+
+            let nomeNovo = prompt(`Quem foi a nova cliente indicada por ${clienteIndicouObj.nome} que realizou o procedimento? (Nome):`);
+            if (!nomeNovo) return;
+
+            let telNovo = prompt(`Telefone/WhatsApp de ${nomeNovo}:`);
+            if (!telNovo) return;
+
+            let novaCliente = {
+                nome: nomeNovo,
+                telefone: telNovo.trim(),
+                historico: [{ pontos: 5, data: Date.now() }]
+            };
+            clientes.push(novaCliente);
+
+            clientes[indexIndicou].historico.push({ pontos: 5, data: Date.now() });
+
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            
+            atualizarSelect();
+            mudarClienteAdmin();
+
+            alert(`Sucesso! \n- ${clienteIndicouObj.nome} ganhou +5 pts pela indicação.\n- ${nomeNovo} foi cadastrada e ganhou seus primeiros 5 pts!`);
+        }
+
+        function resgatarPontos() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index === "") return alert("Selecione uma cliente!");
+            
+            let c = clientes[index];
+            let ptsAtuais = calcularPontosValidos(c.historico);
+
+            if (ptsAtuais <= 0) {
+                return alert("Esta cliente não possui pontos válidos para resgate no momento.");
+            }
+
+            let confirmar = confirm(`${c.nome} possui ${ptsAtuais} pontos válidos.\nDeseja realizar o resgate e zerar/descontar os pontos utilizados?`);
+            if (!confirmar) return;
+
+            // Registra um lançamento negativo ou limpa o histórico válido (aqui registramos a dedução ou limpamos os pontos válidos antigos)
+            // Para zerar e iniciar novo ciclo de forma limpa: adicionamos um registro de uso ou limpamos o histórico antigo injetando uma "data limite de corte" ou deduzindo.
+            // A forma mais limpa para o cartão: adicionamos um resgate que consome os pontos atuais.
+            clientes[index].historico.push({ pontos: -ptsAtuais, data: Date.now() });
+
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            atualizarSelect();
+            mudarClienteAdmin();
+
+            alert(`Resgate realizado com sucesso para ${c.nome}! Os pontos foram zerados para um novo ciclo.`);
         }
 
         function enviarWhatsApp() {
@@ -99,8 +164,6 @@
             let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
             let baseUrl = window.location.href.replace('admin.html', 'index.html');
             let telLimpo = c.telefone.replace(/\D/g, '');
-            
-            // O link agora carrega o nome e os pontos exatos direto na URL para o celular dela ler
             let linkCliente = `${baseUrl}?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
 
             let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${linkCliente}`;
