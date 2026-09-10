@@ -3,84 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Designer Estilo Mary - Fidelidade</title>
+    <title>Cartão Fidelidade</title>
     <style>
-        :root {
-            --primary: #c2185b;
-            --primary-dark: #880e4f;
-            --primary-light: #fce4ec;
-            --bg-color: #fcf6f7;
-            --text-main: #2d2d2d;
-            --text-muted: #666;
-            --white: #ffffff;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px 15px;
-        }
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        h1 {
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-            font-size: 24px;
-        }
-        p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0;
-        }
-        .card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            border: 1px solid #f0e6e8;
-        }
-        .btn {
-            background-color: var(--primary);
-            color: var(--white);
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background-color: var(--primary-dark);
-        }
+        :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; }
+        body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; }
+        .card { background: var(--white); border-radius: 16px; padding: 25px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .pts { font-size: 42px; font-weight: bold; color: var(--primary); margin: 10px 0; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .stamp { aspect-ratio: 1; border-radius: 50%; background: #f1f1f1; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa; border: 2px dashed #ddd; }
+        .stamp.active { background: #fce4ec; color: var(--primary); border: 2px solid var(--primary); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Designer Estilo Mary ✨</h1>
-            <p>Seu Cartão Fidelidade Digital</p>
-        </header>
-
-        <div class="card">
-            <h3>Consultar Meus Pontos</h3>
-            <p>Digite seu telefone para ver seu saldo atual.</p>
-            <!-- Lógica de consulta virá aqui -->
-        </div>
+    <div class="card">
+        <h2 style="color: #880e4f; margin-bottom: 5px;">✨ Designer Estilo Mary ✨</h2>
+        <div style="color: #666; font-size: 14px;">Seu Cartão Fidelidade</div>
+        
+        <div class="pts" id="total-pontos">0 pts</div>
+        <p style="font-size: 12px; color: #888;">Pontos válidos por 60 dias.</p>
+        
+        <div class="grid" id="cartao-selos"></div>
     </div>
 
     <script>
-        // Scripts do painel do cliente
+        let clientesSalvos = JSON.parse(localStorage.getItem('mary_clientes_v2')) || [];
+        // Simula o primeiro cliente para visualização
+        let clienteAtual = clientesSalvos.length > 0 ? clientesSalvos[0] : { historico: [] };
+        
+        let limite60Dias = Date.now() - (60 * 24 * 60 * 60 * 1000);
+        let pontosValidos = clienteAtual.historico
+            .filter(r => r.data >= limite60Dias)
+            .reduce((acc, r) => acc + r.pontos, 0);
+
+        document.getElementById('total-pontos').textContent = `${Math.min(pontosValidos, 50)} pts`;
+
+        let grid = document.getElementById('cartao-selos');
+        let selosAtivos = Math.floor(pontosValidos / 5);
+
+        for (let i = 1; i <= 10; i++) {
+            let div = document.createElement('div');
+            div.className = `stamp ${i <= selosAtivos ? 'active' : ''}`;
+            div.textContent = i <= selosAtivos ? '✔' : i * 5;
+            grid.appendChild(div);
+        }
     </script>
 </body>
 </html>
