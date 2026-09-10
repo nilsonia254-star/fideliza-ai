@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartão Fidelidade</title>
+    <title>Cartão Fidelidade - Designer Estilo Mary</title>
     <style>
         :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; }
         body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; }
@@ -17,7 +17,7 @@
 <body>
     <div class="card">
         <h2 style="color: #880e4f; margin-bottom: 5px;">✨ Designer Estilo Mary ✨</h2>
-        <div style="color: #666; font-size: 14px;">Seu Cartão Fidelidade</div>
+        <div id="nome-cliente" style="color: #440022; font-size: 16px; font-weight: bold; margin-bottom: 15px;">Seu Cartão Fidelidade</div>
         
         <div class="pts" id="total-pontos">0 pts</div>
         <p style="font-size: 12px; color: #888;">Pontos válidos por 60 dias.</p>
@@ -26,12 +26,29 @@
     </div>
 
     <script>
+        // Pega o telefone que veio na URL (ex: ?tel=11940384115)
+        const urlParams = new URLSearchParams(window.location.search);
+        const telCliente = urlParams.get('tel');
+
         let clientesSalvos = JSON.parse(localStorage.getItem('mary_clientes_v2')) || [];
-        // Simula o primeiro cliente para visualização
-        let clienteAtual = clientesSalvos.length > 0 ? clientesSalvos[0] : { historico: [] };
-        
+        let clienteAtual = null;
+
+        if (telCliente) {
+            clienteAtual = clientesSalvos.find(c => c.telefone.replace(/\D/g, '') === telCliente);
+        }
+
+        // Se não achar pelo link, pega o primeiro da lista como fallback
+        if (!clienteAtual && clientesSalvos.length > 0) {
+            clienteAtual = clientesSalvos[0];
+        }
+
+        let historico = clienteAtual ? clienteAtual.historico : [];
+        if (clienteAtual && clienteAtual.nome) {
+            document.getElementById('nome-cliente').textContent = `Olá, ${clienteAtual.nome}!`;
+        }
+
         let limite60Dias = Date.now() - (60 * 24 * 60 * 60 * 1000);
-        let pontosValidos = clienteAtual.historico
+        let pontosValidos = historico
             .filter(r => r.data >= limite60Dias)
             .reduce((acc, r) => acc + r.pontos, 0);
 
