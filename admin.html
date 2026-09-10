@@ -88,7 +88,7 @@
             localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
             atualizarSelect();
             mudarClienteAdmin();
-            alert(`+${qtd} pontos! Validade: 60 dias.`);
+            alert(`+${qtd} pontos adicionados!`);
         }
 
         function enviarWhatsApp() {
@@ -96,9 +96,12 @@
             if (index === "") return alert("Selecione uma cliente!");
             let c = clientes[index];
             
+            let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
             let baseUrl = window.location.href.replace('admin.html', 'index.html');
             let telLimpo = c.telefone.replace(/\D/g, '');
-            let linkCliente = `${baseUrl}?tel=${telLimpo}`;
+            
+            // O link agora carrega o nome e os pontos exatos direto na URL para o celular dela ler
+            let linkCliente = `${baseUrl}?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
 
             let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${linkCliente}`;
             window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
