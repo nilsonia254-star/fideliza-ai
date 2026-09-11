@@ -3,141 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Estilo Mary</title>
+    <title>Painel - Designer Estilo Mary</title>
     <style>
-        :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; }
-        body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; }
-        .card { background: var(--white); border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
-        h2 { color: #880e4f; text-align: center; margin-bottom: 20px; font-size: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: #fff; }
-        button { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-whatsapp { background: #25D366; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .client-info { background: #fdf2f4; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 13px; color: #444; border-left: 3px solid var(--primary); }
+        :root { --primary: #c2185b; --primary-dark: #880e4f; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; --warning: #f57c00; --danger: #c62828; }
+        body { font-family: sans-serif; background: var(--bg-color); margin: 0; padding: 20px 15px; }
+        .wrapper { max-width: 480px; margin: 0 auto; }
+        .card { background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; margin-bottom: 10px; }
+        .btn { background: var(--primary); color: var(--white); border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn-success { background: var(--success); }
+        .btn-secondary { background: #5c6bc0; }
+        .btn-warning { background: var(--warning); }
+        .btn-danger { background: var(--danger); }
+        .alerta-indicacao { background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 10px; display: none; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>✨ Painel Estilo Mary ✨</h2>
+    <div class="wrapper">
+        <h1 style="text-align: center; color: var(--primary-dark);">Painel da Mary 🔒</h1>
+        
+        <div id="aviso-indicacao" class="alerta-indicacao"></div>
 
-        <div class="form-group">
-            <label>Selecione a Cliente:</label>
-            <select id="cliente-selecao" onchange="carregarDadosCliente()">
-                <option value="">-- Escolha uma cliente --</option>
+        <div class="card">
+            <select id="cliente-selecao" onchange="mudarClienteAdmin()">
+                <option value="">Selecione uma cliente...</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Ou Cadastrar Nova Cliente:</label>
-            <input type="text" id="novo-nome" placeholder="Nome da Cliente">
+        <div class="card">
+            <div id="nome-adm" style="font-size: 18px; font-weight: bold; color: var(--primary-dark);">-</div>
+            <div id="tel-adm" style="font-size: 13px; color: #666">-</div>
+            <div id="pontos-adm" style="font-size: 26px; font-weight: bold; color: var(--primary); margin-top: 5px;">0 / 50 pts</div>
         </div>
-        <div class="form-group">
-            <input type="text" id="novo-tel" placeholder="WhatsApp (com DDD)">
-        </div>
-        <button class="btn-primary" onclick="cadastrarCliente()">➕ Cadastrar Cliente</button>
 
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-
-        <div id="painel-cliente" style="display:none;">
-            <div class="client-info" id="resumo-cliente"></div>
-
-            <div class="form-group" style="margin-top: 15px;">
-                <label>Adicionar Pontos / Procedimento:</label>
-                <input type="number" id="pontos-adicionar" placeholder="Ex: 5 ou 10" value="5">
-            </div>
-            <button class="btn-primary" onclick="adicionarPontos()">✨ Adicionar Pontos</button>
-
-            <!-- Botão para enviar o link correto do cartão via WhatsApp -->
-            <button class="btn-whatsapp" onclick="enviarWhatsApp()" style="margin-top: 15px;">💬 Enviar Cartão no WhatsApp</button>
-        </div>
+        <button class="btn btn-success" onclick="abrirCadastro()">+ Cadastrar Cliente</button>
+        <button class="btn" onclick="registrarAtendimento()">Registrar Atendimento (+5 pts)</button>
+        <button class="btn btn-secondary" onclick="registrarIndicacaoManual()">Indicação Manual (+5 pts)</button>
+        <button class="btn btn-warning" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
+        <button class="btn btn-danger" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
+        <button class="btn" style="background: #00897b; margin-top: 15px;" onclick="enviarWhatsApp()">📲 Enviar Link</button>
     </div>
 
     <script>
-        // Banco de dados simulado no navegador (localStorage)
-        let clientes = JSON.parse(localStorage.getItem('mary_clientes')) || [];
+        let clientes = JSON.parse(localStorage.getItem('mary_clientes_v2')) || [];
 
-        function salvarNoLocalStorage() {
-            localStorage.setItem('mary_clientes', JSON.stringify(clientes));
+        const urlParams = new URLSearchParams(window.location.search);
+        const indicadoPor = urlParams.get('indicadoPor');
+
+        if (indicadoPor) {
+            let aviso = document.getElementById('aviso-indicacao');
+            aviso.style.display = 'block';
+            aviso.innerHTML = `✨ Nova cliente veio por indicação de: <b>${decodeURIComponent(indicadoPor)}</b>! Cadastre-a abaixo para creditar os pontos de ambas.`;
+        }
+
+        function calcularPontosValidos(historico) {
+            let limite60Dias = Date.now() - (60 * 24 * 60 * 60 * 1000);
+            return historico.filter(r => r.data >= limite60Dias).reduce((acc, r) => acc + r.pontos, 0);
         }
 
         function atualizarSelect() {
             let select = document.getElementById('cliente-selecao');
-            select.innerHTML = '<option value="">-- Escolha uma cliente --</option>';
+            let atual = select.value;
+            select.innerHTML = '<option value="">Selecione uma cliente...</option>';
             clientes.forEach((c, index) => {
+                let pts = calcularPontosValidos(c.historico);
                 let opt = document.createElement('option');
                 opt.value = index;
-                opt.textContent = `${c.nome} (${c.telefone})`;
+                opt.textContent = `${c.nome} (${pts} pts)`;
                 select.appendChild(opt);
             });
+            select.value = atual;
         }
 
-        function cadastrarCliente() {
-            let nome = document.getElementById('novo-nome').value.trim();
-            let tel = document.getElementById('novo-tel').value.trim();
-
-            if (!nome || !tel) {
-                alert('Por favor, preencha o nome e o telefone da cliente!');
-                return;
+        function mudarClienteAdmin() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index !== "") {
+                let c = clientes[index];
+                let pts = calcularPontosValidos(c.historico);
+                document.getElementById('nome-adm').textContent = c.nome;
+                document.getElementById('tel-adm').textContent = c.telefone;
+                document.getElementById('pontos-adm').textContent = `${Math.min(pts, 50)} / 50 pts`;
+            } else {
+                document.getElementById('nome-adm').textContent = "-";
+                document.getElementById('tel-adm').textContent = "-";
+                document.getElementById('pontos-adm').textContent = "0 / 50 pts";
             }
-
-            clientes.push({ nome: nome, telefone: tel, historico: [] });
-            salvarNoLocalStorage();
-            atualizarSelect();
-
-            document.getElementById('novo-nome').value = '';
-            document.getElementById('novo-tel').value = '';
-            alert('Cliente cadastrada com sucesso! 🎉');
         }
 
-        function calcularPontosValidos(historico) {
-            let agora = new Date().getTime();
-            let pontosTotais = 0;
-            historico.forEach(h => {
-                let dataRegistro = new Date(h.data).getTime();
-                let diasPassados = (agora - dataRegistro) / (1000 * 60 * 60 * 24);
-                // Pontos válidos por 60 dias
-                if (diasPassados <= 60) {
-                    pontosTotais += h.pts;
+        function abrirCadastro() {
+            let nome = prompt("Nome da nova cliente:");
+            if(!nome) return;
+            let telefone = prompt("Telefone/WhatsApp da nova cliente:");
+            if(!telefone) return;
+
+            let novaCliente = {
+                nome: nome.trim(),
+                telefone: telefone.trim(),
+                historico: [{ pontos: 5, data: Date.now() }]
+            };
+
+            clientes.push(novaCliente);
+            let novoIndex = clientes.length - 1;
+
+            if (indicadoPor) {
+                let quemIndicouObj = clientes.find(c => c.nome.toLowerCase() === decodeURIComponent(indicadoPor).toLowerCase());
+                if (quemIndicouObj) {
+                    quemIndicouObj.historico.push({ pontos: 5, data: Date.now() });
+                    alert(`Sucesso! Nova cliente cadastrada com +5 pts.\nE ${quemIndicouObj.nome} ganhou +5 pts pela indicação!`);
+                } else {
+                    alert("Cliente cadastrada com sucesso!");
                 }
+            } else {
+                alert("Cliente cadastrada com sucesso!");
+            }
+
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            atualizarSelect();
+            document.getElementById('cliente-selecao').value = novoIndex;
+            mudarClienteAdmin();
+        }
+
+        function registrarAtendimento() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index === "") return alert("Selecione uma cliente!");
+            
+            clientes[index].historico.push({ pontos: 5, data: Date.now() });
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            atualizarSelect();
+            mudarClienteAdmin();
+            alert(`+5 pontos adicionados por atendimento!`);
+        }
+
+        function registrarIndicacaoManual() {
+            let indexIndicou = document.getElementById('cliente-selecao').value;
+            if (indexIndicou === "") return alert("Selecione primeiro a cliente que FEZ a indicação!");
+
+            let clienteIndicouObj = clientes[indexIndicou];
+            let nomeNovo = prompt(`Nome da nova cliente indicada por ${clienteIndicouObj.nome}:`);
+            if (!nomeNovo) return;
+            let telNovo = prompt(`Telefone de ${nomeNovo}:`);
+            if (!telNovo) return;
+
+            clientes.push({
+                nome: nomeNovo.trim(),
+                telefone: telNovo.trim(),
+                historico: [{ pontos: 5, data: Date.now() }]
             });
-            return pontosTotais;
+
+            clientes[indexIndicou].historico.push({ pontos: 5, data: Date.now() });
+
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            atualizarSelect();
+            mudarClienteAdmin();
+
+            alert(`Sucesso!\n- ${clienteIndicouObj.nome} ganhou +5 pts pela indicação.\n- ${nomeNovo} foi cadastrada com +5 pts.`);
         }
 
-        function carregarDadosCliente() {
+        function resgatarPontos() {
             let index = document.getElementById('cliente-selecao').value;
-            let painel = document.getElementById('painel-cliente');
-
-            if (index === "") {
-                painel.style.display = "none";
-                return;
-            }
-
-            painel.style.display = "block";
+            if (index === "") return alert("Selecione uma cliente!");
+            
             let c = clientes[index];
-            let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
+            let ptsAtuais = calcularPontosValidos(c.historico);
 
-            document.getElementById('resumo-cliente').innerHTML = `
-                <b>Cliente:</b> ${c.nome}<br>
-                <b>Telefone:</b> ${c.telefone}<br>
-                <b>Pontos Atuais:</b> <span style="color: #c2185b; font-weight: bold; font-size: 15px;">${ptsTotais} pts</span> (válidos)
-            `;
+            if (ptsAtuais <= 0) return alert("Esta cliente não possui pontos válidos para resgate.");
+
+            if (!confirm(`${c.nome} possui ${ptsAtuais} pontos. Deseja realizar o resgate e zerar o ciclo?`)) return;
+
+            // Insere um registro com o valor negativo exato para zerar o saldo atual de forma limpa
+            clientes[index].historico.push({ pontos: -ptsAtuais, data: Date.now() });
+
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+            atualizarSelect();
+            mudarClienteAdmin();
+            alert(`Resgate realizado com sucesso para ${c.nome}! Os pontos foram zerados.`);
         }
 
-        function adicionarPontos() {
+        function excluirCliente() {
             let index = document.getElementById('cliente-selecao').value;
-            let qtd = parseInt(document.getElementById('pontos-adicionar').value);
+            if (index === "") return alert("Selecione uma cliente para excluir!");
 
-            if (isNaN(qtd) || qtd <= 0) {
-                alert('Digite uma quantidade válida de pontos!');
-                return;
-            }
+            let c = clientes[index];
+            if (!confirm(`Tem certeza que deseja APAGAR COMPLETAMENTE o cadastro de ${c.nome}?`)) return;
 
-            clientes[index].historico.push({ pts: qtd, data: new Date().toISOString() });
-            salvarNoLocalStorage();
-            carregarDadosCliente();
-            alert(`${qtd} pontos adicionados com sucesso! ✨`);
+            // Remove a cliente da lista
+            clientes.splice(index, 1);
+            localStorage.setItem('mary_clientes_v2', JSON.stringify(clientes));
+
+            atualizarSelect();
+            mudarClienteAdmin();
+            alert("Cadastro excluído com sucesso!");
         }
 
         function enviarWhatsApp() {
@@ -146,18 +201,14 @@
             let c = clientes[index];
             
             let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
+            let baseUrl = window.location.href.replace('admin.html', 'index.html');
             let telLimpo = c.telefone.replace(/\D/g, '');
-            
-            // LINK FIXO APONTANDO EXATAMENTE PARA O INDEX.HTML DO SEU CARTÃO
-            let linkCliente = `https://nilsonia254-star.github.io/fideliza-ai/index.html?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
+            let linkCliente = `${baseUrl}?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
 
-            // Mensagem comercial organizada
-            let msg = `✨ *DESIGNER ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade foi atualizado. 💅\n\nAcesse seu saldo de pontos, confira nosso endereço e agende seu próximo horário por hier:\n👉 ${linkCliente}`;
-            
+            let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${linkCliente}`;
             window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
         }
 
-        // Inicializa a lista ao carregar a página
         atualizarSelect();
     </script>
 </body>
