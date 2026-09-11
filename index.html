@@ -13,6 +13,7 @@
         .stamp { aspect-ratio: 1; border-radius: 50%; background: #f1f1f1; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa; border: 2px dashed #ddd; }
         .stamp.active { background: #fce4ec; color: var(--primary); border: 2px solid var(--primary); }
         .btn-zap { background: #25D366; color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+        .btn-agendar { background: var(--primary); color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
         .address-box { background: #fdf2f4; border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 12px; color: #555; text-align: left; border-left: 3px solid var(--primary); line-height: 1.4; }
     </style>
 </head>
@@ -29,13 +30,16 @@
         <!-- Botão para a cliente indicar amigas -->
         <button class="btn-zap" onclick="compartilharIndicacao()">🎁 Indicar Amiga e Ganhar Pontos</button>
 
-        <!-- Endereço do Salão logo abaixo -->
+        <!-- Endereço do Salão -->
         <div class="address-box">
             <b>📍 Local de Atendimento:</b><br>
             Rua Nova Aliança, nº 2B<br>
             <i>(Travessa da Agostiniana Chantal)</i><br>
             Bairro: Jd. Nova Conquista
         </div>
+
+        <!-- Botão para agendar horário direto no WhatsApp do Salão -->
+        <a href="#" id="link-agendamento" class="btn-agendar" target="_blank">📅 Agendar Horário no WhatsApp</a>
     </div>
 
     <script>
@@ -60,6 +64,13 @@
             div.textContent = i <= selosAtivos ? '✔' : i * 5;
             grid.appendChild(div);
         }
+
+        // COLOQUE AQUI O NÚMERO DO WHATSAPP DO SEU SALÃO (com DDD e 55 na frente)
+        // Exemplo: '5511999999999'
+        const numeroWhatsAppSalao = '5511999999999'; 
+
+        let textoAgendamento = `Olá Mary! Vim pelo meu cartão fidelidade e gostaria de agendar um horário. Meu nome é ${clienteNomeExibicao}.`;
+        document.getElementById('link-agendamento').href = `https://api.whatsapp.com/send?phone=${numeroWhatsAppSalao}&text=${encodeURIComponent(textoAgendamento)}`;
 
         function compartilharIndicacao() {
             let baseUrl = window.location.href.split('?')[0];
