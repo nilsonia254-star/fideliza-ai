@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - Designer Estilo Mary</title>
+    <title>Cartão Fidelidade - Designer Estilo Mary</title>
     <style>
         :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; }
         body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; }
@@ -49,7 +49,7 @@
             </div>
             <button class="btn-primary" onclick="adicionarPontos()">✨ Adicionar Pontos</button>
 
-            <!-- Botão para enviar o link limpo via WhatsApp -->
+            <!-- Botão para enviar o link via WhatsApp -->
             <button class="btn-whatsapp" onclick="enviarWhatsApp()" style="margin-top: 15px;">💬 Enviar Cartão no WhatsApp</button>
         </div>
     </div>
@@ -150,8 +150,8 @@
             let telLimpo = c.telefone.replace(/\D/g, '');
             let linkCliente = `${baseUrl}?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
 
-            // Mensagem atualizada exatamente com a frase solicitada
-            let msg = `Olá ${c.nome}! Acompanhe seus pontos do Cartão Fidelidade Designer Estilo Mary aqui: ${linkCliente}`;
+            // Mensagem limpa focando na marca
+            let msg = `✨ *Cartão Fidelidade - Designer Estilo Mary* ✨\n\nOlá ${c.nome}! Seu cartão foi atualizado com sucesso. 💅\n\nAcesse seu saldo de pontos, confira nosso endereço e agende seu horário por aqui:\n👉 ${linkCliente}`;
             
             window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
         }
