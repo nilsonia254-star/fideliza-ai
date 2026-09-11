@@ -13,22 +13,14 @@
         .stamp { aspect-ratio: 1; border-radius: 50%; background: #f1f1f1; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa; border: 2px dashed #ddd; }
         .stamp.active { background: #fce4ec; color: var(--primary); border: 2px solid var(--primary); }
         .btn-zap { background: #25D366; color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-        .address-box { background: #fdf2f4; border-radius: 8px; padding: 10px; margin-top: 15px; font-size: 12px; color: #555; text-align: left; border-left: 3px solid var(--primary); }
+        .address-box { background: #fdf2f4; border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 12px; color: #555; text-align: left; border-left: 3px solid var(--primary); line-height: 1.4; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2 style="color: #880e4f; margin-bottom: 5px;">✨ Designer Estilo Mary ✨</h2>
-        <div id="nome-cliente" style="color: #440022; font-size: 16px; font-weight: bold; margin-bottom: 5px;">Seu Cartão Fidelidade</div>
+        <div id="nome-cliente" style="color: #440022; font-size: 16px; font-weight: bold; margin-bottom: 15px;">Seu Cartão Fidelidade</div>
         
-        <!-- Endereço do Salão -->
-        <div class="address-box">
-            <b>📍 Local de Atendimento:</b><br>
-            Rua Nova Aliança, nº 2B<br>
-            <i>(Travessa da Agostiniana Chantal)</i><br>
-            Bairro: Jd. Nova Conquista
-        </div>
-
         <div class="pts" id="total-pontos">0 pts</div>
         <p style="font-size: 12px; color: #888; margin-top: 0;">Pontos válidos por 60 dias.</p>
         
@@ -36,6 +28,14 @@
 
         <!-- Botão para a cliente indicar amigas -->
         <button class="btn-zap" onclick="compartilharIndicacao()">🎁 Indicar Amiga e Ganhar Pontos</button>
+
+        <!-- Endereço do Salão logo abaixo -->
+        <div class="address-box">
+            <b>📍 Local de Atendimento:</b><br>
+            Rua Nova Aliança, nº 2B<br>
+            <i>(Travessa da Agostiniana Chantal)</i><br>
+            Bairro: Jd. Nova Conquista
+        </div>
     </div>
 
     <script>
