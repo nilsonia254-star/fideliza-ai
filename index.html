@@ -11,11 +11,40 @@
         h1 { color: #880e4f; font-size: 20px; margin-bottom: 5px; }
         .subtitle { color: #ad1457; font-size: 13px; margin-bottom: 15px; font-weight: 600; }
         .client-welcome { background: #fdf2f4; padding: 10px; border-radius: 10px; font-size: 14px; color: #555; margin-bottom: 15px; border-left: 4px solid var(--primary); text-align: left; }
+        
+        /* Grid de Selos Aprimorado */
         .grid-fidelidade { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
-        .selo { aspect-ratio: 1; background: #fff; border: 2px dashed #f8bbd0; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #aaa; position: relative; font-weight: bold; }
-        .selo.preenchido { background: #fce4ec; border: 2px solid var(--primary); color: var(--primary); }
-        .selo.preenchido::after { content: '💅'; font-size: 16px; position: absolute; }
-        .info-box { background: #fafafa; border-radius: 10px; padding: 12px; margin-bottom: 15px; font-size: 12px; color: #666; text-align: left; border: 1px solid #eee; }
+        .selo { 
+            aspect-ratio: 1; 
+            background: #ffffff; 
+            border: 2px solid #f8bbd0; 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 11px; 
+            color: #ad1457; 
+            position: relative; 
+            font-weight: 700; 
+            box-shadow: 0 2px 5px rgba(194, 24, 91, 0.05);
+            transition: all 0.3s ease;
+        }
+        .selo.preenchido { 
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); 
+            border: 2px solid var(--primary); 
+            color: #880e4f; 
+            box-shadow: 0 4px 8px rgba(194, 24, 91, 0.15);
+            transform: scale(1.02);
+        }
+        .selo.preenchido::after { 
+            content: '💅'; 
+            font-size: 16px; 
+            position: absolute; 
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+
+        .info-box { background: #fafafa; border-radius: 10px; padding: 12px; margin-bottom: 15px; font-size: 12px; color: #666; text-align: left; border: 1px solid #eee; line-height: 1.4; }
         .info-box b { color: #444; }
         .btn-agendar { background: #25D366; color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-sizing: border-box; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
         .footer-obs { font-size: 11px; color: #888; margin-top: 12px; line-height: 1.4; }
@@ -39,12 +68,12 @@
 
         <div class="info-box">
             📍 <b>Endereço do Estúdio:</b><br>
-            Rua Exemplo, 123 - Centro (Próximo à Praça Principal)<br><br>
+            Rua Nova Aliança, nº 2B (Travessa da Agostiniana Chantal) - Jd. Nova Conquista<br><br>
             🎁 <b>Regra do Cartão:</b><br>
             Acumule pontos a cada procedimento e resgate seus benefícios exclusivos!
         </div>
 
-        <!-- Botão Direto para Agendar no WhatsApp com o número configurado -->
+        <!-- Botão Direto para Agendar no WhatsApp -->
         <a href="https://wa.me/5511967066029?text=Olá%20Mary!%20Gostaria%20de%20agendar%20um%20horário." class="btn-agendar" target="_blank">📅 Agendar Horário no WhatsApp</a>
 
         <div class="footer-obs">
@@ -70,8 +99,10 @@
 
         for (let i = 1; i <= 10; i++) {
             let div = document.createElement('div');
+            let pontosDoSelo = i * 5;
             div.className = `selo ${i <= selosAtivos ? 'preenchido' : ''}`;
-            div.innerHTML = i <= selosAtivos ? '' : `${i * 5}pts`;
+            // Se o selo estiver preenchido, esconde o texto para dar lugar ao emoji com destaque, senão mostra o valor (ex: 5pts, 10pts...)
+            div.innerHTML = i <= selosAtivos ? '' : `${pontosDoSelo}pts`;
             grid.appendChild(div);
         }
     </script>
