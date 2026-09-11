@@ -148,12 +148,11 @@
             let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
             let telLimpo = c.telefone.replace(/\D/g, '');
             
-            // Força o link a apontar explicitamente para o index.html do cartão
-            let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + 'index.html';
-            let linkCliente = `${baseUrl}?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
+            // LINK FIXO E GARANTIDO APONTANDO EXATAMENTE PARA O INDEX.HTML DO SEU CARTÃO
+            let linkCliente = `https://nilsonia254-star.github.io/fideliza-ai/index.html?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
 
             // Mensagem comercial organizada
-            let msg = `✨ *DESIGNER ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade foi atualizado. 💅\n\nAcesse seu saldo de pontos, confira nosso endereço e agende seu próximo horário por aqui:\n👉 ${linkCliente}`;
+            let msg = `✨ *DESIGNER ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade foi atualizado. 💅\n\nAcesse seu saldo de pontos, confira nosso endereço e agende seu horário por aqui:\n👉 ${linkCliente}`;
             
             window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
         }
