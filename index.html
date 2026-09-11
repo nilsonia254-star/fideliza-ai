@@ -3,162 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Estilo Mary</title>
+    <title>Cartão Fidelidade - Designer Estilo Mary</title>
     <style>
         :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; }
-        body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; }
-        .card { background: var(--white); border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
-        h2 { color: #880e4f; text-align: center; margin-bottom: 20px; font-size: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; background: #fff; }
-        button { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-whatsapp { background: #25D366; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; }
-        .client-info { background: #fdf2f4; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 13px; color: #444; border-left: 3px solid var(--primary); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-color); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .card { background: var(--white); border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 8px 20px rgba(194, 24, 91, 0.1); box-sizing: border-box; text-align: center; border: 1px solid #f8bbd0; }
+        h1 { color: #880e4f; font-size: 20px; margin-bottom: 5px; }
+        .subtitle { color: #ad1457; font-size: 13px; margin-bottom: 15px; font-weight: 600; }
+        .client-welcome { background: #fdf2f4; padding: 10px; border-radius: 10px; font-size: 14px; color: #555; margin-bottom: 15px; border-left: 4px solid var(--primary); text-align: left; }
+        .grid-fidelidade { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+        .selo { aspect-ratio: 1; background: #fff; border: 2px dashed #f8bbd0; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #aaa; position: relative; font-weight: bold; }
+        .selo.preenchido { background: #fce4ec; border: 2px solid var(--primary); color: var(--primary); }
+        .selo.preenchido::after { content: '💅'; font-size: 16px; position: absolute; }
+        .info-box { background: #fafafa; border-radius: 10px; padding: 12px; margin-bottom: 15px; font-size: 12px; color: #666; text-align: left; border: 1px solid #eee; }
+        .info-box b { color: #444; }
+        .btn-agendar { background: #25D366; color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-sizing: border-box; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .footer-obs { font-size: 11px; color: #888; margin-top: 12px; line-height: 1.4; }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h2>✨ Painel Estilo Mary ✨</h2>
+        <h1>✨ Designer Estilo Mary ✨</h1>
+        <div class="subtitle">Cartão Fidelidade Digital</div>
 
-        <div class="form-group">
-            <label>Selecione a Cliente:</label>
-            <select id="cliente-selecao" onchange="carregarDadosCliente()">
-                <option value="">-- Escolha uma cliente --</option>
-            </select>
+        <div class="client-welcome" id="saudacao-cliente">
+            Olá, <b>Cliente</b>! 👋<br>
+            Seu saldo atual: <span id="texto-pontos" style="color: var(--primary); font-weight: bold;">0 pontos</span> (válidos por 60 dias)
         </div>
 
-        <div class="form-group">
-            <label>Ou Cadastrar Nova Cliente:</label>
-            <input type="text" id="novo-nome" placeholder="Nome da Cliente">
+        <!-- Grade de Selos (50 pontos total / 10 selos de 5 pts) -->
+        <div class="grid-fidelidade" id="grade-selos">
+            <!-- Gerado via JavaScript -->
         </div>
-        <div class="form-group">
-            <input type="text" id="novo-tel" placeholder="WhatsApp (com DDD)">
+
+        <div class="info-box">
+            📍 <b>Endereço do Estúdio:</b><br>
+            Rua Exemplo, 123 - Centro (Próximo à Praça Principal)<br><br>
+            🎁 <b>Regra do Cartão:</b><br>
+            Acumule pontos a cada procedimento e resgate seus benefícios exclusivos!
         </div>
-        <button class="btn-primary" onclick="cadastrarCliente()">➕ Cadastrar Cliente</button>
 
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <!-- Botão Direto para Agendar no WhatsApp com o número configurado -->
+        <a href="https://wa.me/5511967066029?text=Olá%20Mary!%20Gostaria%20de%20agendar%20um%20horário." class="btn-agendar" target="_blank">📅 Agendar Horário no WhatsApp</a>
 
-        <div id="painel-cliente" style="display:none;">
-            <div class="client-info" id="resumo-cliente"></div>
-
-            <div class="form-group" style="margin-top: 15px;">
-                <label>Adicionar Pontos / Procedimento:</label>
-                <input type="number" id="pontos-adicionar" placeholder="Ex: 5 ou 10" value="5">
-            </div>
-            <button class="btn-primary" onclick="adicionarPontos()">✨ Adicionar Pontos</button>
-
-            <!-- Botão para enviar o link correto do cartão via WhatsApp -->
-            <button class="btn-whatsapp" onclick="enviarWhatsApp()" style="margin-top: 15px;">💬 Enviar Cartão no WhatsApp</button>
+        <div class="footer-obs">
+            Apresente este cartão digital na sua próxima visita para somar ou resgatar pontos.
         </div>
     </div>
 
     <script>
-        // Banco de dados simulado no navegador (localStorage)
-        let clientes = JSON.parse(localStorage.getItem('mary_clientes')) || [];
+        // Pega o nome e os pontos passados pelo link do WhatsApp
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomeCliente = urlParams.get('nome') || 'Minha Cliente';
+        const pontosCliente = parseInt(urlParams.get('pts')) || 0;
 
-        function salvarNoLocalStorage() {
-            localStorage.setItem('mary_clientes', JSON.stringify(clientes));
+        // Atualiza o texto de boas-vindas
+        document.getElementById('saudacao-cliente').innerHTML = `
+            Olá, <b>${nomeCliente}</b>! 👋<br>
+            Seu saldo atual: <span style="color: var(--primary); font-weight: bold;">${pontosCliente} pontos</span>
+        `;
+
+        // Desenha os 10 selos (cada selo vale 5 pontos, totalizando 50)
+        const grid = document.getElementById('grade-selos');
+        let selosAtivos = Math.floor(pontosCliente / 5);
+
+        for (let i = 1; i <= 10; i++) {
+            let div = document.createElement('div');
+            div.className = `selo ${i <= selosAtivos ? 'preenchido' : ''}`;
+            div.innerHTML = i <= selosAtivos ? '' : `${i * 5}pts`;
+            grid.appendChild(div);
         }
-
-        function atualizarSelect() {
-            let select = document.getElementById('cliente-selecao');
-            select.innerHTML = '<option value="">-- Escolha uma cliente --</option>';
-            clientes.forEach((c, index) => {
-                let opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = `${c.nome} (${c.telefone})`;
-                select.appendChild(opt);
-            });
-        }
-
-        function cadastrarCliente() {
-            let nome = document.getElementById('novo-nome').value.trim();
-            let tel = document.getElementById('novo-tel').value.trim();
-
-            if (!nome || !tel) {
-                alert('Por favor, preencha o nome e o telefone da cliente!');
-                return;
-            }
-
-            clientes.push({ nome: nome, telefone: tel, historico: [] });
-            salvarNoLocalStorage();
-            atualizarSelect();
-
-            document.getElementById('novo-nome').value = '';
-            document.getElementById('novo-tel').value = '';
-            alert('Cliente cadastrada com sucesso! 🎉');
-        }
-
-        function calcularPontosValidos(historico) {
-            let agora = new Date().getTime();
-            let pontosTotais = 0;
-            historico.forEach(h => {
-                let dataRegistro = new Date(h.data).getTime();
-                let diasPassados = (agora - dataRegistro) / (1000 * 60 * 60 * 24);
-                // Pontos válidos por 60 dias
-                if (diasPassados <= 60) {
-                    pontosTotais += h.pts;
-                }
-            });
-            return pontosTotais;
-        }
-
-        function carregarDadosCliente() {
-            let index = document.getElementById('cliente-selecao').value;
-            let painel = document.getElementById('painel-cliente');
-
-            if (index === "") {
-                painel.style.display = "none";
-                return;
-            }
-
-            painel.style.display = "block";
-            let c = clientes[index];
-            let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
-
-            document.getElementById('resumo-cliente').innerHTML = `
-                <b>Cliente:</b> ${c.nome}<br>
-                <b>Telefone:</b> ${c.telefone}<br>
-                <b>Pontos Atuais:</b> <span style="color: #c2185b; font-weight: bold; font-size: 15px;">${ptsTotais} pts</span> (válidos)
-            `;
-        }
-
-        function adicionarPontos() {
-            let index = document.getElementById('cliente-selecao').value;
-            let qtd = parseInt(document.getElementById('pontos-adicionar').value);
-
-            if (isNaN(qtd) || qtd <= 0) {
-                alert('Digite uma quantidade válida de pontos!');
-                return;
-            }
-
-            clientes[index].historico.push({ pts: qtd, data: new Date().toISOString() });
-            salvarNoLocalStorage();
-            carregarDadosCliente();
-            alert(`${qtd} pontos adicionados com sucesso! ✨`);
-        }
-
-        function enviarWhatsApp() {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert("Selecione uma cliente!");
-            let c = clientes[index];
-            
-            let ptsTotais = Math.min(calcularPontosValidos(c.historico), 50);
-            let telLimpo = c.telefone.replace(/\D/g, '');
-            
-            // LINK FIXO E GARANTIDO APONTANDO EXATAMENTE PARA O INDEX.HTML DO SEU CARTÃO
-            let linkCliente = `https://nilsonia254-star.github.io/fideliza-ai/index.html?nome=${encodeURIComponent(c.nome)}&pts=${ptsTotais}`;
-
-            // Mensagem comercial organizada
-            let msg = `✨ *DESIGNER ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade foi atualizado. 💅\n\nAcesse seu saldo de pontos, confira nosso endereço e agende seu horário por aqui:\n👉 ${linkCliente}`;
-            
-            window.open(`https://api.whatsapp.com/send?phone=55${telLimpo}&text=${encodeURIComponent(msg)}`);
-        }
-
-        // Inicializa a lista ao carregar a página
-        atualizarSelect();
     </script>
 </body>
 </html>
