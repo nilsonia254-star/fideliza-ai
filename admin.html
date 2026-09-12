@@ -17,6 +17,7 @@
         .client-phone { font-size: 12px; color: #666; margin-bottom: 2px; }
         .client-id { font-size: 11px; color: #888; margin-bottom: 6px; }
         .client-points { font-size: 24px; font-weight: bold; color: #c2185b; margin-top: 5px; }
+        .client-validade { font-size: 11px; color: #d81b60; margin-top: 2px; font-weight: 600; }
 
         .btn { width: 100%; padding: 13px 15px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: inline-block; text-align: center; transition: opacity 0.2s; }
         .btn:hover { opacity: 0.9; }
@@ -28,8 +29,10 @@
         .btn-excluir { background: #c62828; }
         .btn-whatsapp { background: #00695c; }
 
-        .editar-container { background: #fff; padding: 10px; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; display: none; }
-        .editar-container input { margin-bottom: 6px; }
+        .acao-container { background: #f9f9f9; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; display: none; text-align: left; }
+        .acao-container input { margin-bottom: 8px; }
+
+        .btn-acao-mini { background: #1976D2; padding: 9px; font-size: 12px; margin-bottom: 0; width: auto; display: inline-block; }
         .btn-salvar-tel { background: #0288d1; padding: 8px; font-size: 12px; margin-bottom: 0; width: auto; display: inline-block; }
     </style>
 </head>
@@ -49,12 +52,13 @@
             <div class="client-phone" id="info-tel">Telefone</div>
             <div class="client-id" id="info-id">ID: </div>
             <div class="client-points" id="info-pts">0 / 50 pts</div>
+            <div class="client-validade">⏱️ Validade dos pontos: 60 dias</div>
             
             <button class="btn btn-salvar-tel" onclick="toggleEditarTel()" style="margin-top: 8px;">✏️ Atualizar Telefone</button>
             
-            <div class="editar-container" id="box-edita-tel">
+            <div class="acao-container" id="box-edita-tel">
                 <input type="text" id="novo-tel-cliente" placeholder="Novo WhatsApp com DDD">
-                <button class="btn btn-salvar-tel" onclick="salvarNovoTelefone()">Salvar Novo Número</button>
+                <button class="btn btn-salvar-tel" onclick="salvarNovoTelefone()">Salvar Número</button>
             </div>
         </div>
 
@@ -62,10 +66,19 @@
         <input type="text" id="novo-nome" placeholder="Nome da Cliente">
         <input type="text" id="novo-tel" placeholder="WhatsApp com DDD (Ex: 119...)">
         
-        <!-- OS 6 BOTÕES COMPLETOS -->
+        <!-- Botões do Painel -->
         <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
         <button class="btn btn-atendimento" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
-        <button class="btn btn-indicacao" onclick="adicionarPontos(5)">Indicação Manual (+5 pts)</button>
+        
+        <!-- Botão Indicação Manual que Abre o Campo da Amiga Indicada -->
+        <button class="btn btn-indicacao" onclick="toggleBoxIndication()">Indicação Manual (+5 pts)</button>
+        
+        <div class="acao-container" id="box-indicacao">
+            <label style="font-size: 12px; font-weight: bold; color: #333;">Nome da Amiga Indicada:</label>
+            <input type="text" id="nome-amiga" placeholder="Digite o nome da amiga indicada" style="margin-top: 4px;">
+            <button class="btn btn-acao-mini" onclick="registrarIndicacao()">Confirmar Indicação (+5 pts)</button>
+        </div>
+
         <button class="btn btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
         <button class="btn btn-excluir" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
         <a href="#" id="link-whatsapp" class="btn btn-whatsapp" target="_blank" onclick="verificarSelecao(event)">📱 Enviar Link</a>
@@ -116,6 +129,7 @@
             let index = document.getElementById('cliente-selecao').value;
             let painel = document.getElementById('painel-cliente');
             document.getElementById('box-edita-tel').style.display = 'none';
+            document.getElementById('box-indicacao').style.display = 'none';
 
             if (index === "") {
                 painel.style.display = "none";
@@ -141,7 +155,7 @@
             let baseURL = window.location.href.replace('admin.html', 'index.html');
             let linkCartao = `${baseURL}?nome=${encodeURIComponent(c.nome)}&pts=${pts}&id=${c.id}`;
 
-            let mensagem = `✨ *ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade Digital está atualizado. 💅\n\nAcesse seu saldo de pontos e indique amigas para ganhar bônus:\n👉 ${linkCartao}`;
+            let mensagem = `✨ *ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade Digital está atualizado. 💅\n\nAcesse seu saldo de pontos (válidos por 60 dias) e indique amigas para ganhar bônus:\n👉 ${linkCartao}`;
 
             let btnZap = document.getElementById('link-whatsapp');
             btnZap.href = `https://api.whatsapp.com/send?phone=55${c.telefone}&text=${encodeURIComponent(mensagem)}`;
@@ -150,6 +164,30 @@
         function toggleEditarTel() {
             let box = document.getElementById('box-edita-tel');
             box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleBoxIndication() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index === "") return alert('Selecione uma cliente primeiro!');
+            let box = document.getElementById('box-indicacao');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function registrarIndicacao() {
+            let index = document.getElementById('cliente-selecao').value;
+            let nomeAmiga = document.getElementById('nome-amiga').value.trim();
+            if (index === "" || !nomeAmiga) return alert('Digite o nome da amiga indicada!');
+
+            // Adiciona 5 pontos para quem indicou (com teto de 50 pontos)
+            clientes[index].pontos = Math.min((clientes[index].pontos || 0) + 5, 50);
+            salvar();
+            carregarDadosCliente();
+            atualizarSelect();
+
+            document.getElementById('nome-amiga').value = '';
+            document.getElementById('box-indicacao').style.display = 'none';
+
+            alert(`Indicação registrada com sucesso! 5 pontos adicionados para a cliente. Lembre-se de cadastrar "${nomeAmiga}" como nova cliente se ela ainda não tiver cadastro! ✨`);
         }
 
         function salvarNovoTelefone() {
@@ -161,7 +199,7 @@
             salvar();
             carregarDadosCliente();
             atualizarSelect();
-            alert('Telefone atualizado com sucesso! O ID e os pontos foram preservados. ✨');
+            alert('Telefone atualizado com sucesso! ✨');
         }
 
         function adicionarPontos(qtd) {
