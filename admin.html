@@ -16,7 +16,7 @@
         .client-name { font-weight: bold; color: #880e4f; font-size: 16px; margin-bottom: 4px; }
         .client-phone { font-size: 12px; color: #666; margin-bottom: 2px; }
         .client-id { font-size: 11px; color: #888; margin-bottom: 6px; }
-        .client-points { font-size: 20px; font-weight: bold; color: #c2185b; margin-top: 5px; }
+        .client-points { font-size: 24px; font-weight: bold; color: #c2185b; margin-top: 5px; }
 
         .btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: inline-block; transition: opacity 0.2s; }
         .btn:hover { opacity: 0.9; }
@@ -43,12 +43,12 @@
             <option value="">-- Selecione uma cliente --</option>
         </select>
 
-        <!-- Caixa de Resumo igual ao modelo antigo -->
+        <!-- Caixa de Resumo Completa -->
         <div class="client-box" id="painel-cliente">
             <div class="client-name" id="info-nome">Nome da Cliente</div>
             <div class="client-phone" id="info-tel">Telefone</div>
             <div class="client-id" id="info-id">ID: </div>
-            <div class="client-points" id="info-pts">0 / 50 pts</div>
+            <div class="client-points" id="info-pts">0 / 5 pts</div>
             
             <button class="btn btn-salvar-tel" onclick="toggleEditarTel()" style="margin-top: 8px; width: auto; padding: 6px 12px;">✏️ Atualizar Telefone</button>
             
@@ -58,10 +58,10 @@
             </div>
         </div>
 
-        <!-- Campos de Cadastro Novo -->
+        <!-- Campos para Cadastrar Nova Cliente -->
         <input type="text" id="novo-nome" placeholder="Nome da Cliente">
         <input type="text" id="novo-tel" placeholder="WhatsApp com DDD (Ex: 119...)">
         
-        <!-- Botões Exatos do Layout Clássico -->
+        <!-- TODOS OS 6 BOTÕES DO LAYOUT ORIGINAL -->
         <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-        <button class="btn btn-atendimento" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
+        <button class="btn btn-atendimento" onclick="adicionarPontos(1)">Registrar Atendimento (+1 pt)</button>
