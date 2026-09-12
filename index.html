@@ -75,7 +75,8 @@
         <!-- Botões de Ação -->
         <a href="https://wa.me/5511967066029?text=Olá%20Mary!%20Gostaria%20de%20agendar%20um%20horário." class="btn-acao" target="_blank">📅 Agendar Horário no WhatsApp</a>
         
-        <a href="#" id="btn-indicar-amiga" class="btn-acao btn-indicar" target="_blank">👥 Indicar Amiga e Ganhar Pontos</a>
+        <!-- Botão Indicação que abre a lista de contatos para escolher para quem enviar -->
+        <button id="btn-indicar-amiga" class="btn-acao btn-indicar" onclick="compartilharIndicacao()">👥 Indicar Amiga e Ganhar Pontos</button>
 
         <div class="footer-obs">
             Apresente este cartão digital na sua próxima visita para somar ou resgatar pontos.
@@ -88,21 +89,15 @@
         const pontosCliente = parseInt(urlParams.get('pts')) || 0;
 
         const saudacaoDiv = document.getElementById('saudacao-cliente');
-        const btnIndicar = document.getElementById('btn-indicar-amiga');
 
         if (!nomeCliente) {
             saudacaoDiv.innerHTML = `Olá! 👋<br>Para ver seu saldo atualizado, acesse o link enviado pela Mary no seu WhatsApp.`;
-            btnIndicar.href = `https://wa.me/5511967066029?text=Olá%20Mary!%20Gostaria%20de%20indicar%20uma%20amiga.`;
         } else {
             saudacaoDiv.innerHTML = `
                 Olá, <b>${nomeCliente}</b>! 👋<br>
                 Seu saldo atual: <span style="color: var(--primary); font-weight: bold;">${pontosCliente} / 50 pontos</span><br>
                 <small style="color: #666; font-size: 11px;">⏱️ Seus pontos são válidos por 60 dias.</small>
             `;
-            
-            // Link dinâmico com o nome da cliente que está indicando
-            let textoIndica = encodeURIComponent(`Olá Mary! Sou a ${nomeCliente} e indiquei uma amiga para conhecer o estúdio. Gostaria de somar meus pontos de indicação! ✨`);
-            btnIndicar.href = `https://wa.me/5511967066029?text=${textoIndica}`;
         }
 
         // Desenha os 10 selos (cada selo vale 5 pontos, totalizando 50)
@@ -115,6 +110,24 @@
             div.className = `selo ${i <= selosAtivos ? 'preenchido' : ''}`;
             div.innerHTML = i <= selosAtivos ? '' : `${pontosDoSelo}pts`;
             grid.appendChild(div);
+        }
+
+        // Função que abre o seletor de contatos/WhatsApp do celular da cliente para ela escolher para quem enviar a indicação
+        function compartilharIndicacao() {
+            let nomeRef = nomeCliente ? nomeCliente : "uma cliente";
+            let textoMensagem = `Oi amiga! Estou fazendo meus procedimentos no Estúdio Designer Estilo Mary e ganhei um cartão fidelidade. Se você for lá e fechar um procedimento indicando meu nome (${nomeRef}), nós duas ganhamos pontos de bônus! Dá uma olhada aqui: ${window.location.href}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Indicação - Designer Estilo Mary',
+                    text: textoMensagem,
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                // Fallback caso o navegador não suporte compartilhamento direto: abre o WhatsApp com a mensagem pronta para escolher o contato
+                let urlZap = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoMensagem)}`;
+                window.open(urlZap, '_blank');
+            }
         }
     </script>
 </body>
