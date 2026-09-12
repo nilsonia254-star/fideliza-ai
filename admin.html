@@ -53,6 +53,7 @@
             <div class="client-id" id="info-id">ID: </div>
             <div class="client-points" id="info-pts">0 / 50 pts</div>
             <div class="client-validade">⏱️ Validade dos pontos: 60 dias</div>
+            <div id="info-indicada-por" style="font-size: 11px; color: #555; margin-top: 4px;"></div>
             
             <button class="btn btn-salvar-tel" onclick="toggleEditarTel()" style="margin-top: 8px;">✏️ Atualizar Telefone</button>
             
@@ -68,15 +69,16 @@
         
         <!-- Botões do Painel -->
         <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-        <button class="btn btn-atendimento" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
+        <button class="btn btn-atendimento" onclick="registrarAtendimento()">Registrar Atendimento (+5 pts)</button>
         
-        <!-- Botão Indicação Manual que Abre o Campo da Amiga Indicada -->
-        <button class="btn btn-indicacao" onclick="toggleBoxIndication()">Indicação Manual (+5 pts)</button>
+        <!-- Botão Indicação Manual -->
+        <button class="btn btn-indicacao" onclick="toggleBoxIndication()">👥 Indicação Manual (Cadastrar Nova)</button>
         
         <div class="acao-container" id="box-indicacao">
-            <label style="font-size: 12px; font-weight: bold; color: #333;">Nome da Amiga Indicada:</label>
-            <input type="text" id="nome-amiga" placeholder="Digite o nome da amiga indicada" style="margin-top: 4px;">
-            <button class="btn btn-acao-mini" onclick="registrarIndicacao()">Confirmar Indicação (+5 pts)</button>
+            <label style="font-size: 12px; font-weight: bold; color: #333;">Cadastrar Amiga Indicada por <span id="nome-quem-indica" style="color: #c2185b;"></span>:</label>
+            <input type="text" id="amiga-nome" placeholder="Nome da nova cliente" style="margin-top: 4px;">
+            <input type="text" id="amiga-tel" placeholder="WhatsApp da nova cliente (Ex: 119...)">
+            <button class="btn btn-acao-mini" onclick="cadastrarAmigaIndicada()">Salvar Nova Cliente no Sistema</button>
         </div>
 
         <button class="btn btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
@@ -115,7 +117,8 @@
                 id: idFixo, 
                 nome: nome, 
                 telefone: tel.replace(/\D/g, ''), 
-                pontos: 0 
+                pontos: 0,
+                indicadoPor: null
             });
 
             salvar();
@@ -152,10 +155,16 @@
             document.getElementById('info-pts').textContent = `${pts} / 50 pts`;
             document.getElementById('novo-tel-cliente').value = c.telefone;
 
+            if (c.indicadoPor) {
+                document.getElementById('info-indicada-por').innerHTML = `🤝 Indicada por: <b>${c.indicadoPor}</b>`;
+            } else {
+                document.getElementById('info-indicada-por').innerHTML = ``;
+            }
+
             let baseURL = window.location.href.replace('admin.html', 'index.html');
             let linkCartao = `${baseURL}?nome=${encodeURIComponent(c.nome)}&pts=${pts}&id=${c.id}`;
 
-            let mensagem = `✨ *ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade Digital está atualizado. 💅\n\nAcesse seu saldo de pontos (válidos por 60 dias) e indique amigas para ganhar bônus:\n👉 ${linkCartao}`;
+            let mensagem = `✨ *ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade Digital está atualizado. 💅\n\nAcesse seu saldo de pontos (válidos por 60 dias):\n👉 ${linkCartao}`;
 
             let btnZap = document.getElementById('link-whatsapp');
             btnZap.href = `https://api.whatsapp.com/send?phone=55${c.telefone}&text=${encodeURIComponent(mensagem)}`;
@@ -168,26 +177,67 @@
 
         function toggleBoxIndication() {
             let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione uma cliente primeiro!');
+            if (index === "") return alert('Selecione primeiro a cliente que fez a indicação!');
+            
+            document.getElementById('nome-quem-indica').textContent = clientes[index].nome;
             let box = document.getElementById('box-indicacao');
             box.style.display = box.style.display === 'none' ? 'block' : 'none';
         }
 
-        function registrarIndicacao() {
-            let index = document.getElementById('cliente-selecao').value;
-            let nomeAmiga = document.getElementById('nome-amiga').value.trim();
-            if (index === "" || !nomeAmiga) return alert('Digite o nome da amiga indicada!');
+        function cadastrarAmigaIndicada() {
+            let indexIndicou = document.getElementById('cliente-selecao').value;
+            let nomeAmiga = document.getElementById('amiga-nome').value.trim();
+            let telAmiga = document.getElementById('amiga-tel').value.trim().replace(/\D/g, '');
 
-            // Adiciona 5 pontos para quem indicou (com teto de 50 pontos)
-            clientes[index].pontos = Math.min((clientes[index].pontos || 0) + 5, 50);
+            if (indexIndicou === "") return alert('Selecione quem indicou!');
+            if (!nomeAmiga || !telAmiga) return alert('Preencha o nome e o WhatsApp da nova cliente!');
+
+            let nomePessoaQueIndicou = clientes[indexIndicou].nome;
+
+            // Cadastra a nova amiga vinculando quem indicou, com 0 pontos inicialmente
+            let idAmiga = 'mary_' + Date.now();
+            clientes.push({
+                id: idAmiga,
+                nome: nomeAmiga,
+                telefone: telAmiga,
+                pontos: 0,
+                indicadoPor: nomePessoaQueIndicou
+            });
+
+            salvar();
+            atualizarSelect();
+
+            document.getElementById('amiga-nome').value = '';
+            document.getElementById('amiga-tel').value = '';
+            document.getElementById('box-indicacao').style.display = 'none';
+
+            alert(`Nova cliente "${nomeAmiga}" cadastrada com sucesso! Ela está com 0 pontos e apta a realizar o primeiro procedimento. Quando ela fizer, registre o atendimento para ambas ganharem os pontos! ✨`);
+        }
+
+        function registrarAtendimento() {
+            let index = document.getElementById('cliente-selecao').value;
+            if (index === "") return alert('Selecione uma cliente primeiro!');
+
+            let clienteAtual = clientes[index];
+            
+            // Adiciona 5 pontos para a cliente selecionada
+            clienteAtual.pontos = Math.min((clienteAtual.pontos || 0) + 5, 50);
+
+            let mensagemExtra = `Atendimento registrado! +5 pontos adicionados para ${clienteAtual.nome}.`;
+
+            // Se essa cliente foi indicada por alguém, pontua quem indicou também!
+            if (clienteAtual.indicadoPor) {
+                let indexQuemIndicou = clientes.findIndex(c => c.nome === clienteAtual.indicadoPor);
+                if (indexQuemIndicou !== -1) {
+                    clientes[indexQuemIndicou].pontos = Math.min((clientes[indexQuemIndicou].pontos || 0) + 5, 50);
+                    mensagemExtra += `\n🎁 Como ela foi indicada por ${clienteAtual.indicadoPor}, a madrinha da indicação também ganhou +5 pontos automaticamente!`;
+                }
+            }
+
             salvar();
             carregarDadosCliente();
             atualizarSelect();
-
-            document.getElementById('nome-amiga').value = '';
-            document.getElementById('box-indicacao').style.display = 'none';
-
-            alert(`Indicação registrada com sucesso! 5 pontos adicionados para a cliente. Lembre-se de cadastrar "${nomeAmiga}" como nova cliente se ela ainda não tiver cadastro! ✨`);
+            alert(mensagemExtra);
         }
 
         function salvarNovoTelefone() {
@@ -200,16 +250,6 @@
             carregarDadosCliente();
             atualizarSelect();
             alert('Telefone atualizado com sucesso! ✨');
-        }
-
-        function adicionarPontos(qtd) {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione uma cliente primeiro!');
-            clientes[index].pontos = Math.min((clientes[index].pontos || 0) + qtd, 50);
-            salvar();
-            carregarDadosCliente();
-            atualizarSelect();
-            alert(`Adicionado ${qtd} pontos com sucesso! ✨`);
         }
 
         function resgatarPontos() {
