@@ -5,68 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel da Mary 🔐</title>
     <style>
-        :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; }
-        body { font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .card { background: var(--white); border-radius: 16px; padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; text-align: center; }
-        h2 { color: #880e4f; margin-bottom: 15px; font-size: 20px; }
-        .form-group { margin-bottom: 12px; text-align: left; }
-        label { display: block; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 4px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; box-sizing: border-box; background: #fff; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 8px; color: white; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fcf6f7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; }
+        .card { background: #ffffff; border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 8px 20px rgba(194, 24, 91, 0.1); text-align: center; border: 1px solid #f8bbd0; box-sizing: border-box; }
+        h2 { color: #880e4f; font-size: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        select, input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #f8bbd0; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fff; color: #333; outline: none; }
+        select:focus, input:focus { border-color: #c2185b; }
+
+        .client-box { background: #fdf2f4; border: 1px solid #f8bbd0; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: none; }
+        .client-name { font-weight: bold; color: #880e4f; font-size: 16px; margin-bottom: 4px; }
+        .client-phone { font-size: 12px; color: #666; margin-bottom: 2px; }
+        .client-id { font-size: 11px; color: #888; margin-bottom: 6px; }
+        .client-points { font-size: 20px; font-weight: bold; color: #c2185b; margin-top: 5px; }
+
+        .btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: inline-block; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+
         .btn-cadastrar { background: #2e7d32; }
-        .btn-atendimento { background: var(--primary); }
+        .btn-atendimento { background: #c2185b; }
         .btn-indicacao { background: #1976D2; }
         .btn-resgatar { background: #f57c00; }
         .btn-excluir { background: #d32f2f; }
-        .btn-atualizar { background: #0288d1; font-size: 12px; padding: 8px; margin-top: 5px; }
-        .btn-whatsapp { background: #25D366; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
-        .client-info { background: #fdf2f4; padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 12px; color: #444; border-left: 3px solid var(--primary); text-align: left; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+        .btn-whatsapp { background: #00695c; }
+
+        .editar-container { background: #fff; padding: 10px; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; display: none; }
+        .editar-container input { margin-bottom: 6px; }
+        .btn-salvar-tel { background: #0288d1; padding: 8px; font-size: 12px; margin-bottom: 0; }
     </style>
 </head>
 <body>
+
     <div class="card">
         <h2>Painel da Mary 🔐</h2>
 
-        <div class="form-group">
-            <label>Selecione a Cliente:</label>
-            <select id="cliente-selecao" onchange="carregarDadosCliente()">
-                <option value="">-- Escolha uma cliente --</option>
-            </select>
-        </div>
+        <!-- Seleção de Clientes -->
+        <select id="cliente-selecao" onchange="carregarDadosCliente()">
+            <option value="">-- Selecione uma cliente --</option>
+        </select>
 
-        <div class="form-group">
-            <label>Cadastrar Nova Cliente:</label>
-            <input type="text" id="novo-nome" placeholder="Nome da Cliente">
-        </div>
-        <div class="form-group">
-            <input type="text" id="novo-tel" placeholder="WhatsApp com DDD (Ex: 119...)">
-        </div>
-        <button class="btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-
-        <div id="painel-cliente" style="display:none;">
-            <div class="client-info" id="resumo-cliente"></div>
-
-            <div class="form-group" style="margin-top: 10px;">
-                <label>Atualizar Telefone da Cliente (se ela trocar):</label>
-                <input type="text" id="edita-tel" placeholder="Novo WhatsApp">
-                <button class="btn-atualizar" onclick="atualizarTelefone()">💾 Salvar Novo Telefone</button>
-            </div>
-
-            <hr>
-
-            <button class="btn-atendimento" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
-            <button class="btn-indicacao" onclick="adicionarPontos(5)">Indicação Manual (+5 pts)</button>
-            <button class="btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
-            <button class="btn-excluir" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
+        <!-- Caixa de Resumo igual ao modelo antigo -->
+        <div class="client-box" id="painel-cliente">
+            <div class="client-name" id="info-nome">Nome da Cliente</div>
+            <div class="client-phone" id="info-tel">Telefone</div>
+            <div class="client-id" id="info-id">ID: </div>
+            <div class="client-points" id="info-pts">0 / 50 pts</div>
             
-            <!-- Botão enviando o link exclusivo contendo o ID fixo -->
-            <a href="#" id="link-whatsapp-cliente" class="btn-whatsapp" target="_blank" style="margin-top: 10px;">📱 Enviar Link Exclusivo</a>
+            <button class="btn btn-salvar-tel" onclick="toggleEditarTel()" style="margin-top: 8px; width: auto; padding: 6px 12px;">✏️ Atualizar Telefone</button>
+            
+            <div class="editar-container" id="box-edita-tel">
+                <input type="text" id="novo-tel-cliente" placeholder="Novo WhatsApp com DDD">
+                <button class="btn btn-salvar-tel" onclick="salvarNovoTelefone()">Salvar Novo Número</button>
+            </div>
         </div>
-    </div>
 
-    <script>
-        let clientes = JSON.parse(localStorage.getItem('mary_clientes')) || [];
-
-        function salvar() {
-            localStorage.setItem('mary_clientes', JSON.stringify(clientes));
+        <!-- Campos de Cadastro Novo -->
+        <input type="text" id="novo-nome" placeholder="Nome da Cliente">
+        <input type="text" id="novo-tel" placeholder="WhatsApp com DDD (Ex: 119...)">
+        
+        <!-- Botões Exatos do Layout Clássico -->
+        <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
+        <button class="btn btn-atendimento" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
