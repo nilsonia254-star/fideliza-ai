@@ -5,286 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel da Mary 🔐</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fcf6f7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; }
-        .card { background: #ffffff; border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 8px 20px rgba(194, 24, 91, 0.1); text-align: center; border: 1px solid #f8bbd0; box-sizing: border-box; }
-        h2 { color: #880e4f; font-size: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #221a1f; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; color: #fff; }
+        .card { background: #2c2529; border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); text-align: center; border: 1px solid #ff00ff; box-sizing: border-box; }
+        h2 { color: #ff80ff; font-size: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         
-        select, input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #f8bbd0; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fff; color: #333; outline: none; }
-        select:focus, input:focus { border-color: #c2185b; }
+        select, input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #555; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #3d353a; color: #fff; outline: none; }
+        select:focus, input:focus { border-color: #ff80ff; }
+        input::placeholder { color: #aaa; }
 
-        .client-box { background: #fdf2f4; border: 1px solid #f8bbd0; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: none; }
-        .client-name { font-weight: bold; color: #880e4f; font-size: 16px; margin-bottom: 4px; }
-        .client-phone { font-size: 12px; color: #666; margin-bottom: 2px; }
+        .client-box { background: #3d353a; border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: none; }
+        .client-name { font-weight: bold; color: #ff80ff; font-size: 16px; margin-bottom: 4px; }
+        .client-phone { font-size: 12px; color: #aaa; margin-bottom: 2px; }
         .client-id { font-size: 11px; color: #888; margin-bottom: 6px; }
-        .client-points { font-size: 24px; font-weight: bold; color: #c2185b; margin-top: 5px; }
+        .client-points { font-size: 24px; font-weight: bold; color: #ff00ff; margin-top: 5px; }
         .client-validade { font-size: 11px; color: #d81b60; margin-top: 2px; font-weight: 600; }
 
-        .btn { width: 100%; padding: 13px 15px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: inline-block; text-align: center; transition: opacity 0.2s; }
+        .btn { width: 100%; padding: 13px 15px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:hover { opacity: 0.9; }
 
-        .btn-cadastrar { background: #2e7d32; }
-        .btn-atendimento { background: #ad1457; }
-        .btn-indicacao { background: #1976D2; }
-        .btn-resgatar { background: #f57c00; }
-        .btn-excluir { background: #c62828; }
-        .btn-whatsapp { background: #00695c; }
-
-        .acao-container { background: #f9f9f9; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; display: none; text-align: left; }
-        .acao-container input { margin-bottom: 8px; }
-
-        .btn-acao-mini { background: #1976D2; padding: 9px; font-size: 12px; margin-bottom: 0; width: auto; display: inline-block; }
-        .btn-salvar-tel { background: #0288d1; padding: 8px; font-size: 12px; margin-bottom: 0; width: auto; display: inline-block; }
+        .btn-cadastrar { background: #008000; } /* Verde escuro */
+        .btn-atendimento-cinza { background: #3d3d3d; border: 2px solid #00c853; } /* Cinza com borda verde viva para +3 pts */
+        .btn-atendimento-magenta { background: #9c004f; } /* Magenta escuro para +5 pts */
+        .btn-indicacao { background: #0056b3; } /* Azul escuro */
+        .btn-resgatar { background: #ff8000; } /* Laranja */
+        .btn-excluir { background: #cc0000; } /* Vermelho */
+        .btn-enviar-link { background: #004d40; } /* Verde petróleo bem escuro */
     </style>
 </head>
 <body>
-
     <div class="card">
         <h2>Painel da Mary 🔐</h2>
-
-        <!-- Seleção de Clientes -->
-        <select id="cliente-selecao" onchange="carregarDadosCliente()">
+        
+        <!-- Seleção de Cliente -->
+        <select id="selectCliente" onchange="carregarDadosCliente()">
             <option value="">Selecione uma cliente...</option>
         </select>
 
-        <!-- Caixa de Resumo da Cliente Selecionada -->
-        <div class="client-box" id="painel-cliente">
-            <div class="client-name" id="info-nome">Nome da Cliente</div>
-            <div class="client-phone" id="info-tel">Telefone</div>
-            <div class="client-id" id="info-id">ID: </div>
-            <div class="client-points" id="info-pts">0 / 50 pts</div>
-            <div class="client-validade">⏱️ Validade dos pontos: 60 dias</div>
-            <div id="info-indicada-por" style="font-size: 11px; color: #555; margin-top: 4px;"></div>
-            
-            <button class="btn btn-salvar-tel" onclick="toggleEditarTel()" style="margin-top: 8px;">✏️ Atualizar Telefone</button>
-            
-            <div class="acao-container" id="box-edita-tel">
-                <input type="text" id="novo-tel-cliente" placeholder="Novo WhatsApp com DDD">
-                <button class="btn btn-salvar-tel" onclick="salvarNovoTelefone()">Salvar Número</button>
-            </div>
-        </div>
+        <!-- Formulário de Cadastro (aparece vazio quando nenhuma cliente é selecionada) -->
+        <input type="text" id="nomeCliente" placeholder="Nome da Cliente">
+        <input type="tel" id="whatsappCliente" placeholder="WhatsApp com DDD (Ex: 119...)">
 
-        <!-- Campos para Cadastrar Nova Cliente -->
-        <input type="text" id="novo-nome" placeholder="Nome da Cliente">
-        <input type="text" id="novo-tel" placeholder="WhatsApp com DDD (Ex: 119...)">
-        
-        <!-- Botões do Painel -->
+        <!-- Botões de Ação Principal -->
         <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-        <button class="btn btn-atendimento" onclick="registrarAtendimento()">Registrar Atendimento (+5 pts)</button>
         
-        <!-- Botão Indicação Manual -->
-        <button class="btn btn-indicacao" onclick="toggleBoxIndication()">👥 Indicação Manual (Cadastrar Nova)</button>
-        
-        <div class="acao-container" id="box-indicacao">
-            <label style="font-size: 12px; font-weight: bold; color: #333;">Cadastrar Amiga Indicada por <span id="nome-quem-indica" style="color: #c2185b;"></span>:</label>
-            <input type="text" id="amiga-nome" placeholder="Nome da nova cliente" style="margin-top: 4px;">
-            <input type="text" id="amiga-tel" placeholder="WhatsApp da nova cliente (Ex: 119...)">
-            <button class="btn btn-acao-mini" onclick="cadastrarAmigaIndicada()">Salvar Nova Cliente no Sistema</button>
-        </div>
+        <!-- NOVA OPÇÃO: +3 PONTOS (Botão Cinza com Borda Verde) -->
+        <button class="btn btn-atendimento-cinza" onclick="adicionarPontos(3)">🎁 Registrar Atendimento (+3 pts)</button>
 
+        <!-- OPÇÃO ORIGINAL: +5 PONTOS -->
+        <button class="btn btn-atendimento-magenta" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
+
+        <button class="btn btn-indicacao" onclick="indicacaoManual()">👥 Indicação Manual (Cadastrar Nova)</button>
         <button class="btn btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
         <button class="btn btn-excluir" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
-        <a href="#" id="link-whatsapp" class="btn btn-whatsapp" target="_blank" onclick="verificarSelecao(event)">📱 Enviar Link</a>
-    </div>
-
-    <script>
-        let clientes = JSON.parse(localStorage.getItem('mary_clientes')) || [];
-
-        function salvar() {
-            localStorage.setItem('mary_clientes', JSON.stringify(clientes));
-        }
-
-        function atualizarSelect() {
-            let select = document.getElementById('cliente-selecao');
-            let valorAntigo = select.value;
-            select.innerHTML = '<option value="">Selecione uma cliente...</option>';
-            clientes.forEach((c, index) => {
-                let opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = `${c.nome} (${c.pontos || 0} pts)`;
-                select.appendChild(opt);
-            });
-            select.value = valorAntigo;
-        }
-
-        function cadastrarCliente() {
-            let nome = document.getElementById('novo-nome').value.trim();
-            let tel = document.getElementById('novo-tel').value.trim();
-            if (!nome || !tel) return alert('Preencha o nome e o telefone!');
-
-            let idFixo = 'mary_' + Date.now();
-
-            clientes.push({ 
-                id: idFixo, 
-                nome: nome, 
-                telefone: tel.replace(/\D/g, ''), 
-                pontos: 0,
-                indicadoPor: null
-            });
-
-            salvar();
-            atualizarSelect();
-            document.getElementById('novo-nome').value = '';
-            document.getElementById('novo-tel').value = '';
-            alert('Cliente cadastrada com sucesso! 🎉');
-        }
-
-        function carregarDadosCliente() {
-            let index = document.getElementById('cliente-selecao').value;
-            let painel = document.getElementById('painel-cliente');
-            document.getElementById('box-edita-tel').style.display = 'none';
-            document.getElementById('box-indicacao').style.display = 'none';
-
-            if (index === "") {
-                painel.style.display = "none";
-                return;
-            }
-
-            painel.style.display = "block";
-            let c = clientes[index];
-
-            if (!c.id) {
-                c.id = 'mary_' + Date.now();
-                salvar();
-            }
-
-            let pts = c.pontos || 0;
-
-            document.getElementById('info-nome').textContent = c.nome;
-            document.getElementById('info-tel').textContent = `WhatsApp: ${c.telefone}`;
-            document.getElementById('info-id').textContent = `ID Fixo: ${c.id}`;
-            document.getElementById('info-pts').textContent = `${pts} / 50 pts`;
-            document.getElementById('novo-tel-cliente').value = c.telefone;
-
-            if (c.indicadoPor) {
-                document.getElementById('info-indicada-por').innerHTML = `🤝 Indicada por: <b>${c.indicadoPor}</b>`;
-            } else {
-                document.getElementById('info-indicada-por').innerHTML = ``;
-            }
-
-            let baseURL = window.location.href.replace('admin.html', 'index.html');
-            let linkCartao = `${baseURL}?nome=${encodeURIComponent(c.nome)}&pts=${pts}&id=${c.id}`;
-
-            let mensagem = `✨ *ESTILO MARY* ✨\n\nOlá ${c.nome}! Seu Cartão Fidelidade Digital está atualizado. 💅\n\nAcesse seu saldo de pontos (válidos por 60 dias):\n👉 ${linkCartao}`;
-
-            let btnZap = document.getElementById('link-whatsapp');
-            btnZap.href = `https://api.whatsapp.com/send?phone=55${c.telefone}&text=${encodeURIComponent(mensagem)}`;
-        }
-
-        function toggleEditarTel() {
-            let box = document.getElementById('box-edita-tel');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function toggleBoxIndication() {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione primeiro a cliente que fez a indicação!');
-            
-            document.getElementById('nome-quem-indica').textContent = clientes[index].nome;
-            let box = document.getElementById('box-indicacao');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function cadastrarAmigaIndicada() {
-            let indexIndicou = document.getElementById('cliente-selecao').value;
-            let nomeAmiga = document.getElementById('amiga-nome').value.trim();
-            let telAmiga = document.getElementById('amiga-tel').value.trim().replace(/\D/g, '');
-
-            if (indexIndicou === "") return alert('Selecione quem indicou!');
-            if (!nomeAmiga || !telAmiga) return alert('Preencha o nome e o WhatsApp da nova cliente!');
-
-            let nomePessoaQueIndicou = clientes[indexIndicou].nome;
-
-            // Cadastra a nova amiga vinculando quem indicou, com 0 pontos inicialmente
-            let idAmiga = 'mary_' + Date.now();
-            clientes.push({
-                id: idAmiga,
-                nome: nomeAmiga,
-                telefone: telAmiga,
-                pontos: 0,
-                indicadoPor: nomePessoaQueIndicou
-            });
-
-            salvar();
-            atualizarSelect();
-
-            document.getElementById('amiga-nome').value = '';
-            document.getElementById('amiga-tel').value = '';
-            document.getElementById('box-indicacao').style.display = 'none';
-
-            alert(`Nova cliente "${nomeAmiga}" cadastrada com sucesso! Ela está com 0 pontos e apta a realizar o primeiro procedimento. Quando ela fizer, registre o atendimento para ambas ganharem os pontos! ✨`);
-        }
-
-        function registrarAtendimento() {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione uma cliente primeiro!');
-
-            let clienteAtual = clientes[index];
-            
-            // Adiciona 5 pontos para a cliente selecionada
-            clienteAtual.pontos = Math.min((clienteAtual.pontos || 0) + 5, 50);
-
-            let mensagemExtra = `Atendimento registrado! +5 pontos adicionados para ${clienteAtual.nome}.`;
-
-            // Se essa cliente foi indicada por alguém, pontua quem indicou também!
-            if (clienteAtual.indicadoPor) {
-                let indexQuemIndicou = clientes.findIndex(c => c.nome === clienteAtual.indicadoPor);
-                if (indexQuemIndicou !== -1) {
-                    clientes[indexQuemIndicou].pontos = Math.min((clientes[indexQuemIndicou].pontos || 0) + 5, 50);
-                    mensagemExtra += `\n🎁 Como ela foi indicada por ${clienteAtual.indicadoPor}, a madrinha da indicação também ganhou +5 pontos automaticamente!`;
-                }
-            }
-
-            salvar();
-            carregarDadosCliente();
-            atualizarSelect();
-            alert(mensagemExtra);
-        }
-
-        function salvarNovoTelefone() {
-            let index = document.getElementById('cliente-selecao').value;
-            let novoTel = document.getElementById('novo-tel-cliente').value.trim().replace(/\D/g, '');
-            if (index === "" || !novoTel) return alert('Digite um telefone válido!');
-
-            clientes[index].telefone = novoTel;
-            salvar();
-            carregarDadosCliente();
-            atualizarSelect();
-            alert('Telefone atualizado com sucesso! ✨');
-        }
-
-        function resgatarPontos() {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione uma cliente primeiro!');
-            if (confirm("Deseja resgatar os benefícios e zerar os pontos desta cliente?")) {
-                clientes[index].pontos = 0;
-                salvar();
-                carregarDadosCliente();
-                atualizarSelect();
-                alert("Pontos zerados para um novo ciclo! 🎁");
-            }
-        }
-
-        function excluirCliente() {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") return alert('Selecione uma cliente primeiro!');
-            if (confirm("Tem certeza que deseja excluir esta cliente?")) {
-                clientes.splice(index, 1);
-                salvar();
-                atualizarSelect();
-                document.getElementById('painel-cliente').style.display = "none";
-                alert("Cliente excluída!");
-            }
-        }
-
-        function verificarSelecao(e) {
-            let index = document.getElementById('cliente-selecao').value;
-            if (index === "") {
-                e.preventDefault();
-                alert('Selecione uma cliente primeiro para enviar o link!');
-            }
-        }
-
-        atualizarSelect();
-    </script>
-</body>
-</html>
+        <button class="btn btn-enviar-link" onclick="enviarLink()">📱 Enviar Link<
