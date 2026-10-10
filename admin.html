@@ -46,15 +46,15 @@
     </div>
 
     <script>
-        // Procura por qualquer uma das chaves antigas que possam ter sido usadas anteriormente
+        // Função inteligente: procura no celular por QUALQUER lista de clientes salva anteriormente
         function obterChaveStorage() {
-            const chavesPossiveis = ['fidelida_clientes', 'clientes', 'fideliza_clientes', 'fideliza_ai_clientes'];
+            const chavesPossiveis = ['fidelida_clientes', 'fideliza_clientes', 'clientes', 'fideliza_ai_clientes'];
             for (let chave of chavesPossiveis) {
                 if (localStorage.getItem(chave)) {
                     return chave;
                 }
             }
-            return 'fidelida_clientes'; // Padrão se nenhuma for encontrada
+            return 'fidelida_clientes';
         }
 
         const STORAGE_KEY = obterChaveStorage();
@@ -73,3 +73,5 @@
         function gerarId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
+
+        function carregarClie
