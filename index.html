@@ -3,132 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartão Fidelidade - Designer Estilo Mary</title>
+    <title>Designer Estilo Mary - Cartão Fidelidade Digital</title>
     <style>
-        :root { --primary: #c2185b; --bg-color: #fcf6f7; --white: #ffffff; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-color); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
-        .card { background: var(--white); border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 8px 20px rgba(194, 24, 91, 0.1); box-sizing: border-box; text-align: center; border: 1px solid #f8bbd0; }
-        h1 { color: #880e4f; font-size: 20px; margin-bottom: 5px; }
-        .subtitle { color: #ad1457; font-size: 13px; margin-bottom: 15px; font-weight: 600; }
-        .client-welcome { background: #fdf2f4; padding: 12px; border-radius: 10px; font-size: 14px; color: #555; margin-bottom: 15px; border-left: 4px solid var(--primary); text-align: left; line-height: 1.4; }
-        
-        /* Grade de Selos (10 selos de 5 pts = 50 pts total) */
-        .grid-fidelidade { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
-        .selo { 
-            aspect-ratio: 1; 
-            background: #ffffff; 
-            border: 2px solid #f8bbd0; 
-            border-radius: 12px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 11px; 
-            color: #ad1457; 
-            position: relative; 
-            font-weight: 700; 
-            box-shadow: 0 2px 5px rgba(194, 24, 91, 0.05);
-        }
-        .selo.preenchido { 
-            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); 
-            border: 2px solid var(--primary); 
-            color: #880e4f; 
-            box-shadow: 0 4px 8px rgba(194, 24, 91, 0.15);
-        }
-        .selo.preenchido::after { 
-            content: '💅'; 
-            font-size: 16px; 
-            position: absolute; 
+        :root {
+            --bg-color: #0d0d0d;
+            --card-bg: #161616;
+            --primary-color: #ff2a85;
+            --text-color: #ffffff;
+            --text-muted: #b0b0b0;
+            --border-color: #ff2a85;
         }
 
-        .info-box { background: #fafafa; border-radius: 10px; padding: 12px; margin-bottom: 15px; font-size: 12px; color: #666; text-align: left; border: 1px solid #eee; line-height: 1.4; }
-        .info-box b { color: #444; }
-        
-        .btn-acao { background: #25D366; color: white; border: none; width: 100%; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-sizing: border-box; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); margin-bottom: 10px; }
-        .btn-indicar { background: #1976D2; box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3); }
-        
-        .footer-obs { font-size: 11px; color: #888; margin-top: 10px; line-height: 1.4; }
-    </style>
-</head>
-<body>
-
-    <div class="card">
-        <h1>✨ Designer Estilo Mary ✨</h1>
-        <div class="subtitle">Cartão Fidelidade Digital</div>
-
-        <div class="client-welcome" id="saudacao-cliente">
-            Carregando cartão...
-        </div>
-
-        <!-- Grade de Selos -->
-        <div class="grid-fidelidade" id="grade-selos">
-            <!-- Gerado via JavaScript -->
-        </div>
-
-        <div class="info-box">
-            📍 <b>Endereço do Estúdio:</b><br>
-            Rua Nova Aliança, nº 2B (Travessa da Agostiniana Chantal) - Jd. Nova Conquista<br><br>
-            🎁 <b>Regra do Cartão:</b><br>
-            Acumule pontos a cada procedimento e resgate seus benefícios exclusivos! (Validade: 60 dias)
-        </div>
-
-        <!-- Botões de Ação -->
-        <a href="https://wa.me/5511967066029?text=Olá%20Mary!%20Gostaria%20de%20agendar%20um%20horário." class="btn-acao" target="_blank">📅 Agendar Horário no WhatsApp</a>
-        
-        <!-- Botão Indicação que abre a lista de contatos para escolher para quem enviar -->
-        <button id="btn-indicar-amiga" class="btn-acao btn-indicar" onclick="compartilharIndicacao()">👥 Indicar Amiga e Ganhar Pontos</button>
-
-        <div class="footer-obs">
-            Apresente este cartão digital na sua próxima visita para somar ou resgatar pontos.
-        </div>
-    </div>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const nomeCliente = urlParams.get('nome');
-        const pontosCliente = parseInt(urlParams.get('pts')) || 0;
-
-        const saudacaoDiv = document.getElementById('saudacao-cliente');
-
-        if (!nomeCliente) {
-            saudacaoDiv.innerHTML = `Olá! 👋<br>Para ver seu saldo atualizado, acesse o link enviado pela Mary no seu WhatsApp.`;
-        } else {
-            saudacaoDiv.innerHTML = `
-                Olá, <b>${nomeCliente}</b>! 👋<br>
-                Seu saldo atual: <span style="color: var(--primary); font-weight: bold;">${pontosCliente} / 50 pontos</span><br>
-                <small style="color: #666; font-size: 11px;">⏱️ Seus pontos são válidos por 60 dias.</small>
-            `;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        // Desenha os 10 selos (cada selo vale 5 pontos, totalizando 50)
-        const grid = document.getElementById('grade-selos');
-        let selosAtivos = Math.floor(pontosCliente / 5);
-
-        for (let i = 1; i <= 10; i++) {
-            let div = document.createElement('div');
-            let pontosDoSelo = i * 5;
-            div.className = `selo ${i <= selosAtivos ? 'preenchido' : ''}`;
-            div.innerHTML = i <= selosAtivos ? '' : `${pontosDoSelo}pts`;
-            grid.appendChild(div);
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(255, 42, 133, 0.15);
+            box-sizing: border-box;
+            text-align: center;
         }
 
-        // Função que abre o seletor de contatos/WhatsApp do celular da cliente para ela escolher para quem enviar a indicação
-        function compartilharIndicacao() {
-            let nomeRef = nomeCliente ? nomeCliente : "uma cliente";
-            let textoMensagem = `Oi amiga! Estou fazendo meus procedimentos no Estúdio Designer Estilo Mary e ganhei um cartão fidelidade. Se você for lá e fechar um procedimento indicando meu nome (${nomeRef}), nós duas ganhamos pontos de bônus! Dá uma olhada aqui: ${window.location.href}`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Indicação - Designer Estilo Mary',
-                    text: textoMensagem,
-                    url: window.location.href,
-                }).catch(() => {});
-            } else {
-                // Fallback caso o navegador não suporte compartilhamento direto: abre o WhatsApp com a mensagem pronta para escolher o contato
-                let urlZap = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoMensagem)}`;
-                window.open(urlZap, '_blank');
-            }
+        .header h1 {
+            font-size: 22px;
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+            font-weight: 700;
         }
-    </script>
-</body>
-</html>
+
+        .header p {
+            font-size: 13px;
+            color: var(--primary-color);
+            margin: 0 0 20px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .client-info {
+            background-color: #1f1f1f;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .client-info h2 {
+            font-size: 15px;
+            margin: 0 0 8px 0;
+            color: var(--text-color);
+        }
+
+        .client-info p {
+            font-size: 14px;
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .client-info span {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .grid-points {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .point-box {
+            background-color: #1a1a1a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            color: var(--primary-color);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .point-box.active {
+            background-color: rgba(255, 42, 133, 0.15);
+            box-shadow: 0 0 10px rgba(255, 42, 133, 0.3);
+        }
+
+        .info-studio {
+            background-color: #1a1a1a;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 12px;
+            color: var(--text-muted);
+            border: 1px solid #333;
+        }
+
+        .info-studio p {
+            margin: 5px 0;
+        }
+
+        .info-studio strong {
+            color: var(--text-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+            transition: opacity 0.2s;
+        }
+
+        .btn-whatsapp {
+            background-color: #198754;
+        }
+
+        .btn-referral {
+            background-color: #0d6efd;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .footer-note {
+            font-size: 11px;
