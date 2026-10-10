@@ -13,48 +13,63 @@
         select:focus, input:focus { border-color: #ff80ff; }
         input::placeholder { color: #aaa; }
 
-        .client-box { background: #3d353a; border: 1px solid #555; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; display: none; }
-        .client-name { font-weight: bold; color: #ff80ff; font-size: 16px; margin-bottom: 4px; }
-        .client-phone { font-size: 12px; color: #aaa; margin-bottom: 2px; }
-        .client-id { font-size: 11px; color: #888; margin-bottom: 6px; }
-        .client-points { font-size: 24px; font-weight: bold; color: #ff00ff; margin-top: 5px; }
-        .client-validade { font-size: 11px; color: #d81b60; margin-top: 2px; font-weight: 600; }
-
         .btn { width: 100%; padding: 13px 15px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:hover { opacity: 0.9; }
 
-        .btn-cadastrar { background: #008000; } /* Verde escuro */
-        .btn-atendimento-cinza { background: #3d3d3d; border: 2px solid #00c853; } /* Cinza com borda verde viva para +3 pts */
-        .btn-atendimento-magenta { background: #9c004f; } /* Magenta escuro para +5 pts */
-        .btn-indicacao { background: #0056b3; } /* Azul escuro */
-        .btn-resgatar { background: #ff8000; } /* Laranja */
-        .btn-excluir { background: #cc0000; } /* Vermelho */
-        .btn-enviar-link { background: #004d40; } /* Verde petróleo bem escuro */
+        .btn-cadastrar { background: #008000; }
+        .btn-atendimento-cinza { background: #3d3d3d; border: 2px solid #00c853; }
+        .btn-atendimento-magenta { background: #9c004f; }
+        .btn-indicacao { background: #0056b3; }
+        .btn-resgatar { background: #ff8000; }
+        .btn-excluir { background: #cc0000; }
+        .btn-enviar-link { background: #004d40; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>Painel da Mary 🔐</h2>
         
-        <!-- Seleção de Cliente -->
         <select id="selectCliente" onchange="carregarDadosCliente()">
             <option value="">Selecione uma cliente...</option>
         </select>
 
-        <!-- Formulário de Cadastro (aparece vazio quando nenhuma cliente é selecionada) -->
         <input type="text" id="nomeCliente" placeholder="Nome da Cliente">
         <input type="tel" id="whatsappCliente" placeholder="WhatsApp com DDD (Ex: 119...)">
 
-        <!-- Botões de Ação Principal -->
         <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-        
-        <!-- NOVA OPÇÃO: +3 PONTOS (Botão Cinza com Borda Verde) -->
         <button class="btn btn-atendimento-cinza" onclick="adicionarPontos(3)">🎁 Registrar Atendimento (+3 pts)</button>
-
-        <!-- OPÇÃO ORIGINAL: +5 PONTOS -->
         <button class="btn btn-atendimento-magenta" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
-
         <button class="btn btn-indicacao" onclick="indicacaoManual()">👥 Indicação Manual (Cadastrar Nova)</button>
         <button class="btn btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
         <button class="btn btn-excluir" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
-        <button class="btn btn-enviar-link" onclick="enviarLink()">📱 Enviar Link<
+        <button class="btn btn-enviar-link" onclick="enviarLink()">📱 Enviar Link</button>
+    </div>
+
+    <script>
+        // Procura por qualquer uma das chaves antigas que possam ter sido usadas anteriormente
+        function obterChaveStorage() {
+            const chavesPossiveis = ['fidelida_clientes', 'clientes', 'fideliza_clientes', 'fideliza_ai_clientes'];
+            for (let chave of chavesPossiveis) {
+                if (localStorage.getItem(chave)) {
+                    return chave;
+                }
+            }
+            return 'fidelida_clientes'; // Padrão se nenhuma for encontrada
+        }
+
+        const STORAGE_KEY = obterChaveStorage();
+        const PONTOS_PARA_RESGATE = 10;
+
+        document.addEventListener('DOMContentLoaded', carregarClientesNoSelect);
+
+        function obterClientes() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        }
+
+        function salvarClientes(clientes) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
+        }
+
+        function gerarId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
