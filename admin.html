@@ -1,77 +1,1472 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel da Mary 🔐</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #221a1f; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; color: #fff; }
-        .card { background: #2c2529; border-radius: 20px; padding: 25px; width: 100%; max-width: 440px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); text-align: center; border: 1px solid #ff00ff; box-sizing: border-box; }
-        h2 { color: #ff80ff; font-size: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        
-        select, input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #555; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #3d353a; color: #fff; outline: none; }
-        select:focus, input:focus { border-color: #ff80ff; }
-        input::placeholder { color: #aaa; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1418">
+<!-- Título e prévia que a CLIENTE vê no WhatsApp ao receber o link -->
+<title>Cartão Fidelidade · Designer Estilo Mary</title>
+<meta name="description" content="Seu cartão fidelidade digital com os pontos atualizados ✨">
+<meta property="og:title" content="✨ Seu Cartão Fidelidade · Designer Estilo Mary">
+<meta property="og:description" content="Toque para ver seus pontos atualizados 💖">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --fundo:#1a1418;
+    --card:#221a1f;
+    --campo:#2c2529;
+    --neon:#ff00ff;
+    --rosa:#ff7ad9;
+    --texto:#f3e9ef;
+    --texto-suave:#b9a8b3;
+    --borda:rgba(255,0,255,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:radial-gradient(circle at 50% 0%,#2e1a29 0%,var(--fundo) 60%);
+    background-color:var(--fundo);
+    color:var(--texto);
+    display:flex;justify-content:center;
+    padding:32px 16px 48px;
+  }
+  .painel{
+    width:100%;max-width:460px;
+    background:var(--card);
+    border:1px solid var(--borda);
+    border-radius:28px;
+    padding:28px 22px 24px;
+    box-shadow:0 0 40px rgba(255,0,255,.12),inset 0 0 0 1px rgba(255,255,255,.02);
+  }
+  h1{
+    text-align:center;font-size:1.75rem;font-weight:800;
+    color:var(--rosa);
+    text-shadow:0 0 12px rgba(255,0,255,.45);
+    margin-bottom:6px;
+  }
+  .subtitulo{text-align:center;color:var(--texto-suave);font-size:.85rem;margin-bottom:22px}
 
-        .btn { width: 100%; padding: 13px 15px; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 10px; color: white; box-sizing: border-box; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn:hover { opacity: 0.9; }
+  select,input{
+    width:100%;font-size:1rem;color:var(--texto);
+    background:var(--campo);
+    border:1px solid var(--borda);
+    border-radius:14px;
+    padding:15px 18px;margin-bottom:12px;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+    -webkit-appearance:none;appearance:none;
+  }
+  select{
+    background-color:#4a4247;cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,#ddd 50%),linear-gradient(135deg,#ddd 50%,transparent 50%);
+    background-position:calc(100% - 22px) 52%,calc(100% - 16px) 52%;
+    background-size:6px 6px;background-repeat:no-repeat;padding-right:44px;
+  }
+  select option{background:#2c2529;color:var(--texto)}
+  input::placeholder{color:#9d8f97}
+  select:focus,input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(255,0,255,.18)}
 
-        .btn-cadastrar { background: #008000; }
-        .btn-atendimento-cinza { background: #3d3d3d; border: 2px solid #00c853; }
-        .btn-atendimento-magenta { background: #9c004f; }
-        .btn-indicacao { background: #0056b3; }
-        .btn-resgatar { background: #ff8000; }
-        .btn-excluir { background: #cc0000; }
-        .btn-enviar-link { background: #004d40; }
-    </style>
+  /* Cartão da cliente selecionada */
+  .info{
+    display:none;
+    background:linear-gradient(135deg,rgba(255,0,255,.12),rgba(255,0,255,.03));
+    border:1px solid var(--borda);border-radius:16px;
+    padding:14px 16px;margin-bottom:14px;
+  }
+  .info.ativa{display:block}
+  .info-topo{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .info-nome{font-weight:700;font-size:1.05rem;word-break:break-word}
+  .info-tel{color:var(--texto-suave);font-size:.85rem;margin-top:2px}
+  .pontos{
+    flex-shrink:0;text-align:center;min-width:70px;
+    background:#160f13;border:1px solid var(--neon);border-radius:12px;padding:6px 10px;
+    box-shadow:0 0 10px rgba(255,0,255,.3);
+  }
+  .pontos b{display:block;font-size:1.4rem;color:var(--rosa);line-height:1.1}
+  .pontos span{font-size:.7rem;color:var(--texto-suave)}
+  .historico{margin-top:10px;font-size:.8rem;color:var(--texto-suave);list-style:none}
+  .historico li{padding:3px 0;border-top:1px dashed rgba(255,255,255,.07)}
+  .historico li:first-child{border-top:none}
+
+  .divisor{height:1px;background:var(--borda);margin:6px 0 16px;opacity:.6}
+
+  button{
+    width:100%;font-size:1rem;font-weight:700;color:#fff;
+    border:none;border-radius:14px;padding:16px 14px;margin-bottom:12px;
+    cursor:pointer;transition:transform .08s,filter .2s,box-shadow .2s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  button:hover{filter:brightness(1.12)}
+  button:active{transform:scale(.98)}
+  .b-cadastrar{background:#0b5e12}
+  .b-salvar{background:#5b1a8c;border:2px solid var(--neon);box-shadow:0 0 10px rgba(255,0,255,.3)}
+  .salvo{font-size:.72rem;color:#7dff9a;margin-top:4px}
+  .b-mais3{background:#3a3438;border:2px solid #39ff14;box-shadow:0 0 10px rgba(57,255,20,.25)}
+  .b-mais5{background:#9e0045}
+  .b-indicacao{background:#0a49ad}
+  .b-resgatar{background:#a82a00}
+  .b-excluir{background:#a30000}
+  .b-link{background:#03301d}
+
+  .rodape{margin-top:18px;padding-top:16px;border-top:1px solid var(--borda)}
+  .rodape h2{font-size:.85rem;color:var(--texto-suave);font-weight:600;text-align:center;margin-bottom:12px;letter-spacing:.3px}
+  .b-backup{background:transparent;border:1.5px solid var(--neon);color:var(--rosa);font-size:.95rem}
+
+  /* Validade */
+  .validade{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.25);font-size:.85rem}
+  .validade.ok{color:#9be7b0}
+  .validade.alerta{color:#ffb347;border:1px solid rgba(255,179,71,.5)}
+  .validade.critico{color:#ff6b6b;border:1px solid rgba(255,107,107,.6)}
+  .ajustes{display:flex;gap:6px;margin-top:8px}
+  .ajustes button{margin:0;padding:9px 0;font-size:.85rem;border-radius:10px;background:#3a3438;border:1px solid var(--borda)}
+  .config{margin-top:18px;padding-top:16px;border-top:1px solid var(--borda)}
+  .config h2{font-size:.85rem;color:var(--texto-suave);font-weight:600;text-align:center;margin-bottom:12px;letter-spacing:.3px}
+  .linha-config{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.92rem}
+  .linha-config label{flex:1;color:var(--texto)}
+  .linha-config input{width:86px;margin:0;padding:10px;text-align:center;font-weight:700}
+  .linha-config span{color:var(--texto-suave);width:34px}
+  .b-config{background:#5b1a8c;border:1.5px solid var(--neon);font-size:.95rem}
+  .vencendo{font-size:.82rem;line-height:1.5;color:#ffb347;text-align:center}
+  .b-backup:hover{background:rgba(255,0,255,.1)}
+  .b-excel{border-color:#21a366;color:#7be3a8}
+  .b-excel:hover{background:rgba(33,163,102,.12)}
+  .estado{font-size:.78rem;color:var(--texto-suave);text-align:center;line-height:1.5}
+  .estado.alerta{color:#ffb347}
+
+  /* Aviso rápido */
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:#160f13;border:1px solid var(--neon);color:var(--texto);
+    padding:12px 18px;border-radius:12px;font-size:.92rem;max-width:calc(100% - 32px);
+    box-shadow:0 0 18px rgba(255,0,255,.35);opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;z-index:20;text-align:center;
+  }
+  .toast.ver{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.erro{border-color:#ff4d4d;box-shadow:0 0 18px rgba(255,77,77,.35)}
+
+  /* Janela de importação */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
+  .modal.ver{display:flex}
+  .modal-caixa{background:var(--card);border:1px solid var(--neon);border-radius:20px;padding:22px 18px 10px;max-width:400px;width:100%}
+  .modal-caixa h3{color:var(--rosa);margin-bottom:10px}
+  .modal-caixa p{color:var(--texto-suave);font-size:.92rem;margin-bottom:16px;line-height:1.45}
+  .b-cinza{background:#3a3438}
+  .envio-caixa{max-height:calc(100vh - 32px);overflow-y:auto}
+  .envio-previa{display:block;width:100%;max-width:260px;margin:0 auto 14px;border-radius:14px;border:1px solid var(--borda)}
+  .envio-linha{display:flex;gap:8px}
+  .envio-linha button{font-size:.88rem;padding:13px 8px}
+
+  /* ================= CARTÃO DA CLIENTE (tema claro) ================= */
+  body.modo-cartao{background:#f1ecef;color:#3b2a35}
+  body.modo-cartao .painel,body.modo-cartao .toast,body.modo-cartao .modal{display:none !important}
+  .cartao{
+    width:100%;max-width:470px;background:#fbf9fa;
+    border:1px solid #ecd9e2;border-radius:26px;
+    padding:30px 22px 22px;box-shadow:0 10px 30px rgba(150,40,100,.12);
+  }
+  .c-titulo{text-align:center;font-size:1.65rem;font-weight:800;color:#7a1557;font-family:Georgia,"Times New Roman",serif}
+  .c-sub{text-align:center;color:#a01d6a;font-size:1rem;margin:4px 0 22px}
+  .c-ola{
+    border-left:4px solid #b0135f;border-radius:12px;background:#fff;
+    padding:14px 16px;margin-bottom:20px;line-height:1.5;color:#555;font-size:1rem;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+  }
+  .c-ola strong{color:#7a1557}
+  .c-total{font-size:1.9rem;font-weight:800;color:#b0135f;display:block;margin-top:4px}
+  .c-validade{font-size:.82rem;color:#888;margin-top:6px}
+  .c-validade.vencido{color:#c0392b;font-weight:600}
+  .selos{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+  .selo{
+    aspect-ratio:1;border:2px solid #ead0dc;border-radius:14px;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-weight:700;font-size:.85rem;color:#7a1557;transition:transform .3s;
+  }
+  .selo .ic{font-size:1.15rem;line-height:1;margin-bottom:3px}
+  .selo.cheio{
+    background:linear-gradient(135deg,#d6157a,#8e1a8f);border-color:#d6157a;color:#fff;
+    box-shadow:0 4px 10px rgba(214,21,122,.35);
+  }
+  .selo .q-pts{font-size:1.25rem;font-weight:800;line-height:1.1}
+  .selo .q-rot{font-size:.62rem;font-weight:600;opacity:.95}
+  .selo .q-data{font-size:.62rem;font-weight:400;opacity:.9}
+  .selo.indic{background:linear-gradient(135deg,#2f6bff,#1d3fb0);border-color:#2f6bff}
+  .selo.vazio{color:#e3c3d2;font-size:1.1rem}
+  .c-total-barra{display:flex;justify-content:space-between;align-items:center;
+    background:linear-gradient(90deg,#7a1557,#b0135f);color:#fff;border-radius:14px;padding:14px 18px;margin:-6px 0 20px}
+  .c-total-barra span{font-weight:600;font-size:.9rem;letter-spacing:.5px}
+  .c-total-barra b{font-size:1.5rem}
+  .c-completo{
+    text-align:center;background:#fff4d6;border:1px solid #f1c75b;color:#7a5600;
+    border-radius:12px;padding:10px;margin:-6px 0 18px;font-weight:600;font-size:.92rem;
+  }
+  .c-info{font-size:.92rem;color:#555;line-height:1.45;margin:0 6px 16px}
+  .c-info b{color:#3b2a35}
+  .c-btn{
+    display:block;width:100%;text-align:center;text-decoration:none;color:#fff;
+    font-weight:700;font-size:1rem;border-radius:12px;padding:15px 12px;margin-top:12px;
+  }
+  .c-agendar{background:#2fae3e}
+  .c-indicar{background:#1d4fd8}
+  .c-rodape{text-align:center;font-size:.8rem;color:#888;margin-top:18px;line-height:1.4}
+  @media (max-width:380px){ .selos{gap:7px} .selo{font-size:.75rem;border-radius:11px} }
+</style>
 </head>
 <body>
-    <div class="card">
-        <h2>Painel da Mary 🔐</h2>
-        
-        <select id="selectCliente" onchange="carregarDadosCliente()">
-            <option value="">Selecione uma cliente...</option>
-        </select>
 
-        <input type="text" id="nomeCliente" placeholder="Nome da Cliente">
-        <input type="tel" id="whatsappCliente" placeholder="WhatsApp com DDD (Ex: 119...)">
+<main class="painel">
+  <h1>Painel da Mary 🔐</h1>
+  <p class="subtitulo" id="contador">0 clientes cadastradas</p>
 
-        <button class="btn btn-cadastrar" onclick="cadastrarCliente()">+ Cadastrar Cliente</button>
-        <button class="btn btn-atendimento-cinza" onclick="adicionarPontos(3)">🎁 Registrar Atendimento (+3 pts)</button>
-        <button class="btn btn-atendimento-magenta" onclick="adicionarPontos(5)">Registrar Atendimento (+5 pts)</button>
-        <button class="btn btn-indicacao" onclick="indicacaoManual()">👥 Indicação Manual (Cadastrar Nova)</button>
-        <button class="btn btn-resgatar" onclick="resgatarPontos()">🎁 Resgatar / Zerar Pontos</button>
-        <button class="btn btn-excluir" onclick="excluirCliente()">🗑️ Excluir Cliente Selecionada</button>
-        <button class="btn btn-enviar-link" onclick="enviarLink()">📱 Enviar Link</button>
+  <select id="selCliente" aria-label="Selecionar cliente">
+    <option value="">Selecione uma cliente...</option>
+  </select>
+
+  <section class="info" id="info">
+    <div class="info-topo">
+      <div>
+        <div class="info-nome" id="infoNome"></div>
+        <div class="info-tel" id="infoTel"></div>
+        <div class="salvo" id="infoSalvo"></div>
+      </div>
+      <div class="pontos"><b id="infoPontos">0</b><span>pontos</span></div>
     </div>
+    <div class="validade" id="infoValidade" hidden>
+      <div id="infoValidadeTxt"></div>
+      <div class="ajustes">
+        <button id="aj-7" title="Tirar 7 dias">−7 dias</button>
+        <button id="aj-1" title="Tirar 1 dia">−1</button>
+        <button id="aj+1" title="Dar 1 dia">+1</button>
+        <button id="aj+7" title="Dar 7 dias">+7 dias</button>
+      </div>
+    </div>
+    <ul class="historico" id="infoHist"></ul>
+  </section>
 
-    <script>
-        // Função inteligente: procura no celular por QUALQUER lista de clientes salva anteriormente
-        function obterChaveStorage() {
-            const chavesPossiveis = ['fidelida_clientes', 'fideliza_clientes', 'clientes', 'fideliza_ai_clientes'];
-            for (let chave of chavesPossiveis) {
-                if (localStorage.getItem(chave)) {
-                    return chave;
-                }
-            }
-            return 'fidelida_clientes';
+  <input type="text" id="nome" placeholder="Nome da Cliente" autocomplete="off">
+  <input type="tel" id="whats" placeholder="WhatsApp com DDD (Ex: 119...)" inputmode="numeric" autocomplete="off">
+
+  <button class="b-cadastrar" id="btnCadastrar">+ Cadastrar Cliente</button>
+  <button class="b-salvar" id="btnSalvar">💾 Salvar Cliente</button>
+  <button class="b-mais3" id="btnMais3">🎁 Registrar Atendimento (+3 pts)</button>
+  <button class="b-mais5" id="btnMais5">Registrar Atendimento (+5 pts)</button>
+  <button class="b-indicacao" id="btnIndicacao">👥 Indicação Manual (Cadastrar Nova)</button>
+  <button class="b-resgatar" id="btnResgatar">🎁 Resgatar / Zerar Pontos</button>
+  <button class="b-excluir" id="btnExcluir">🗑️ Excluir Cliente Selecionada</button>
+  <button class="b-link" id="btnLink">📱 Enviar Cartão (imagem) no WhatsApp</button>
+
+  <section class="config">
+    <h2>⏳ VALIDADE DOS PONTOS</h2>
+    <div class="linha-config"><label for="cfgDias">Pontos expiram após</label><input type="number" id="cfgDias" min="1" max="3650" inputmode="numeric"><span>dias</span></div>
+    <div class="linha-config"><label for="cfgAviso">Avisar quando faltar</label><input type="number" id="cfgAviso" min="0" max="365" inputmode="numeric"><span>dias</span></div>
+    <button class="b-config" id="btnCfg">💾 Salvar Validade</button>
+    <p class="vencendo" id="resumoValidade"></p>
+  </section>
+
+  <footer class="rodape">
+    <h2>SEGURANÇA DOS DADOS</h2>
+    <button class="b-backup" id="btnExportar">📥 Exportar Backup (Salvar Clientes)</button>
+    <button class="b-backup b-excel" id="btnExcel">📊 Exportar para Excel (.xlsx)</button>
+    <button class="b-backup" id="btnImportar">📤 Importar Backup (JSON ou Excel)</button>
+    <input type="file" id="arquivo" accept=".json,application/json,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+    <p class="estado" id="estadoBackup"></p>
+  </footer>
+</main>
+
+<div class="modal" id="modal">
+  <div class="modal-caixa">
+    <h3>Restaurar backup</h3>
+    <p id="modalTexto"></p>
+    <button class="b-cadastrar" id="mJuntar">Juntar com a lista atual (recomendado)</button>
+    <button class="b-excluir" id="mSubstituir">Substituir a lista inteira</button>
+    <button class="b-cinza" id="mCancelar">Cancelar</button>
+  </div>
+</div>
+
+<div class="modal" id="modalEnvio">
+  <div class="modal-caixa envio-caixa">
+    <h3 id="envTitulo">Enviar cartão</h3>
+    <img id="envPrevia" class="envio-previa" alt="Prévia do cartão">
+    <p id="envPassos"></p>
+    <button class="b-cadastrar" id="envCompartilhar">📤 Compartilhar no WhatsApp</button>
+    <button class="b-link" id="envAbrir">💬 Abrir conversa da cliente</button>
+    <div class="envio-linha">
+      <button class="b-cinza" id="envCopiar">📋 Copiar de novo</button>
+      <button class="b-cinza" id="envBaixar">⬇️ Baixar imagem</button>
+    </div>
+    <button class="b-cinza" id="envFechar">Fechar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ================= CARTÃO QUE A CLIENTE RECEBE ================= -->
+<section class="cartao" id="cartao" hidden>
+  <div class="c-titulo">✨ Designer Estilo Mary ✨</div>
+  <div class="c-sub">Cartão Fidelidade Digital</div>
+  <div class="c-ola" id="cOla"></div>
+  <div class="selos" id="cSelos"></div>
+  <div class="c-total-barra"><span>TOTAL ACUMULADO</span><b id="cTotal">0 pts</b></div>
+  <div class="c-completo" id="cCompleto" hidden>🎉 Parabéns! Cartão completo — resgate seu benefício na próxima visita!</div>
+  <div class="c-info"><b>📍 Endereço do Estúdio:</b><br><span id="cEndereco"></span></div>
+  <div class="c-info"><b>🎁 Regra do Cartão:</b><br>Acumule pontos a cada procedimento e resgate seus benefícios exclusivos! (Validade: <span id="cDias"></span> dias)</div>
+  <a class="c-btn c-agendar" id="cAgendar" target="_blank" rel="noopener">📅 Agendar Horário no WhatsApp</a>
+  <a class="c-btn c-indicar" id="cIndicar" target="_blank" rel="noopener">👥 Indicar Amiga e Ganhar Pontos</a>
+  <p class="c-rodape">Apresente este cartão digital na sua próxima visita para somar ou resgatar pontos.</p>
+</section>
+
+<script>
+/* ================= CONFIGURAÇÕES ================= */
+const CHAVE            = 'fideliza_ai_clientes';                 // chave principal (fixa)
+const CHAVES_ANTIGAS   = ['fidelida_clientes','clientes','fideliza_clientes'];
+const CHAVE_MIGRACAO   = 'fideliza_ai_migracao';                 // controle do que já foi migrado
+const CHAVE_COPIA      = 'fideliza_ai_clientes_copia';           // cópia automática da versão anterior
+const CHAVE_ULT_BACKUP = 'fideliza_ai_ultimo_backup';
+const PONTOS_INDICACAO = 5;    // pontos que a cliente que indicou ganha
+
+/* ---- Dados do estúdio (aparecem no cartão da cliente) ---- */
+const NOME_ESTUDIO   = 'Designer Estilo Mary';
+const ENDERECO       = 'Rua Nova Aliança, nº 2B (Travessa da Agostiniana Chantal) - Jd. Nova Conquista';
+const WHATSAPP_MARY  = '11967066029';   // WhatsApp da Mary com DDD, só números
+const VALIDADE_DIAS  = 60;      // validade padrão (pode ser alterada no próprio painel, em "Validade dos pontos")
+const AVISO_DIAS     = 7;       // aviso padrão: quantos dias antes de vencer a cliente fica marcada ⚠️
+const CHAVE_CONFIG   = 'fideliza_ai_config';
+const PONTOS_POR_SELO = 5;      // cada quadradinho do cartão vale 5 pts
+const TOTAL_SELOS     = 10;     // 10 quadradinhos = 50 pts
+const SAL_ASSINATURA  = 'estilo-mary-2026';  // dificulta a cliente "editar" os pontos no link
+// Endereço do site publicado no GitHub Pages (ex: 'https://seuusuario.github.io/fidelidade/')
+// Se ficar vazio, usa o endereço onde o painel estiver aberto (funciona quando aberto pelo GitHub Pages).
+const URL_SITE = '';
+
+/* ================= UTILITÁRIOS ================= */
+const $ = id => document.getElementById(id);
+const soDigitos = s => String(s || '').replace(/\D/g, '');
+const novoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const agora = () => new Date().toISOString();
+const dataBR = iso => { try { return new Date(iso).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}); } catch { return ''; } };
+
+function lerJSON(chave){
+  try { const raw = localStorage.getItem(chave); return raw ? JSON.parse(raw) : null; }
+  catch { return null; }
+}
+function hashTexto(s){
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return s.length + ':' + h;
+}
+function formatarTel(t){
+  const d = soDigitos(t);
+  if (d.length === 11) return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return t || '';
+}
+
+/* Aceita listas em vários formatos (array, {clientes:[...]}, objeto-mapa) */
+function extrairLista(v){
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  if (typeof v === 'object'){
+    for (const k of ['clientes','clients','lista','data','dados']) if (Array.isArray(v[k])) return v[k];
+    const vals = Object.values(v);
+    if (vals.length && vals.every(x => x && typeof x === 'object')) return vals;
+  }
+  return [];
+}
+
+/* Converte qualquer registro (antigo ou novo) para o formato atual, sem perder campos extras */
+function normalizar(c){
+  if (!c || typeof c !== 'object') return null;
+  const nome = String(c.nome ?? c.name ?? c.cliente ?? '').trim();
+  const whatsapp = soDigitos(c.whatsapp ?? c.telefone ?? c.phone ?? c.tel ?? c.celular ?? c.numero ?? '').replace(/^0+/, '');
+  if (!nome && !whatsapp) return null;
+  const pontos = Number(c.pontos ?? c.points ?? c.saldo ?? 0) || 0;
+  return {
+    ...c,
+    id: c.id ? String(c.id) : novoId(),
+    nome: nome || 'Sem nome',
+    whatsapp,
+    pontos: Math.max(0, pontos),
+    historico: Array.isArray(c.historico) ? c.historico : [],
+    criadoEm: c.criadoEm || agora(),
+  };
+}
+const identidade = c => soDigitos(c.whatsapp).length >= 8 ? 'w:' + soDigitos(c.whatsapp).slice(-9) : 'n:' + c.nome.toLowerCase().trim();
+
+/* Junta duas listas sem nunca descartar clientes.
+   Duplicadas (mesmo WhatsApp, ou mesmo nome sem telefone) ficam com o MAIOR saldo de pontos. */
+function mesclar(base, novos){
+  const mapa = new Map();
+  base.forEach(c => mapa.set(identidade(c), c));
+  let adicionadas = 0;
+  novos.forEach(n => {
+    const k = identidade(n);
+    const atual = mapa.get(k);
+    if (!atual){ mapa.set(k, n); adicionadas++; return; }
+    const hist = [...atual.historico];
+    const minuto = d => Math.round(new Date(d).getTime() / 60000);
+    n.historico.forEach(h => { if (!hist.some(x => minuto(x.data) === minuto(h.data) && x.tipo === h.tipo && Number(x.pontos) === Number(h.pontos))) hist.push(h); });
+    mapa.set(k, {
+      ...n, ...atual,
+      nome: atual.nome !== 'Sem nome' ? atual.nome : n.nome,
+      whatsapp: atual.whatsapp || n.whatsapp,
+      pontos: Math.max(atual.pontos, n.pontos),
+      historico: hist.sort((a, b) => String(a.data).localeCompare(String(b.data))),
+    });
+  });
+  return { lista: [...mapa.values()], adicionadas };
+}
+
+/* ================= ARMAZENAMENTO ================= */
+let clientes = [];
+
+/* ================= VALIDADE / EXPIRAÇÃO ================= */
+// Configuração salva no aparelho: prazo de validade e dias de aviso
+function lerConfig(){
+  const c = lerJSON(CHAVE_CONFIG) || {};
+  return {
+    validadeDias: Number(c.validadeDias) > 0 ? Number(c.validadeDias) : VALIDADE_DIAS,
+    avisoDias: Number(c.avisoDias) >= 0 && c.avisoDias !== undefined ? Number(c.avisoDias) : AVISO_DIAS,
+    inicioRegra: c.inicioRegra || null,   // dia em que a expiração passou a valer (protege clientes antigas)
+  };
+}
+let config = lerConfig();
+function salvarConfig(){ try { localStorage.setItem(CHAVE_CONFIG, JSON.stringify(config)); } catch {} }
+
+/* O prazo conta a partir do PRIMEIRO ponto ganho depois do último resgate (ou expiração).
+   Se a cliente não resgatar até o fim do prazo, os pontos expiram. */
+function inicioCiclo(c, cfg = config){
+  let ini = null;
+  for (const h of c.historico){
+    const p = Number(h.pontos) || 0;
+    if (h.tipo === 'Resgate' || h.tipo === 'Pontos expirados') ini = null;
+    else if (p > 0 && !ini) ini = h.data;
+  }
+  if (!ini && c.pontos > 0) ini = c.criadoEm || agora();
+  if (!ini) return null;
+  // Clientes antigas: o prazo nunca conta de antes do dia em que esta regra começou
+  if (cfg.inicioRegra && new Date(ini) < new Date(cfg.inicioRegra)) ini = cfg.inicioRegra;
+  return ini;
+}
+function vencimento(c, cfg = config){
+  if (!(c.pontos > 0)) return null;
+  const ini = inicioCiclo(c, cfg); if (!ini) return null;
+  const d = new Date(ini);
+  d.setDate(d.getDate() + cfg.validadeDias + (Number(c.ajusteDias) || 0));
+  return d;
+}
+function diasRestantes(c, cfg = config){
+  const v = vencimento(c, cfg); if (!v) return null;
+  return Math.ceil((v - Date.now()) / 86400000);
+}
+// Zera os pontos de quem passou do prazo (fica registrado no histórico)
+function expirarVencidas(){
+  const vencidas = [];
+  clientes.forEach(c => {
+    const v = vencimento(c);
+    if (v && v <= new Date()){
+      vencidas.push(`${c.nome} (${c.pontos} pts)`);
+      c.historico.push({ data: agora(), tipo: 'Pontos expirados', pontos: -c.pontos });
+      c.pontos = 0; c.ajusteDias = 0; c.atualizadoEm = agora();
+    }
+  });
+  if (vencidas.length){
+    salvar();
+    aviso(`⏳ Pontos expirados: ${vencidas.slice(0, 3).join(', ')}${vencidas.length > 3 ? ` e mais ${vencidas.length - 3}` : ''}`, true);
+  }
+  return vencidas.length;
+}
+
+function carregar(){
+  return extrairLista(lerJSON(CHAVE)).map(normalizar).filter(Boolean);
+}
+function salvar(){
+  try {
+    const anterior = localStorage.getItem(CHAVE);
+    if (anterior) localStorage.setItem(CHAVE_COPIA, anterior);   // guarda a versão anterior
+    localStorage.setItem(CHAVE, JSON.stringify(clientes));
+    return true;
+  } catch (e){
+    aviso('Erro ao salvar! Exporte um backup agora.', true);
+    return false;
+  }
+}
+
+/* MIGRAÇÃO AUTOMÁTICA: lê chaves antigas e consolida na principal. Nunca apaga as antigas.
+   Cada chave antiga só é migrada de novo se o conteúdo dela mudar
+   (assim uma cliente excluída não "volta" sozinha). */
+function migrar(){
+  const registro = lerJSON(CHAVE_MIGRACAO) || {};
+  let total = 0, mudou = false;
+  CHAVES_ANTIGAS.forEach(k => {
+    if (k === CHAVE) return;
+    const raw = localStorage.getItem(k);
+    if (!raw) return;
+    const h = hashTexto(raw);
+    if (registro[k] === h) return;
+    let parsed; try { parsed = JSON.parse(raw); } catch { registro[k] = h; return; }
+    const antigos = extrairLista(parsed).map(normalizar).filter(Boolean);
+    const r = mesclar(clientes, antigos);
+    clientes = r.lista; total += r.adicionadas;
+    registro[k] = h; mudou = true;
+  });
+  if (mudou){
+    salvar();
+    try { localStorage.setItem(CHAVE_MIGRACAO, JSON.stringify(registro)); } catch {}
+    if (total) aviso(`✅ ${total} cliente(s) recuperada(s) de versões antigas`);
+  }
+}
+
+/* ================= INTERFACE ================= */
+let timerToast;
+function aviso(msg, erro = false){
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast ver' + (erro ? ' erro' : '');
+  clearTimeout(timerToast);
+  timerToast = setTimeout(() => t.className = 'toast' + (erro ? ' erro' : ''), 3200);
+}
+
+function selecionada(){
+  const id = $('selCliente').value;
+  return clientes.find(c => c.id === id) || null;
+}
+function exigirSelecao(){
+  const c = selecionada();
+  if (!c) aviso('Selecione uma cliente primeiro', true);
+  return c;
+}
+
+function renderizar(idSelecionar){
+  const sel = $('selCliente');
+  const manter = idSelecionar ?? sel.value;
+  const ordenadas = [...clientes].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  sel.innerHTML = '<option value="">Selecione uma cliente...</option>' +
+    ordenadas.map(c => {
+      const dr = diasRestantes(c);
+      const marca = dr !== null && dr <= config.avisoDias ? ` ⚠️ vence em ${dr}d` : '';
+      return `<option value="${c.id}">${escapar(c.nome)} — ${c.pontos} pts${marca}</option>`;
+    }).join('');
+  if (clientes.some(c => c.id === manter)) sel.value = manter;
+
+  const n = clientes.length;
+  $('contador').textContent = `${n} cliente${n === 1 ? '' : 's'} cadastrada${n === 1 ? '' : 's'}`;
+  renderizarInfo();
+  renderizarEstadoBackup();
+  renderizarResumoValidade();
+}
+
+function renderizarResumoValidade(){
+  $('cfgDias').value = config.validadeDias;
+  $('cfgAviso').value = config.avisoDias;
+  const vencendo = clientes
+    .map(c => ({ c, dr: diasRestantes(c) }))
+    .filter(x => x.dr !== null && x.dr <= config.avisoDias)
+    .sort((a, b) => a.dr - b.dr);
+  $('resumoValidade').innerHTML = vencendo.length
+    ? `⚠️ <b>${vencendo.length}</b> cliente(s) com pontos vencendo em até ${config.avisoDias} dias:<br>` +
+      vencendo.slice(0, 6).map(x => `${escapar(x.c.nome)} (${x.dr <= 0 ? 'hoje' : x.dr + 'd'})`).join(' · ') +
+      (vencendo.length > 6 ? ` e mais ${vencendo.length - 6}` : '') +
+      '<br><span style="color:var(--texto-suave)">Dica: envie o cartão para lembrar de resgatar.</span>'
+    : '';
+}
+
+function renderizarInfo(){
+  const c = selecionada();
+  const box = $('info');
+  if (!c){ box.classList.remove('ativa'); return; }
+  box.classList.add('ativa');
+  $('infoNome').textContent = c.nome;
+  $('infoTel').textContent = c.whatsapp ? '📱 ' + formatarTel(c.whatsapp) : 'Sem WhatsApp';
+  $('infoPontos').textContent = c.pontos;
+  $('infoSalvo').textContent = c.atualizadoEm ? '✔ Salva em ' + dataBR(c.atualizadoEm) : '';
+
+  // Validade da cliente selecionada
+  const v = vencimento(c), dr = diasRestantes(c), boxV = $('infoValidade');
+  if (v){
+    boxV.hidden = false;
+    const ajuste = Number(c.ajusteDias) || 0;
+    $('infoValidadeTxt').innerHTML =
+      `⏳ Pontos vencem em <b>${v.toLocaleDateString('pt-BR')}</b> ` +
+      `(${dr <= 0 ? 'hoje' : dr === 1 ? 'falta 1 dia' : `faltam ${dr} dias`})` +
+      (ajuste ? ` · ajuste: ${ajuste > 0 ? '+' : ''}${ajuste} dia(s)` : '');
+    boxV.className = 'validade ' + (dr <= 2 ? 'critico' : dr <= config.avisoDias ? 'alerta' : 'ok');
+  } else {
+    boxV.hidden = true;
+  }
+  const ultimos = c.historico.slice(-4).reverse();
+  $('infoHist').innerHTML = ultimos.length
+    ? ultimos.map(h => `<li>${dataBR(h.data)} · ${escapar(h.tipo)}${h.pontos ? ` (${h.pontos > 0 ? '+' : ''}${h.pontos})` : ''}</li>`).join('')
+    : '<li>Sem movimentações ainda</li>';
+}
+
+function renderizarEstadoBackup(){
+  const ult = localStorage.getItem(CHAVE_ULT_BACKUP);
+  const el = $('estadoBackup');
+  if (!ult){
+    el.textContent = '⚠️ Nenhum backup exportado ainda. Exporte para não perder clientes.';
+    el.className = 'estado alerta'; return;
+  }
+  const dias = Math.floor((Date.now() - new Date(ult)) / 86400000);
+  el.textContent = `Último backup: ${dataBR(ult)}` + (dias >= 7 ? ` — faz ${dias} dias, exporte de novo!` : '');
+  el.className = 'estado' + (dias >= 7 ? ' alerta' : '');
+}
+
+function escapar(s){
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function lerCampos(){
+  const nome = $('nome').value.trim();
+  const whatsapp = soDigitos($('whats').value).replace(/^0+/, '');   // aceita '011...'
+  if (!nome){ aviso('Digite o nome da cliente', true); $('nome').focus(); return null; }
+  if (whatsapp && whatsapp.length < 10){ aviso('WhatsApp precisa ter DDD + número', true); $('whats').focus(); return null; }
+  return { nome, whatsapp };
+}
+function buscarDuplicada(nome, whatsapp){
+  if (whatsapp) return clientes.find(c => soDigitos(c.whatsapp).slice(-9) === whatsapp.slice(-9));
+  return clientes.find(c => c.nome.toLowerCase() === nome.toLowerCase());
+}
+function criarCliente(nome, whatsapp, extra = {}){
+  const c = { id: novoId(), nome, whatsapp, pontos: 0, criadoEm: agora(),
+              historico: [{ data: agora(), tipo: 'Cadastro', pontos: 0 }], ...extra };
+  clientes.push(c);
+  return c;
+}
+function limparCampos(){ $('nome').value = ''; $('whats').value = ''; }
+
+function adicionarPontos(c, pts, tipo){
+  c.pontos += pts;
+  c.historico.push({ data: agora(), tipo, pontos: pts });
+  c.atualizadoEm = agora();
+}
+
+/* ================= AÇÕES ================= */
+// Ao selecionar, preenche os campos com os dados da cliente (para editar e salvar)
+$('selCliente').addEventListener('change', () => {
+  const c = selecionada();
+  $('nome').value = c ? c.nome : '';
+  $('whats').value = c ? c.whatsapp : '';
+  renderizarInfo();
+});
+
+// 💾 Salvar Cliente: grava as alterações da cliente selecionada.
+// Sem cliente selecionada, cadastra uma nova com os dados dos campos.
+$('btnSalvar').onclick = () => {
+  const d = lerCampos(); if (!d) return;
+  const c = selecionada();
+  if (!c){ $('btnCadastrar').onclick(); return; }
+  const outra = clientes.find(x => x.id !== c.id &&
+    (d.whatsapp ? soDigitos(x.whatsapp).slice(-9) === d.whatsapp.slice(-9)
+                : x.nome.toLowerCase() === d.nome.toLowerCase()));
+  if (outra){ aviso(`Esse WhatsApp/nome já é de ${outra.nome}`, true); return; }
+  const mudou = c.nome !== d.nome || c.whatsapp !== d.whatsapp;
+  if (mudou) c.historico.push({ data: agora(), tipo: 'Dados editados', pontos: 0 });
+  c.nome = d.nome;
+  c.whatsapp = d.whatsapp;
+  c.atualizadoEm = agora();
+  if (salvar()){ renderizar(c.id); aviso(`💾 ${c.nome} salva com sucesso!`); }
+};
+
+$('btnCadastrar').onclick = () => {
+  const d = lerCampos(); if (!d) return;
+  const dup = buscarDuplicada(d.nome, d.whatsapp);
+  if (dup){ renderizar(dup.id); aviso(`${dup.nome} já está cadastrada (selecionada)`, true); return; }
+  const c = criarCliente(d.nome, d.whatsapp);
+  if (salvar()){ limparCampos(); renderizar(c.id); aviso(`✅ ${c.nome} cadastrada!`); }
+};
+
+function registrar(pts){
+  const c = exigirSelecao(); if (!c) return;
+  adicionarPontos(c, pts, 'Atendimento');
+  if (salvar()){ renderizar(); aviso(`+${pts} pts para ${c.nome} (total: ${c.pontos})`); }
+}
+$('btnMais3').onclick = () => registrar(3);
+$('btnMais5').onclick = () => registrar(5);
+
+$('btnIndicacao').onclick = () => {
+  const quemIndicou = selecionada();
+  if (!quemIndicou){ aviso('Selecione quem INDICOU e preencha os dados da nova cliente', true); return; }
+  const d = lerCampos(); if (!d) return;
+  const dup = buscarDuplicada(d.nome, d.whatsapp);
+  if (dup){ aviso(`${dup.nome} já é cliente — indicação não registrada`, true); return; }
+  const nova = criarCliente(d.nome, d.whatsapp, { indicadaPor: quemIndicou.id });
+  adicionarPontos(quemIndicou, PONTOS_INDICACAO, `Indicou ${nova.nome}`);
+  if (salvar()){ limparCampos(); renderizar(quemIndicou.id); aviso(`👥 ${nova.nome} cadastrada · +${PONTOS_INDICACAO} pts para ${quemIndicou.nome}`); }
+};
+
+$('btnResgatar').onclick = () => {
+  const c = exigirSelecao(); if (!c) return;
+  if (c.pontos <= 0){ aviso(`${c.nome} não tem pontos para resgatar`, true); return; }
+  if (!confirm(`Resgatar e zerar os ${c.pontos} pontos de ${c.nome}?`)) return;
+  const tinha = c.pontos;
+  c.pontos = 0;
+  c.historico.push({ data: agora(), tipo: 'Resgate', pontos: -tinha });
+  c.ajusteDias = 0;   // novo ciclo começa do zero
+  c.atualizadoEm = agora();
+  if (salvar()){ renderizar(); aviso(`🎁 Resgate feito: ${tinha} pts de ${c.nome}`); }
+};
+
+$('btnExcluir').onclick = () => {
+  const c = exigirSelecao(); if (!c) return;
+  if (!confirm(`Excluir ${c.nome} (${c.pontos} pts)?\n\nDica: exporte um backup antes, se tiver dúvida.`)) return;
+  clientes = clientes.filter(x => x.id !== c.id);
+  if (salvar()){ renderizar(''); aviso(`🗑️ ${c.nome} excluída`); }
+};
+
+/* 📱 ENVIAR: gera a IMAGEM do cartão e abre a janela de envio.
+   O WhatsApp não aceita imagem pelo link de conversa (só texto), então:
+   - Celular: botão "Compartilhar" envia a imagem + mensagem direto para o WhatsApp.
+   - Computador: a imagem é COPIADA; abre a conversa da cliente e é só apertar Ctrl+V. */
+let envio = null;   // { arquivo, msg, tel, url }
+$('btnLink').onclick = () => {
+  const c = exigirSelecao(); if (!c) return;
+  const tel = telInternacional(c.whatsapp);
+  // Mensagem sem emojis: o WhatsApp no computador costuma trocar emojis por "�".
+  // Os links abaixo ficam CLICÁVEIS no WhatsApp da cliente.
+  const ganhos = ganhosDoCiclo(c);
+  const ultimo = ganhos.length ? ganhos[ganhos.length - 1] : null;
+  const links = linksCliente(c.nome);
+  const msg =
+    `Olá, ${c.nome}!\n\n` +
+    `Seu *Cartão Fidelidade ${NOME_ESTUDIO}* foi atualizado!\n` +
+    (ultimo && ultimo.data ? `Pontos ganhos: *+${ultimo.p}* (${ultimo.tipo.toLowerCase()} de ${new Date(ultimo.data).toLocaleDateString('pt-BR')})\n` : '') +
+    `*Total acumulado: ${c.pontos} ponto${c.pontos === 1 ? '' : 's'}*\n` +
+    (vencimento(c) ? `Válidos até *${vencimento(c).toLocaleDateString('pt-BR')}* — não deixe de resgatar!\n` : '') +
+    (links.agendar ? `\n*Agendar horário com a Mary* (toque no link):\n${links.agendar}\n` : '') +
+    `\n*Indique uma amiga e ganhe +${PONTOS_INDICACAO} pontos* (toque no link e escolha a amiga):\n${links.indicar}\n` +
+    `\nObrigada pela preferência!`;
+
+  let arquivo;
+  try { arquivo = imagemCartao(c); }
+  catch { aviso('Não foi possível gerar a imagem do cartão', true); return; }
+
+  if (envio && envio.url) URL.revokeObjectURL(envio.url);
+  envio = { arquivo, msg, tel, url: URL.createObjectURL(arquivo) };
+
+  const celular = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  const podeCompartilhar = !!(navigator.canShare && navigator.canShare({ files: [arquivo] }));
+
+  $('envPrevia').src = envio.url;
+  $('envTitulo').textContent = `Enviar cartão para ${c.nome.split(' ')[0]}`;
+  $('envCompartilhar').hidden = !podeCompartilhar;
+  $('envCompartilhar').className = celular ? 'b-cadastrar' : 'b-cinza';
+  $('envAbrir').hidden = !tel;
+  $('envPassos').innerHTML = celular && podeCompartilhar
+    ? `Toque em <b>📤 Compartilhar</b>, escolha <b>WhatsApp</b> e depois a cliente. A imagem e a mensagem vão juntas.`
+    : `<b>1.</b> Toque em <b>💬 Abrir conversa</b>.<br>` +
+      `<b>2.</b> Na conversa, aperte <b>Ctrl + V</b> para colar o cartão e envie.` +
+      `<br><span id="envStatus" style="color:var(--texto-suave)"></span>`;
+  $('modalEnvio').classList.add('ver');
+
+  if (!(celular && podeCompartilhar)) copiarImagem(true);
+};
+
+// Copia a imagem do cartão para colar com Ctrl+V no WhatsApp
+async function copiarImagem(silencioso){
+  const st = $('envStatus');
+  try {
+    if (!navigator.clipboard || !window.ClipboardItem) throw new Error('sem suporte');
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': envio.arquivo })]);
+    if (st) st.innerHTML = '✅ Cartão copiado! É só colar (Ctrl + V) na conversa.';
+    if (!silencioso) aviso('📋 Cartão copiado!');
+    return true;
+  } catch {
+    if (st) st.innerHTML = '⚠️ Não deu para copiar automaticamente. Use <b>⬇️ Baixar imagem</b> e anexe pelo clipe 📎 do WhatsApp.';
+    return false;
+  }
+}
+function fecharEnvio(){ $('modalEnvio').classList.remove('ver'); }
+
+$('envCompartilhar').onclick = () => {
+  navigator.share({ files: [envio.arquivo], text: envio.msg })
+    .then(() => fecharEnvio())
+    .catch(() => {});
+};
+$('envAbrir').onclick = () => {
+  window.open(`https://wa.me/${envio.tel}?text=${encodeURIComponent(envio.msg)}`, '_blank');
+};
+$('envCopiar').onclick = () => copiarImagem(false);
+$('envBaixar').onclick = () => {
+  const a = document.createElement('a');
+  a.href = envio.url; a.download = envio.arquivo.name;
+  document.body.appendChild(a); a.click(); a.remove();
+  aviso('⬇️ Imagem salva em Downloads');
+};
+$('envFechar').onclick = fecharEnvio;
+
+/* Links que a cliente pode tocar:
+   - agendar: abre a conversa com a Mary já com a mensagem pronta
+   - indicar: a cliente escolhe a amiga; a amiga recebe um link que abre a conversa com a Mary
+     dizendo quem indicou (assim a Mary sabe para quem dar os pontos) */
+function linksCliente(nomeCompleto){
+  const nome = String(nomeCompleto || '').trim();
+  const primeiro = nome.split(' ')[0];
+  const telMary = telInternacional(WHATSAPP_MARY);
+  const agendar = telMary
+    ? `https://wa.me/${telMary}?text=${encodeURIComponent(`Olá, Mary! Sou a ${nome} e gostaria de agendar um horário.`)}`
+    : '';
+  // Link curto para a amiga falar com a Mary (mensagem curta = link curto e bonito no WhatsApp)
+  const amigaFalaComMary = telMary
+    ? `https://wa.me/${telMary}?text=${encodeURIComponent(`Fui indicada pela ${primeiro}`)}`
+    : '';
+  const textoAmiga =
+    `Oi! Conheça o *${NOME_ESTUDIO}*: sobrancelhas, cílios e unhas com muito capricho! ` +
+    (amigaFalaComMary ? `Agende com a Mary: ${amigaFalaComMary}` : `Diga que foi indicação da ${primeiro}!`);
+  return { agendar, indicar: `https://wa.me/?text=${encodeURIComponent(textoAmiga)}`, textoAmiga, amigaFalaComMary };
+}
+
+/* ================= IMAGEM DO CARTÃO (desenhada no próprio navegador) ================= */
+function retRedondo(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function quebrarTexto(ctx, texto, largura){
+  const palavras = texto.split(' '); const linhas = []; let linha = '';
+  palavras.forEach(p => {
+    const teste = linha ? linha + ' ' + p : p;
+    if (ctx.measureText(teste).width > largura && linha){ linhas.push(linha); linha = p; } else linha = teste;
+  });
+  if (linha) linhas.push(linha);
+  return linhas;
+}
+/* Pontos ganhos no ciclo atual (desde o último resgate/expiração): um quadradinho para cada ganho */
+function ganhosDoCiclo(c){
+  let g = [];
+  for (const h of c.historico){
+    const p = Number(h.pontos) || 0;
+    if (h.tipo === 'Resgate' || h.tipo === 'Pontos expirados') g = [];
+    else if (p > 0) g.push({ p, tipo: /^Indic/i.test(h.tipo) ? 'Indicação' : 'Atendimento', data: h.data });
+  }
+  const soma = g.reduce((s, x) => s + x.p, 0);
+  if (c.pontos > soma) g.unshift({ p: c.pontos - soma, tipo: 'Saldo anterior', data: null });   // clientes antigas
+  // No máximo 20 quadradinhos: os mais antigos viram um só
+  if (g.length > 20){
+    const juntar = g.splice(0, g.length - 19);
+    g.unshift({ p: juntar.reduce((s, x) => s + x.p, 0), tipo: 'Anteriores', data: null });
+  }
+  return g;
+}
+
+function imagemCartao(c){
+  const completo = c.pontos >= PONTOS_POR_SELO * TOTAL_SELOS;
+  const W = 1080, M = 70;
+  // Desenha o conteúdo numa folha alta e depois recorta na altura certa
+  const tmp = document.createElement('canvas'); tmp.width = W; tmp.height = 3200;
+  const ctx = tmp.getContext('2d');
+  const fonte = (peso, tam, serif) => `${peso} ${tam}px ${serif ? 'Georgia,"Times New Roman",serif' : 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif'}`;
+  const centro = (txt, y, x = W / 2) => { ctx.textAlign = 'center'; ctx.fillText(txt, x, y); ctx.textAlign = 'left'; };
+  const dm = iso => { const d = new Date(iso); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; };
+  ctx.textBaseline = 'alphabetic';
+
+  // Título
+  ctx.fillStyle = '#7a1557'; ctx.font = fonte('bold', 66, true); centro(`✨ ${NOME_ESTUDIO} ✨`, 160);
+  ctx.fillStyle = '#a01d6a'; ctx.font = fonte('500', 40); centro('Cartão Fidelidade Digital', 225);
+
+  // Caixa de saudação
+  const nome = c.nome.split(' ')[0];
+  const ganhos = ganhosDoCiclo(c);
+  const ultimo = ganhos.length ? ganhos[ganhos.length - 1] : null;
+  const bx = M, by = 275, bw = W - 2 * M, bh = 330;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.06)'; ctx.shadowBlur = 16;
+  retRedondo(ctx, bx, by, bw, bh, 26); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
+  ctx.save(); retRedondo(ctx, bx, by, bw, bh, 26); ctx.clip(); ctx.fillStyle = '#b0135f'; ctx.fillRect(bx, by, 10, bh); ctx.restore();
+  ctx.fillStyle = '#555'; ctx.font = fonte('500', 44); ctx.fillText(`Olá, ${nome}! 👋`, bx + 50, by + 75);
+  ctx.font = fonte('400', 38);
+  ctx.fillText(ultimo && ultimo.data ? `Você ganhou +${ultimo.p} pontos em ${dm(ultimo.data)} 🎉` : 'Seu saldo de pontos:', bx + 50, by + 135);
+  ctx.fillStyle = '#b0135f'; ctx.font = fonte('800', 96);
+  ctx.fillText(`${c.pontos} ponto${c.pontos === 1 ? '' : 's'} 💖`, bx + 50, by + 240);
+  const venc = vencimento(c);
+  ctx.fillStyle = '#888'; ctx.font = fonte('400', 30);
+  ctx.fillText(`Atualizado em ${new Date().toLocaleDateString('pt-BR')}` + (venc ? `  ·  Válido até ${venc.toLocaleDateString('pt-BR')}` : ''), bx + 50, by + 295);
+
+  // Quadradinhos: cada um mostra os pontos ganhos naquele atendimento/indicação
+  const gap = 24, cols = 5, size = (W - 2 * M - gap * (cols - 1)) / cols;
+  const total = Math.min(20, Math.max(TOTAL_SELOS, Math.ceil(ganhos.length / cols) * cols));
+  const sy = by + bh + 45;
+  for (let i = 0; i < total; i++){
+    const x = M + (i % cols) * (size + gap), y = sy + Math.floor(i / cols) * (size + gap);
+    const g = ganhos[i];
+    retRedondo(ctx, x, y, size, size, 30);
+    if (g){
+      const grad = ctx.createLinearGradient(x, y, x + size, y + size);
+      if (g.tipo === 'Indicação'){ grad.addColorStop(0, '#2f6bff'); grad.addColorStop(1, '#1d3fb0'); }
+      else { grad.addColorStop(0, '#d6157a'); grad.addColorStop(1, '#8e1a8f'); }
+      ctx.save(); ctx.shadowColor = 'rgba(214,21,122,.3)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6;
+      ctx.fillStyle = grad; ctx.fill(); ctx.restore();
+      ctx.fillStyle = '#fff';
+      ctx.font = fonte('800', 50); centro(`+${g.p}`, y + 78, x + size / 2);
+      ctx.font = fonte('600', 22);
+      centro(g.tipo === 'Indicação' ? '👥 Indicação' : g.tipo === 'Atendimento' ? '💖 Atend.' : g.tipo, y + 114, x + size / 2);
+      if (g.data){ ctx.font = fonte('400', 22); centro(dm(g.data), y + 142, x + size / 2); }
+    } else {
+      ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#ead0dc'; ctx.lineWidth = 4; ctx.stroke();
+      ctx.fillStyle = '#e3c3d2'; ctx.font = fonte('bold', 40); centro(`${i + 1}`, y + size / 2 + 14, x + size / 2);
+    }
+  }
+  let y = sy + Math.ceil(total / cols) * (size + gap) + 10;
+
+  // Total acumulado
+  const tg = ctx.createLinearGradient(M, 0, W - M, 0);
+  tg.addColorStop(0, '#7a1557'); tg.addColorStop(1, '#b0135f');
+  retRedondo(ctx, M, y, W - 2 * M, 110, 26); ctx.fillStyle = tg; ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = fonte('600', 36); ctx.fillText('TOTAL ACUMULADO', M + 40, y + 68);
+  ctx.font = fonte('800', 54); ctx.textAlign = 'right'; ctx.fillText(`${c.pontos} pts`, W - M - 40, y + 74); ctx.textAlign = 'left';
+  y += 150;
+
+  // Cartão completo
+  if (completo){
+    retRedondo(ctx, M, y - 10, W - 2 * M, 80, 22); ctx.fillStyle = '#fff4d6'; ctx.fill();
+    ctx.strokeStyle = '#f1c75b'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#7a5600'; ctx.font = fonte('bold', 34); centro('🎉 Cartão completo! Resgate seu benefício!', y + 42);
+    y += 115;
+  }
+
+  // Endereço e regra
+  y += 20;
+  const bloco = (titulo, texto) => {
+    ctx.fillStyle = '#3b2a35'; ctx.font = fonte('bold', 36); ctx.fillText(titulo, M + 10, y); y += 50;
+    ctx.fillStyle = '#555'; ctx.font = fonte('400', 33);
+    quebrarTexto(ctx, texto, W - 2 * M - 20).forEach(l => { ctx.fillText(l, M + 10, y); y += 44; });
+    y += 30;
+  };
+  bloco('📍 Endereço do Estúdio:', ENDERECO);
+  bloco('🎁 Regra do Cartão:', `Acumule pontos a cada procedimento e resgate seus benefícios exclusivos! (Validade: ${config.validadeDias} dias)`);
+
+  // Faixas de ação (os links clicáveis vão na mensagem do WhatsApp)
+  const faixa = (cor, texto) => {
+    retRedondo(ctx, M, y, W - 2 * M, 100, 24); ctx.fillStyle = cor; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = fonte('bold', 37); centro(texto, y + 64); y += 122;
+  };
+  if (WHATSAPP_MARY) faixa('#2fae3e', `📅 Agende: WhatsApp ${formatarTel(soDigitos(WHATSAPP_MARY).replace(/^0+/, ''))}`);
+  faixa('#1d4fd8', `👥 Indique uma amiga e ganhe +${PONTOS_INDICACAO} pts`);
+  ctx.fillStyle = '#888'; ctx.font = fonte('400', 28);
+  centro('👆 Toque nos links da mensagem para agendar ou indicar', y + 15);
+  y += 70;
+
+  // Folha final: fundo + cartão na altura exata do conteúdo
+  const H = y + 40;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const fx = cv.getContext('2d');
+  fx.fillStyle = '#f1ecef'; fx.fillRect(0, 0, W, H);
+  fx.save(); fx.shadowColor = 'rgba(150,40,100,.18)'; fx.shadowBlur = 40; fx.shadowOffsetY = 12;
+  retRedondo(fx, 30, 30, W - 60, H - 60, 50); fx.fillStyle = '#fbf9fa'; fx.fill(); fx.restore();
+  retRedondo(fx, 30, 30, W - 60, H - 60, 50); fx.strokeStyle = '#ecd9e2'; fx.lineWidth = 3; fx.stroke();
+  fx.drawImage(tmp, 0, 0, W, H, 0, 0, W, H);
+
+  // Converte para arquivo (síncrono, para manter o toque da Mary válido no compartilhamento)
+  const dataUrl = cv.toDataURL('image/png');
+  const bin = atob(dataUrl.split(',')[1]);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const nomeArq = 'cartao-' + c.nome.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '.png';
+  return new File([bytes], nomeArq, { type: 'image/png' });
+}
+
+/* ================= CONTROLE DA VALIDADE ================= */
+// Dar ou tirar dias de UMA cliente
+function ajustarDias(n){
+  const c = exigirSelecao(); if (!c) return;
+  if (!(c.pontos > 0)){ aviso('Essa cliente não tem pontos para vencer', true); return; }
+  const novoAjuste = (Number(c.ajusteDias) || 0) + n;
+  const teste = vencimento({ ...c, ajusteDias: novoAjuste });
+  if (teste <= new Date() && !confirm(`Com isso os ${c.pontos} pontos de ${c.nome} vão EXPIRAR agora. Confirmar?`)) return;
+  c.ajusteDias = novoAjuste;
+  c.historico.push({ data: agora(), tipo: `Validade ${n > 0 ? '+' : ''}${n} dia(s)`, pontos: 0 });
+  c.atualizadoEm = agora();
+  salvar();
+  expirarVencidas();
+  renderizar(c.id);
+  if (c.pontos > 0) aviso(`⏳ ${c.nome}: pontos vencem em ${vencimento(c).toLocaleDateString('pt-BR')}`);
+}
+$('aj-7').onclick = () => ajustarDias(-7);
+$('aj-1').onclick = () => ajustarDias(-1);
+$('aj+1').onclick = () => ajustarDias(1);
+$('aj+7').onclick = () => ajustarDias(7);
+
+// Mudar o prazo de TODAS as clientes
+$('btnCfg').onclick = () => {
+  const dias = Math.round(Number($('cfgDias').value));
+  const avisoD = Math.round(Number($('cfgAviso').value));
+  if (!(dias >= 1 && dias <= 3650)){ aviso('Validade precisa ser entre 1 e 3650 dias', true); return; }
+  if (!(avisoD >= 0 && avisoD <= 365)){ aviso('Aviso precisa ser entre 0 e 365 dias', true); return; }
+  const novo = { ...config, validadeDias: dias, avisoDias: avisoD };
+  const afetadas = clientes.filter(c => { const v = vencimento(c, novo); return v && v <= new Date(); });
+  if (afetadas.length && !confirm(
+      `Com ${dias} dias de validade, ${afetadas.length} cliente(s) vão ter os pontos EXPIRADOS agora:\n\n` +
+      afetadas.slice(0, 8).map(c => `• ${c.nome} (${c.pontos} pts)`).join('\n') +
+      (afetadas.length > 8 ? `\n• e mais ${afetadas.length - 8}` : '') + '\n\nConfirmar?')) return;
+  config = novo; salvarConfig();
+  expirarVencidas();
+  renderizar();
+  aviso(`💾 Validade: ${dias} dias · aviso ${avisoD} dias antes`);
+};
+
+/* ================= EXCEL (.xlsx) — gerado no próprio navegador, sem internet ================= */
+const xmlEsc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+const colLetra = i => { let s = ''; i++; while (i > 0){ const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+const colIndice = ref => { let n = 0; for (const ch of ref.match(/^[A-Z]+/)[0]) n = n * 26 + ch.charCodeAt(0) - 64; return n - 1; };
+// Data do JavaScript -> número de data do Excel (no horário local)
+function serialExcel(iso){
+  const d = new Date(iso); if (!iso || isNaN(d)) return null;
+  return (d.getTime() - d.getTimezoneOffset() * 60000) / 86400000 + 25569;
+}
+// Número de data do Excel (ou texto dd/mm/aaaa) -> data ISO
+function dataDeCelula(v){
+  if (v === undefined || v === null || v === '') return null;
+  if (typeof v === 'number'){
+    const d = new Date((v - 25569) * 86400000);
+    return new Date(d.getTime() + d.getTimezoneOffset() * 60000).toISOString();
+  }
+  const m = String(v).match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:\s+(\d{1,2}):(\d{2}))?/);
+  if (m){
+    const ano = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+    return new Date(ano, m[2] - 1, m[1], m[4] || 12, m[5] || 0).toISOString();
+  }
+  const d = new Date(v); return isNaN(d) ? null : d.toISOString();
+}
+
+// Monta uma aba. Cada célula: { v, t } com t = 's' texto, 'n' número, 'd' data, 'dt' data e hora
+function abaXML(cabecalho, linhas, larguras){
+  let xml = '<row r="1">' + cabecalho.map((h, i) => `<c r="${colLetra(i)}1" t="inlineStr" s="1"><is><t>${xmlEsc(h)}</t></is></c>`).join('') + '</row>';
+  linhas.forEach((l, ri) => {
+    const r = ri + 2;
+    xml += `<row r="${r}">` + l.map((cel, i) => {
+      const ref = colLetra(i) + r;
+      if (!cel || cel.v === '' || cel.v === null || cel.v === undefined) return '';
+      if (cel.t === 'n') return `<c r="${ref}" s="4"><v>${Number(cel.v) || 0}</v></c>`;
+      if (cel.t === 'd' || cel.t === 'dt'){ const sv = serialExcel(cel.v); return sv === null ? '' : `<c r="${ref}" s="${cel.t === 'dt' ? 2 : 3}"><v>${sv}</v></c>`; }
+      return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(cel.v)}</t></is></c>`;
+    }).join('') + '</row>';
+  });
+  const ultima = colLetra(cabecalho.length - 1) + (linhas.length + 1);
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' +
+    '<cols>' + larguras.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('') + '</cols>' +
+    `<sheetData>${xml}</sheetData><autoFilter ref="A1:${ultima}"/></worksheet>`;
+}
+
+// ZIP simples (sem compressão) — o .xlsx é um ZIP de arquivos XML
+const TABELA_CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++){ let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(b){ let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = TABELA_CRC[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function zipSemCompressao(arquivos, tipo){
+  const enc = new TextEncoder(), partes = [], central = []; let pos = 0;
+  const d = new Date();
+  const dt = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  const hr = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+  for (const a of arquivos){
+    const nome = enc.encode(a.nome), dados = enc.encode(a.dados), crc = crc32(dados);
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true);
+    h.setUint16(10, hr, true); h.setUint16(12, dt, true); h.setUint32(14, crc, true);
+    h.setUint32(18, dados.length, true); h.setUint32(22, dados.length, true); h.setUint16(26, nome.length, true);
+    partes.push(new Uint8Array(h.buffer), nome, dados);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+    c.setUint16(12, hr, true); c.setUint16(14, dt, true); c.setUint32(16, crc, true);
+    c.setUint32(20, dados.length, true); c.setUint32(24, dados.length, true); c.setUint16(28, nome.length, true);
+    c.setUint32(42, pos, true);
+    central.push(new Uint8Array(c.buffer), nome);
+    pos += 30 + nome.length + dados.length;
+  }
+  const tamCentral = central.reduce((s, p) => s + p.length, 0);
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, arquivos.length, true); e.setUint16(10, arquivos.length, true);
+  e.setUint32(12, tamCentral, true); e.setUint32(16, pos, true);
+  return new Blob([...partes, ...central, new Uint8Array(e.buffer)], { type: tipo });
+}
+
+function gerarExcel(){
+  const ordenadas = [...clientes].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const porId = new Map(clientes.map(c => [c.id, c]));
+  const ultimoGanhoData = c => { const g = c.historico.filter(h => Number(h.pontos) > 0); return g.length ? g[g.length - 1].data : ''; };
+
+  // Aba 1: Clientes
+  const cabClientes = ['Nome', 'WhatsApp', 'Total de pontos', 'Pontos válidos até', 'Último ganho de pontos', 'Cadastrada em', 'Indicada por', 'Ajuste validade (dias)', 'ID'];
+  const linClientes = ordenadas.map(c => {
+    const v = vencimento(c);
+    const ind = c.indicadaPor && porId.get(c.indicadaPor) ? porId.get(c.indicadaPor).nome : (c.indicadaPorNome || '');
+    return [
+      { v: c.nome, t: 's' }, { v: formatarTel(c.whatsapp), t: 's' }, { v: c.pontos, t: 'n' },
+      { v: v ? v.toISOString() : '', t: 'd' }, { v: ultimoGanhoData(c), t: 'dt' }, { v: c.criadoEm, t: 'dt' },
+      { v: ind, t: 's' }, { v: Number(c.ajusteDias) || 0, t: 'n' }, { v: c.id, t: 's' },
+    ];
+  });
+
+  // Aba 2: Pontos ganhos (todos os movimentos com data)
+  const cabMov = ['Nome', 'WhatsApp', 'Data', 'Movimento', 'Pontos', 'ID cliente'];
+  const linMov = [];
+  ordenadas.forEach(c => c.historico
+    .filter(h => Number(h.pontos) !== 0)
+    .forEach(h => linMov.push([
+      { v: c.nome, t: 's' }, { v: formatarTel(c.whatsapp), t: 's' }, { v: h.data, t: 'dt' },
+      { v: h.tipo, t: 's' }, { v: Number(h.pontos), t: 'n' }, { v: c.id, t: 's' },
+    ])));
+  linMov.sort((a, b) => String(b[2].v).localeCompare(String(a[2].v)));   // mais recentes primeiro
+
+  const estilos = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<numFmts count="2"><numFmt numFmtId="164" formatCode="dd/mm/yyyy hh:mm"/><numFmt numFmtId="165" formatCode="dd/mm/yyyy"/></numFmts>' +
+    '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts>' +
+    '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FF9E0045"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+    '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>' +
+    '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+    '<cellXfs count="5">' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>' +
+      '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="1" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+    '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+
+  const ult1 = colLetra(cabClientes.length - 1) + (linClientes.length + 1);
+  const ult2 = colLetra(cabMov.length - 1) + (linMov.length + 1);
+  const arquivos = [
+    { nome: '[Content_Types].xml', dados: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+      '<Default Extension="xml" ContentType="application/xml"/>' +
+      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+      '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+      '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+      '</Types>' },
+    { nome: '_rels/.rels', dados: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+      '</Relationships>' },
+    { nome: 'xl/workbook.xml', dados: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+      '<sheets><sheet name="Clientes" sheetId="1" r:id="rId1"/><sheet name="Pontos ganhos" sheetId="2" r:id="rId2"/></sheets>' +
+      '<definedNames>' +
+      `<definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">Clientes!$A$1:$${ult1.replace(/(\d+)$/, '$$$1')}</definedName>` +
+      `<definedName name="_xlnm._FilterDatabase" localSheetId="1" hidden="1">'Pontos ganhos'!$A$1:$${ult2.replace(/(\d+)$/, '$$$1')}</definedName>` +
+      '</definedNames></workbook>' },
+    { nome: 'xl/_rels/workbook.xml.rels', dados: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+      '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>' +
+      '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+      '</Relationships>' },
+    { nome: 'xl/styles.xml', dados: estilos },
+    { nome: 'xl/worksheets/sheet1.xml', dados: abaXML(cabClientes, linClientes, [28, 18, 15, 18, 22, 18, 22, 20, 16]) },
+    { nome: 'xl/worksheets/sheet2.xml', dados: abaXML(cabMov, linMov, [28, 18, 18, 24, 10, 16]) },
+  ];
+  return zipSemCompressao(arquivos, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+}
+
+$('btnExcel').onclick = () => {
+  if (!clientes.length){ aviso('Nenhuma cliente cadastrada para exportar', true); return; }
+  try {
+    const url = URL.createObjectURL(gerarExcel());
+    const a = document.createElement('a');
+    a.href = url; a.download = `clientes-mary-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    try { localStorage.setItem(CHAVE_ULT_BACKUP, agora()); } catch {}
+    renderizarEstadoBackup();
+    aviso(`📊 Excel com ${clientes.length} clientes baixado`);
+  } catch (err){
+    aviso('Erro ao gerar o Excel', true);
+  }
+};
+
+/* ---- Ler .xlsx (para restaurar a partir da planilha) ---- */
+async function lerZip(buf){
+  const dv = new DataView(buf); let fim = -1;
+  for (let i = buf.byteLength - 22; i >= Math.max(0, buf.byteLength - 65557); i--){ if (dv.getUint32(i, true) === 0x06054b50){ fim = i; break; } }
+  if (fim < 0) throw new Error('não é um arquivo Excel válido');
+  const n = dv.getUint16(fim + 10, true); let p = dv.getUint32(fim + 16, true);
+  const dec = new TextDecoder(), arqs = {};
+  for (let k = 0; k < n; k++){
+    const metodo = dv.getUint16(p + 10, true), tam = dv.getUint32(p + 20, true);
+    const ln = dv.getUint16(p + 28, true), le = dv.getUint16(p + 30, true), lc = dv.getUint16(p + 32, true), off = dv.getUint32(p + 42, true);
+    const nome = dec.decode(new Uint8Array(buf, p + 46, ln));
+    const ini = off + 30 + dv.getUint16(off + 26, true) + dv.getUint16(off + 28, true);
+    arqs[nome] = { metodo, dados: new Uint8Array(buf, ini, tam) };
+    p += 46 + ln + le + lc;
+  }
+  return async nome => {
+    const a = arqs[nome]; if (!a) return null;
+    if (a.metodo === 0) return dec.decode(a.dados);
+    if (a.metodo === 8){
+      if (typeof DecompressionStream === 'undefined') throw new Error('navegador muito antigo para ler Excel; use o backup .json');
+      return await new Response(new Blob([a.dados]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();
+    }
+    throw new Error('compressão não suportada');
+  };
+}
+async function lerPlanilhasXLSX(buf){
+  const texto = await lerZip(buf), P = new DOMParser();
+  const xml = async n => { const t = await texto(n); return t ? P.parseFromString(t, 'application/xml') : null; };
+  const ss = await xml('xl/sharedStrings.xml');
+  const compart = ss ? [...ss.getElementsByTagName('si')].map(si => [...si.getElementsByTagName('t')].map(t => t.textContent).join('')) : [];
+  const wb = await xml('xl/workbook.xml'), rels = await xml('xl/_rels/workbook.xml.rels');
+  if (!wb || !rels) throw new Error('não é um arquivo Excel válido');
+  const alvo = {};
+  [...rels.getElementsByTagName('Relationship')].forEach(r => alvo[r.getAttribute('Id')] = r.getAttribute('Target'));
+  const res = {};
+  for (const sh of wb.getElementsByTagName('sheet')){
+    let t = alvo[sh.getAttribute('r:id')]; if (!t) continue;
+    t = t.replace(/^\//, ''); if (!t.startsWith('xl/')) t = 'xl/' + t;
+    const doc = await xml(t); if (!doc) continue;
+    const linhas = [];
+    for (const row of doc.getElementsByTagName('row')){
+      const l = [];
+      for (const c of row.getElementsByTagName('c')){
+        const ref = c.getAttribute('r'), col = ref ? colIndice(ref) : l.length, tp = c.getAttribute('t');
+        let v;
+        if (tp === 'inlineStr') v = [...c.getElementsByTagName('t')].map(x => x.textContent).join('');
+        else {
+          const ve = c.getElementsByTagName('v')[0]; v = ve ? ve.textContent : '';
+          if (tp === 's') v = compart[Number(v)] ?? '';
+          else if (tp !== 'str' && tp !== 'b' && v !== '') v = Number(v);
         }
+        l[col] = v;
+      }
+      linhas.push(l);
+    }
+    res[sh.getAttribute('name')] = linhas;
+  }
+  return res;
+}
+// Reconstrói as clientes a partir das abas "Clientes" e "Pontos ganhos"
+function clientesDeExcel(planilhas){
+  const cli = planilhas['Clientes'];
+  if (!cli || !cli.length) throw new Error('aba "Clientes" não encontrada');
+  const cab = (cli[0] || []).map(x => String(x ?? '').trim().toLowerCase());
+  const col = n => cab.findIndex(h => h.startsWith(n));
+  const iN = col('nome'), iW = col('whatsapp'), iP = col('total'), iC = col('cadastrada'), iI = col('indicada'), iA = col('ajuste'), iD = cab.indexOf('id');
+  if (iN < 0) throw new Error('coluna "Nome" não encontrada');
+  const lista = [], mapa = new Map();
+  cli.slice(1).forEach(l => {
+    if (!l) return;
+    const nome = String(l[iN] ?? '').trim(); if (!nome) return;
+    const c = {
+      id: iD >= 0 && l[iD] ? String(l[iD]) : novoId(), nome,
+      whatsapp: soDigitos(iW >= 0 ? l[iW] : '').replace(/^0+/, ''),
+      pontos: iP >= 0 ? Number(l[iP]) || 0 : 0,
+      criadoEm: (iC >= 0 && dataDeCelula(l[iC])) || agora(),
+      ajusteDias: iA >= 0 ? Number(l[iA]) || 0 : 0,
+      historico: [],
+    };
+    if (iI >= 0 && String(l[iI] ?? '').trim()) c.indicadaPorNome = String(l[iI]).trim();
+    lista.push(c); mapa.set('id:' + c.id, c); mapa.set('n:' + nome.toLowerCase(), c);
+    if (c.whatsapp.length >= 8) mapa.set('w:' + c.whatsapp.slice(-9), c);
+  });
+  const mov = planilhas['Pontos ganhos'];
+  if (mov && mov.length){
+    const cb = (mov[0] || []).map(x => String(x ?? '').trim().toLowerCase());
+    const f = n => cb.findIndex(h => h.startsWith(n));
+    const jN = f('nome'), jW = f('whatsapp'), jD = f('data'), jT = f('movimento'), jP = f('pontos'), jI = f('id');
+    mov.slice(1).forEach(l => {
+      if (!l) return;
+      const w = soDigitos(jW >= 0 ? l[jW] : '').replace(/^0+/, '');
+      const c = (jI >= 0 && mapa.get('id:' + String(l[jI] ?? ''))) || (w.length >= 8 && mapa.get('w:' + w.slice(-9))) ||
+                mapa.get('n:' + String(jN >= 0 ? l[jN] ?? '' : '').trim().toLowerCase());
+      if (!c) return;
+      c.historico.push({ data: dataDeCelula(jD >= 0 ? l[jD] : '') || agora(), tipo: String((jT >= 0 && l[jT]) || 'Atendimento'), pontos: jP >= 0 ? Number(l[jP]) || 0 : 0 });
+    });
+    lista.forEach(c => c.historico.sort((a, b) => String(a.data).localeCompare(String(b.data))));
+  }
+  return lista;
+}
 
-        const STORAGE_KEY = obterChaveStorage();
-        const PONTOS_PARA_RESGATE = 10;
+/* ================= BACKUP ================= */
+$('btnExportar').onclick = () => {
+  const pacote = { app: 'fideliza_ai', versao: 1, exportadoEm: agora(), total: clientes.length, clientes };
+  const blob = new Blob([JSON.stringify(pacote, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const hoje = new Date().toISOString().slice(0, 10);
+  a.href = url; a.download = `backup-clientes-mary-${hoje}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  try { localStorage.setItem(CHAVE_ULT_BACKUP, agora()); } catch {}
+  renderizarEstadoBackup();
+  aviso(`📥 Backup com ${clientes.length} clientes baixado`);
+};
 
-        document.addEventListener('DOMContentLoaded', carregarClientesNoSelect);
+let pendentes = null;
+$('btnImportar').onclick = () => { $('arquivo').value = ''; $('arquivo').click(); };
+function abrirModalImportacao(lista){
+  pendentes = lista.map(normalizar).filter(Boolean);
+  if (!pendentes.length){ aviso('Nenhuma cliente encontrada nesse arquivo', true); pendentes = null; return; }
+  $('modalTexto').textContent =
+    `O backup tem ${pendentes.length} cliente(s). Hoje o painel tem ${clientes.length}.\n\n` +
+    `"Juntar" mantém todas e fica com o maior saldo nas repetidas. "Substituir" troca a lista atual pela do backup.`;
+  $('modal').classList.add('ver');
+}
+$('arquivo').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    if (/\.xlsx$/i.test(f.name)){
+      const planilhas = await lerPlanilhasXLSX(await f.arrayBuffer());
+      abrirModalImportacao(clientesDeExcel(planilhas));
+    } else {
+      let dados;
+      try { dados = JSON.parse(await f.text()); } catch { aviso('Arquivo inválido (use o backup .json ou o Excel exportado pelo painel)', true); return; }
+      abrirModalImportacao(extrairLista(dados));
+    }
+  } catch (err){
+    aviso('Não foi possível ler o arquivo: ' + (err && err.message ? err.message : 'formato não reconhecido'), true);
+  }
+};
+function fecharModal(){ $('modal').classList.remove('ver'); pendentes = null; }
+$('mCancelar').onclick = fecharModal;
+$('mJuntar').onclick = () => {
+  const r = mesclar(clientes, pendentes);
+  clientes = r.lista;
+  if (salvar()){ renderizar(); aviso(`📤 Restaurado! ${r.adicionadas} nova(s), total ${clientes.length}`); }
+  fecharModal();
+};
+$('mSubstituir').onclick = () => {
+  if (!confirm('Tem certeza? A lista atual será trocada pela do backup.\n(Uma cópia da lista atual fica guardada no aparelho.)')) return;
+  clientes = mesclar([], pendentes).lista;
+  if (salvar()){ renderizar(''); aviso(`📤 Lista substituída: ${clientes.length} clientes`); }
+  fecharModal();
+};
 
-        function obterClientes() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        }
+/* ================= LINK DO CARTÃO ================= */
+function telInternacional(t){
+  let d = soDigitos(t).replace(/^0+/, '');   // aceita números digitados com 0 na frente (ex: 011...)
+  if (!d) return '';
+  if (d.length <= 11) d = '55' + d;
+  return d;
+}
+function b64urlCodificar(texto){
+  return btoa(unescape(encodeURIComponent(texto))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function b64urlDecodificar(s){
+  s = s.replace(/-/g,'+').replace(/_/g,'/');
+  while (s.length % 4) s += '=';
+  return decodeURIComponent(escape(atob(s)));
+}
+function assinar(texto){
+  let h = 7;
+  const s = SAL_ASSINATURA + '|' + texto;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h).toString(36);
+}
+// Data do último ganho de pontos (base da validade de 60 dias)
+function ultimoGanho(c){
+  const ganhos = c.historico.filter(h => Number(h.pontos) > 0);
+  return (ganhos.length ? ganhos[ganhos.length - 1].data : (c.atualizadoEm || c.criadoEm)) || agora();
+}
+function gerarLinkCartao(c){
+  const v = vencimento(c);
+  // g = quadradinhos: [pontos, tipo (A=atendimento, I=indicação, S=saldo), data dd/mm]
+  const g = ganhosDoCiclo(c).map(x => [x.p, x.tipo === 'Indicação' ? 'I' : x.tipo === 'Atendimento' ? 'A' : 'S',
+    x.data ? new Date(x.data).toLocaleDateString('pt-BR').slice(0, 5) : '']);
+  const dados = JSON.stringify({ n: c.nome, p: c.pontos, v: v ? v.toISOString().slice(0,10) : '', d: config.validadeDias, e: agora().slice(0,10), g });
+  const cod = b64urlCodificar(dados);
+  return `${enderecoSite()}?c=${cod}&s=${assinar(cod)}`;
+}
+// Endereço público do cartão. Retorna '' quando o painel foi aberto do arquivo no computador.
+function enderecoSite(){
+  if (URL_SITE) return URL_SITE.split('?')[0];
+  if (location.protocol === 'http:' || location.protocol === 'https:') return location.origin + location.pathname;
+  return '';
+}
 
-        function salvarClientes(clientes) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
-        }
+/* ================= MODO CARTÃO (o que a cliente vê) ================= */
+function mostrarCartao(params){
+  document.body.classList.add('modo-cartao');
+  document.querySelector('meta[name="theme-color"]').content = '#f1ecef';
+  $('cartao').hidden = false;
+  $('cEndereco').textContent = ENDERECO;
+  $('cDias').textContent = VALIDADE_DIAS;
 
-        function gerarId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-        }
+  let d = null;
+  try {
+    const cod = params.get('c');
+    if (assinar(cod) === params.get('s')) d = JSON.parse(b64urlDecodificar(cod));
+  } catch {}
 
-        function carregarClie
+  const pontos = d ? Math.max(0, Number(d.p) || 0) : 0;
+  const nome = d ? String(d.n || '').split(' ')[0] : '';
+
+  if (d){
+    let validade = '';
+    $('cDias').textContent = d.d || VALIDADE_DIAS;
+    if (d.v || d.u){
+      let ate;
+      if (d.v) ate = new Date(d.v + 'T12:00:00');
+      else { ate = new Date(d.u + 'T12:00:00'); ate.setDate(ate.getDate() + VALIDADE_DIAS); }   // links antigos
+      const vencido = ate < new Date() && pontos > 0;
+      validade = `<div class="c-validade${vencido ? ' vencido' : ''}">` +
+        (vencido ? '⚠️ Prazo dos pontos vencido — fale com a Mary' : `Pontos válidos até ${ate.toLocaleDateString('pt-BR')}`) +
+        `</div>`;
+    }
+    $('cOla').innerHTML =
+      `Olá, <strong>${escapar(nome)}</strong>! 👋<br>Você tem` +
+      `<span class="c-total">${pontos} ponto${pontos === 1 ? '' : 's'} 💖</span>` +
+      (d.e ? `<div class="c-validade">Atualizado em ${new Date(d.e + 'T12:00:00').toLocaleDateString('pt-BR')}</div>` : '') +
+      validade;
+    document.title = `Cartão de ${nome} · ${NOME_ESTUDIO}`;
+  } else {
+    $('cOla').innerHTML = 'Olá! 👋<br>Para ver seu saldo atualizado, acesse o link enviado pela Mary no seu WhatsApp.';
+  }
+
+  // Quadradinhos: cada um mostra os pontos ganhos (links antigos sem "g": um a cada 5 pts)
+  let ganhos = d && Array.isArray(d.g) ? d.g : null;
+  if (!ganhos){
+    ganhos = [];
+    for (let i = 1; i <= Math.min(20, Math.floor(pontos / PONTOS_POR_SELO)); i++) ganhos.push([PONTOS_POR_SELO, 'A', '']);
+  }
+  const totalQ = Math.min(20, Math.max(TOTAL_SELOS, Math.ceil(ganhos.length / 5) * 5));
+  let html = '';
+  for (let i = 0; i < totalQ; i++){
+    const g = ganhos[i];
+    if (g){
+      const rot = g[1] === 'I' ? '👥 Indicação' : g[1] === 'A' ? '💖 Atend.' : 'Anterior';
+      html += `<div class="selo cheio${g[1] === 'I' ? ' indic' : ''}"><b class="q-pts">+${Number(g[0]) || 0}</b>` +
+              `<span class="q-rot">${rot}</span>${g[2] ? `<span class="q-data">${escapar(g[2])}</span>` : ''}</div>`;
+    } else {
+      html += `<div class="selo vazio">${i + 1}</div>`;
+    }
+  }
+  $('cSelos').innerHTML = html;
+  $('cTotal').textContent = `${pontos} pts`;
+  $('cCompleto').hidden = pontos < PONTOS_POR_SELO * TOTAL_SELOS;
+
+  // Botões clicáveis (mesmos links da mensagem)
+  const links = linksCliente(d ? d.n : '');
+  const telMary = telInternacional(WHATSAPP_MARY);
+  $('cAgendar').href = links.agendar || `https://wa.me/${telMary}`;
+  $('cIndicar').href = links.indicar;
+  $('cIndicar').textContent = `👥 Indicar Amiga e Ganhar +${PONTOS_INDICACAO} Pontos`;
+}
+
+/* ================= INÍCIO ================= */
+const parametros = new URLSearchParams(location.search);
+if (parametros.has('c')){
+  mostrarCartao(parametros);          // cliente abrindo o link: mostra só o cartão
+} else {
+  document.title = 'Painel da Mary';  // Mary abrindo o painel
+  clientes = carregar();
+  migrar();
+  // Primeira vez com a regra de expiração: marca o dia de início (clientes antigas não expiram de imediato)
+  if (!config.inicioRegra){ config.inicioRegra = agora(); salvarConfig(); }
+  expirarVencidas();
+  // Confere de novo quando a Mary volta ao painel e a cada hora com ele aberto
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && expirarVencidas()) renderizar(); });
+  setInterval(() => { if (expirarVencidas()) renderizar(); }, 3600000);
+  renderizar();
+
+  // Pede ao navegador para não apagar os dados automaticamente
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+  // Se outra aba alterar os dados, atualiza aqui também
+  window.addEventListener('storage', e => { if (e.key === CHAVE){ clientes = carregar(); renderizar(); } });
+
+  if (!WHATSAPP_MARY) setTimeout(() => aviso('⚙️ Falta colocar o WhatsApp da Mary no código (WHATSAPP_MARY)', true), 1200);
+}
+</script>
+</body>
+</html>
